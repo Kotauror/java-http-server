@@ -29,7 +29,7 @@ public class RequestParser {
             if (line.equals("")) {
                 break;
             }
-            if (line != "") {
+            if (!line.equals("")) {
                 String ElementsOfLine[] = line.split(" ", 2);
                 String key = this.removeLastCharacter(ElementsOfLine[0]);
                 String value = this.stripOfNewLine(ElementsOfLine[1]);
@@ -39,6 +39,11 @@ public class RequestParser {
         return headers;
     }
 
+    public String getBody(String requestString) {
+        String linesOfInputString[] = requestString.split("\\r");
+        return this.removeEmptyLines(linesOfInputString[1]);
+    }
+
     private String getFirstLine(String requestString) {
         String linesOfInputString[] = requestString.split("\\r?\\n");
         return linesOfInputString[0];
@@ -46,7 +51,6 @@ public class RequestParser {
 
     private String[] splitRequestIntoLines(String requestString) {
         return requestString.split("\\r?\\n");
-
     }
 
     private String stripOfNewLine(String string) {
@@ -55,5 +59,9 @@ public class RequestParser {
 
     private String removeLastCharacter(String string) {
         return string.substring(0, string.length() -1);
+    }
+
+    private String removeEmptyLines(String string) {
+        return string.replaceAll("(?m)^[ \t]*\r?\n", "");
     }
 }

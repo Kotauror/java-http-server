@@ -19,7 +19,7 @@ public class RequestParserTests {
         input = "GET http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1\n" +
                 "Host: 0.0.0.0:5000\n" +
                 "Content-Length: 24\n\r\n" +
-                "nmethod body\n";
+                "nomethod body\ntestbody";
         headers = new LinkedHashMap<String, String>() {{
             put("Host", "0.0.0.0:5000");
             put("Content-Length", "24");
@@ -41,7 +41,11 @@ public class RequestParserTests {
 
     @Test
     public void getHeadersReturnsRightHeaders() {
-        System.out.println("headers from test " + headers);
         assertEquals(headers, requestParser.getHeaders(input));
+    }
+
+    @Test
+    public void getBodyReturnsRightBody() {
+        assertEquals("nomethod body\ntestbody", requestParser.getBody(input));
     }
 }
