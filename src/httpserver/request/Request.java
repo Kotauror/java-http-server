@@ -3,15 +3,16 @@ package httpserver.request;
 import httpserver.Method;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class Request {
 
     private final Method method;
     private final String path;
-    private final HashMap<String, String> headers;
+    private final LinkedHashMap<String, String> headers;
     private final String body;
 
-    public Request(Method method, String path, HashMap<String, String> headers, String body) {
+    public Request(Method method, String path, LinkedHashMap<String, String> headers, String body) {
         this.method = method;
         this.path = path;
         this.headers = headers;
@@ -26,7 +27,7 @@ public class Request {
         return this.path;
     }
 
-    public HashMap getHeaders() {
+    public LinkedHashMap getHeaders() {
         return this.headers;
     }
 

@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -14,7 +15,7 @@ public class RequestTests {
     @Before
     public void setup() {
         String path = "http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1";
-        HashMap<String, String> headers = new HashMap<String, String>() {{
+        LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
             put("Host", "localhost");
             put("Accept-Language", "en-US");
         }};
