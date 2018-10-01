@@ -9,6 +9,14 @@ public class RequestParser {
 
     public RequestParser() {}
 
+    public Request parse(String requestString) {
+        Method method = getMethod(requestString);
+        String path = getPath(requestString);
+        LinkedHashMap<String, String> headers = getHeaders(requestString);
+        String body = getBody(requestString);
+        return new Request(method, path, headers, body);
+    }
+
     public Method getMethod(String requestString) {
         String firstLine = this.getFirstLine(requestString);
         String elementsOfFirstLine[] = firstLine.split(" ", 2);

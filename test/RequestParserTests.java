@@ -1,4 +1,5 @@
 import httpserver.Method;
+import httpserver.request.Request;
 import httpserver.request.RequestParser;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,5 +48,18 @@ public class RequestParserTests {
     @Test
     public void getBodyReturnsRightBody() {
         assertEquals("nomethod body\ntestbody", requestParser.getBody(input));
+    }
+
+    @Test
+    public void parseReturnsRequest() {
+        String path = "http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1";
+        String body = "nomethod body\ntestbody";
+
+        Request request = requestParser.parse(input);
+
+        assertEquals(Method.GET, request.getMethod());
+        assertEquals(path, request.getPath());
+        assertEquals(headers, request.getHeaders());
+        assertEquals(body, request.getBody());
     }
 }
