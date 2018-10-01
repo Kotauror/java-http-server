@@ -28,12 +28,9 @@ public class RequestParserTests {
     }
 
     @Test
-    public void returnsParsedRequestWithAllDataInIt() {
-        Request request = requestParser.parse(input);
-
-        assertEquals(Method.GET, request.getMethod());
-        assertEquals("http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1", request.getPath());
-        assertEquals(headers, request.getHeaders());
-        assertEquals("method body\\r\\nmethod body", request.getBody());
+    public void getMethodReturnsRightMethod() {
+        assertEquals(Method.GET, requestParser.getMethod("GET http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1"));
+        assertEquals(Method.OPTIONS, requestParser.getMethod("OPTIONS http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1"));
+        assertEquals(Method.POST, requestParser.getMethod("POST http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1"));
     }
 }
