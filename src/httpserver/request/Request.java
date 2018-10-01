@@ -33,5 +33,4 @@ public class Request {
     public String getBody() {
         return this.body;
     }
-
 }

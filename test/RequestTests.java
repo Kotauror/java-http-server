@@ -13,7 +13,6 @@ public class RequestTests {
 
     @Before
     public void setup() {
-//        String method = "GET";
         String path = "http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1";
         HashMap<String, String> headers = new HashMap<String, String>() {{
             put("Host", "localhost");
