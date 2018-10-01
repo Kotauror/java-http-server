@@ -1,22 +1,24 @@
 package httpserver.request;
 
+import httpserver.Method;
+
 import java.util.HashMap;
 
 public class Request {
 
-    private final String method;
+    private final Method method;
     private final String path;
     private final HashMap<String, String> headers;
     private final String body;
 
-    public Request(String method, String path, HashMap<String, String> headers, String body) {
+    public Request(Method method, String path, HashMap<String, String> headers, String body) {
         this.method = method;
         this.path = path;
         this.headers = headers;
         this.body = body;
     }
 
-    public String getMethod() {
+    public Method getMethod() {
         return this.method;
     }
 

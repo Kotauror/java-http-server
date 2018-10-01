@@ -1,3 +1,4 @@
+import httpserver.Method;
 import httpserver.request.Request;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,7 +13,7 @@ public class RequestTests {
 
     @Before
     public void setup() {
-        String method = "GET";
+//        String method = "GET";
         String path = "http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1";
         HashMap<String, String> headers = new HashMap<String, String>() {{
             put("Host", "localhost");
@@ -20,12 +21,12 @@ public class RequestTests {
         }};
         String body = "example body";
 
-        request = new Request(method, path, headers, body);
+        request = new Request(Method.GET, path, headers, body);
     }
 
     @Test
     public void returnsMethod() {
-        assertEquals("GET", request.getMethod());
+        assertEquals(Method.GET, request.getMethod());
     }
 
     @Test
