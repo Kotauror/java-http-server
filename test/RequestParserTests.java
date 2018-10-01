@@ -36,7 +36,7 @@ public class RequestParserTests {
 
     @Test
     public void getPathReturnsRightPath() {
-        String path = "http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1";
-        assertEquals(path, requestParser.getPath("GET http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1\n"));
+        String ExpectedPath = "http://developer.mozilla.org/en-US/HTTP/Messages HTTP/1.1";
+        assertEquals(ExpectedPath, requestParser.getPath("GET http://developer.mozilla.org/en-US/HTTP/Messages HTTP/1.1\n test \n testing new lines"));
     }
 }

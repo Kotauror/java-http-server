@@ -12,7 +12,8 @@ public class RequestParser {
     }
 
     public String getPath(String inputString) {
-        String elementsOfFirstLine[] = inputString.split(" ", 2);
+        String linesOfInputString[] = inputString.split("\\r?\\n");
+        String elementsOfFirstLine[] = linesOfInputString[0].split(" ", 2);
         return stripOfNewLine(elementsOfFirstLine[1]);
     }
 
