@@ -6,6 +6,8 @@ import httpserver.request.RequestParser;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.LinkedHashMap;
 
 import static junit.framework.Assert.assertEquals;
@@ -13,31 +15,32 @@ import static junit.framework.Assert.assertEquals;
 public class RequestParserTests {
 
     private RequestParser requestParser;
-    private String input;
     private LinkedHashMap<String, String> headers;
     private String path;
     private String httpVersion;
+    private ByteArrayInputStream mockStream;
 
     @Before
     public void setup() {
         requestParser = new RequestParser();
-        input = "GET http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1\n" +
+        String requestString = "GET http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1\n" +
                 "Host: 0.0.0.0:5000\n" +
-                "Content-Length: 24\n\r\n" +
+                "Content-Length: 23\n\r\n" +
                 "nomethod body\ntestbody";
+        mockStream = new ByteArrayInputStream(requestString.getBytes());
         path = "http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages";
         httpVersion = "HTTP/1.1";
         headers = new LinkedHashMap<String, String>() {{
             put("Host", "0.0.0.0:5000");
-            put("Content-Length", "24");
+            put("Content-Length", "23");
         }};
     }
 
     @Test
-    public void parseReturnsRequestWithAllFieldsFilled() {
+    public void parseReturnsRequestWithAllFieldsFilled() throws IOException {
         String body = "nomethod body\ntestbody";
 
-        Request request = requestParser.parse(input);
+        Request request = requestParser.parse(mockStream);
 
         assertEquals(Method.GET, request.getMethod());
         assertEquals(path, request.getPath());
@@ -47,12 +50,13 @@ public class RequestParserTests {
     }
 
     @Test
-    public void parseReturnsRequestWithOnlyMethodAndPath() {
-        String input = "GET http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1\n";
+    public void parseReturnsRequestWithOnlyMethodAndPath() throws IOException {
+        String requestString = "GET http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1\n";
+        ByteArrayInputStream mockStream1 = new ByteArrayInputStream(requestString.getBytes());
         LinkedHashMap headers = new LinkedHashMap<String, String>();
         String body = "";
 
-        Request request = requestParser.parse(input);
+        Request request = requestParser.parse(mockStream1);
 
         assertEquals(Method.GET, request.getMethod());
         assertEquals(path, request.getPath());
@@ -62,13 +66,16 @@ public class RequestParserTests {
     }
 
     @Test
-    public void parseReturnsRequestWithMethodPathAndHeaders() {
-        String input = "GET http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1\n" +
-                "Host: 0.0.0.0:5000\n" +
-                "Content-Length: 24\n";
+    public void parseReturnsRequestWithMethodPathAndHeaders() throws IOException {
+        String requestString = "GET http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1\n" +
+                "Host: 0.0.0.0:5000\n";
+        ByteArrayInputStream mockStream1 = new ByteArrayInputStream(requestString.getBytes());
         String body = "";
+        LinkedHashMap headers = new LinkedHashMap<String, String>() {{
+            put("Host", "0.0.0.0:5000");
+        }};
 
-        Request request = requestParser.parse(input);
+        Request request = requestParser.parse(mockStream1);
 
         assertEquals(Method.GET, request.getMethod());
         assertEquals(path, request.getPath());
@@ -78,7 +85,7 @@ public class RequestParserTests {
     }
 
     @Test
-    public void testCaseFromFitnesseAPISimpleGet() {
+    public void testCaseFromFitnesseAPISimpleGet() throws IOException {
         String input = "GET /file1 HTTP/1.1\n" +
         "Host: localhost:5000\n" +
         "Connection: Keep-Alive\n" +
@@ -91,7 +98,9 @@ public class RequestParserTests {
             put("Accept-Encoding", "gzip,deflate");
         }};
 
-        Request request = requestParser.parse(input);
+        ByteArrayInputStream mockStream1 = new ByteArrayInputStream(input.getBytes());
+
+        Request request = requestParser.parse(mockStream1);
         assertEquals(Method.GET, request.getMethod());
         assertEquals("/file1", request.getPath());
         assertEquals("HTTP/1.1", request.getHttpVersion());
