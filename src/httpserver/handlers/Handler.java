@@ -2,6 +2,8 @@ package httpserver.handlers;
 
 import httpserver.Method;
 import httpserver.request.Request;
+import httpserver.response.Response;
+
 import java.util.ArrayList;
 
 public abstract class Handler {
@@ -24,4 +26,6 @@ public abstract class Handler {
     public boolean handles(Request request) {
         return this.handledMethods.contains(request.getMethod());
     }
+
+    public abstract Response getResponse(Request request);
 }

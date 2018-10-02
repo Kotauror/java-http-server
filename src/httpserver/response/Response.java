@@ -2,7 +2,7 @@ package httpserver.response;
 
 public class Response {
 
-    private final ResponseStatus responseStatus;
+    private ResponseStatus responseStatus;
     private String httpVersion;
 
     public Response() {
@@ -12,5 +12,13 @@ public class Response {
 
     public ResponseStatus getStatus() {
         return this.responseStatus;
+    }
+
+    public String getHttpVersion() {
+        return this.httpVersion;
+    }
+
+    public void setStatus(ResponseStatus status) {
+        this.responseStatus = status;
     }
 }

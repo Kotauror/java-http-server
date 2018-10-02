@@ -20,4 +20,11 @@ public class responseTests {
     public void responseHasDefaultStatusOf500() {
         assertEquals(ResponseStatus.INTERNAL_SERVER_ERROR, response.getStatus());
     }
+
+    @Test
+    public void setStatusChangesResponseStatus() {
+        response.setStatus(ResponseStatus.OK);
+
+        assertEquals(ResponseStatus.OK, response.getStatus());
+    }
 }
