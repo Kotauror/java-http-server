@@ -1,3 +1,5 @@
+package serverTests;
+
 import httpserver.server.ServerStatus;
 import org.junit.Before;
 import org.junit.Test;

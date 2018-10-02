@@ -1,3 +1,5 @@
+package serverTests;
+
 import httpserver.server.MockServerSocket;
 import httpserver.server.MockServerStatus;
 import httpserver.server.WebServer;
