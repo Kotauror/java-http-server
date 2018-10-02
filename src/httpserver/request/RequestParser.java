@@ -10,34 +10,33 @@ public class RequestParser {
     public RequestParser() {}
 
     public Request parse(String requestString) {
-        Method method = getMethod(requestString);
-        String path = getPath(requestString);
-        LinkedHashMap<String, String> headers = getHeaders(requestString);
+        String[] linesOfRequest = this.splitRequestIntoLines(requestString);
+
+        Method method = getMethod(linesOfRequest[0]);
+        String path = getPath(linesOfRequest[0]);
+        LinkedHashMap<String, String> headers = getHeaders(linesOfRequest);
         String body = getBody(requestString);
         return new Request(method, path, headers, body);
     }
 
-    public Method getMethod(String requestString) {
-        String firstLine = this.getFirstLine(requestString);
-        String elementsOfFirstLine[] = firstLine.split(" ", 2);
-        return Method.valueOf(elementsOfFirstLine[0]);
+    private Method getMethod(String firstLineOfRequest) {
+        String[] methodAndPath = this.getMethodAndPath(firstLineOfRequest);
+        return Method.valueOf(methodAndPath[0]);
     }
 
-    public String getPath(String requestString) {
-        String firstLine = this.getFirstLine(requestString);
-        String elementsOfFirstLine[] = firstLine.split(" ", 2);
-        return stripOfNewLine(elementsOfFirstLine[1]);
+    private String getPath(String firstLineOfRequest) {
+        String[] methodAndPath = this.getMethodAndPath(firstLineOfRequest);
+        return stripOfNewLine(methodAndPath[1]);
     }
 
-    public LinkedHashMap getHeaders(String requestString) {
+    private LinkedHashMap getHeaders(String[] linesOfRequest) {
         LinkedHashMap<String, String> headers = new LinkedHashMap<>();
-        String linesOfRequestString[] = splitRequestIntoLines(requestString);
-        String linesOfInputWithoutFirst[] = Arrays.copyOfRange(linesOfRequestString, 1, linesOfRequestString.length);
-        for (String line : linesOfInputWithoutFirst) {
-            if (line.equals("")) {
+        String linesOfRequestWithoutFirst[] = Arrays.copyOfRange(linesOfRequest, 1, linesOfRequest.length);
+        for (String line : linesOfRequestWithoutFirst) {
+            if (this.hitAnEmptyLine(line)) {
                 break;
             }
-            if (!line.equals("")) {
+            if (!(this.hitAnEmptyLine(line))) {
                 String ElementsOfLine[] = line.split(" ", 2);
                 String key = this.removeLastCharacter(ElementsOfLine[0]);
                 String value = this.stripOfNewLine(ElementsOfLine[1]);
@@ -47,14 +46,17 @@ public class RequestParser {
         return headers;
     }
 
-    public String getBody(String requestString) {
-        String linesOfInputString[] = requestString.split("\\r");
-        return this.removeEmptyLines(linesOfInputString[1]);
+    private String getBody(String requestString) {
+        String partsOfInputString[] = requestString.split("\\r");
+        return (hasNoBody(partsOfInputString)) ? "" : this.removeEmptyLines(partsOfInputString[1]);
     }
 
-    private String getFirstLine(String requestString) {
-        String linesOfInputString[] = requestString.split("\\r?\\n");
-        return linesOfInputString[0];
+    private String[] getMethodAndPath(String FirstLineOfRequest) {
+        return FirstLineOfRequest.split(" ", 2);
+    }
+
+    private Boolean hitAnEmptyLine(String line) {
+        return line.equals("");
     }
 
     private String[] splitRequestIntoLines(String requestString) {
@@ -71,5 +73,9 @@ public class RequestParser {
 
     private String removeEmptyLines(String string) {
         return string.replaceAll("(?m)^[ \t]*\r?\n", "");
+    }
+
+    private Boolean hasNoBody(String[] partsOfInputString) {
+        return partsOfInputString.length == 1;
     }
 }
