@@ -2,18 +2,26 @@ package httpserver.handlers;
 
 import httpserver.Method;
 import httpserver.request.Request;
+import java.util.ArrayList;
 
 public abstract class Handler {
 
-    private final String type;
-    private final Method handledMethods;
+    private final ArrayList<Method> handledMethods = new ArrayList<>();
+    private String typeOfHandler = "";
 
-    public Handler() {
-        this.type = "";
-        this.handledMethods = null;
+    public String getType() {
+        return typeOfHandler;
     }
 
-    public abstract boolean handles(Request request);
+    public void setType(String type) {
+        typeOfHandler = type;
+    }
 
-    public abstract String getType();
+    public void addHandledMethod(Method method) {
+        handledMethods.add(method);
+    }
+
+    public boolean handles(Request request) {
+        return this.handledMethods.contains(request.getMethod());
+    }
 }
