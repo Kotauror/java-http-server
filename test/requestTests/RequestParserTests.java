@@ -16,6 +16,7 @@ public class RequestParserTests {
     private String input;
     private LinkedHashMap<String, String> headers;
     private String path;
+    private String httpVersion;
 
     @Before
     public void setup() {
@@ -24,7 +25,8 @@ public class RequestParserTests {
                 "Host: 0.0.0.0:5000\n" +
                 "Content-Length: 24\n\r\n" +
                 "nomethod body\ntestbody";
-        path = "http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1";
+        path = "http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages";
+        httpVersion = "HTTP/1.1";
         headers = new LinkedHashMap<String, String>() {{
             put("Host", "0.0.0.0:5000");
             put("Content-Length", "24");
@@ -39,6 +41,7 @@ public class RequestParserTests {
 
         assertEquals(Method.GET, request.getMethod());
         assertEquals(path, request.getPath());
+        assertEquals(httpVersion, request.getHttpVersion());
         assertEquals(headers, request.getHeaders());
         assertEquals(body, request.getBody());
     }
@@ -53,6 +56,7 @@ public class RequestParserTests {
 
         assertEquals(Method.GET, request.getMethod());
         assertEquals(path, request.getPath());
+        assertEquals(httpVersion, request.getHttpVersion());
         assertEquals(headers, request.getHeaders());
         assertEquals(body, request.getBody());
     }
@@ -68,6 +72,7 @@ public class RequestParserTests {
 
         assertEquals(Method.GET, request.getMethod());
         assertEquals(path, request.getPath());
+        assertEquals(httpVersion, request.getHttpVersion());
         assertEquals(headers, request.getHeaders());
         assertEquals(body, request.getBody());
     }

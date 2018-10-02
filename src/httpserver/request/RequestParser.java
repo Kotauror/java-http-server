@@ -14,19 +14,25 @@ public class RequestParser {
 
         Method method = getMethod(linesOfRequest[0]);
         String path = getPath(linesOfRequest[0]);
+        String httpVersion = getHttpVersion(linesOfRequest[0]);
         LinkedHashMap<String, String> headers = getHeaders(linesOfRequest);
         String body = getBody(requestString);
-        return new Request(method, path, headers, body);
+        return new Request(method, path, httpVersion, headers, body);
     }
 
     private Method getMethod(String firstLineOfRequest) {
-        String[] methodAndPath = this.getMethodAndPath(firstLineOfRequest);
+        String[] methodAndPath = this.getMethodPathAndHttpVersion(firstLineOfRequest);
         return Method.valueOf(methodAndPath[0]);
     }
 
     private String getPath(String firstLineOfRequest) {
-        String[] methodAndPath = this.getMethodAndPath(firstLineOfRequest);
+        String[] methodAndPath = this.getMethodPathAndHttpVersion(firstLineOfRequest);
         return stripOfNewLine(methodAndPath[1]);
+    }
+
+    private String getHttpVersion(String firstLineOfRequest) {
+        String[] methodAndPath = this.getMethodPathAndHttpVersion(firstLineOfRequest);
+        return stripOfNewLine(methodAndPath[2]);
     }
 
     private LinkedHashMap getHeaders(String[] linesOfRequest) {
@@ -51,8 +57,8 @@ public class RequestParser {
         return (hasNoBody(partsOfInputString)) ? "" : this.removeEmptyLines(partsOfInputString[1]);
     }
 
-    private String[] getMethodAndPath(String FirstLineOfRequest) {
-        return FirstLineOfRequest.split(" ", 2);
+    private String[] getMethodPathAndHttpVersion(String FirstLineOfRequest) {
+        return FirstLineOfRequest.split(" ", 3);
     }
 
     private Boolean hitAnEmptyLine(String line) {
