@@ -76,4 +76,26 @@ public class RequestParserTests {
         assertEquals(headers, request.getHeaders());
         assertEquals(body, request.getBody());
     }
+
+    @Test
+    public void testCaseFromFitnesseAPISimpleGet() {
+        String input = "GET /file1 HTTP/1.1\n" +
+        "Host: localhost:5000\n" +
+        "Connection: Keep-Alive\n" +
+        "User-Agent: Apache-HttpClient/4.3.5 (java 1.5)\n" +
+        "Accept-Encoding: gzip,deflate";
+        LinkedHashMap headers = new LinkedHashMap<String, String>() {{
+            put("Host", "localhost:5000");
+            put("Connection", "Keep-Alive");
+            put("User-Agent", "Apache-HttpClient/4.3.5 (java 1.5)");
+            put("Accept-Encoding", "gzip,deflate");
+        }};
+
+        Request request = requestParser.parse(input);
+        assertEquals(Method.GET, request.getMethod());
+        assertEquals("/file1", request.getPath());
+        assertEquals("HTTP/1.1", request.getHttpVersion());
+        assertEquals(headers, request.getHeaders());
+        assertEquals("", request.getBody());
+    }
 }
