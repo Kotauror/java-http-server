@@ -63,12 +63,10 @@ public class RequestParser {
 
     private String getBody(BufferedReader bufferedReader, int contentLength) throws IOException {
         StringBuilder body = new StringBuilder();
-        char[] characters = new char[contentLength];
-        bufferedReader.read(characters);
-        for (char character : characters) {
-            body.append(character);
+        for (int i = 0; i < contentLength -1; i++) {
+            body.append((char)bufferedReader.read());
         }
-        return body.toString().trim();
+        return body.toString();
     }
 
     private String[] getMethodPathAndHttpVersion(String FirstLineOfRequest) {
