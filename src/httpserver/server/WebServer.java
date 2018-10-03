@@ -2,6 +2,7 @@ package httpserver.server;
 
 import httpserver.handlers.RequestRouter;
 import httpserver.request.RequestParser;
+import httpserver.response.ResponseWriter;
 
 import java.io.*;
 import java.net.ServerSocket;

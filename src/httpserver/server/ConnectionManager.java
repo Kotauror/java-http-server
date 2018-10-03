@@ -5,21 +5,22 @@ import httpserver.handlers.RequestRouter;
 import httpserver.request.Request;
 import httpserver.request.RequestParser;
 import httpserver.response.Response;
+import httpserver.response.ResponseWriter;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.OutputStream;
 import java.net.Socket;
 
 public class ConnectionManager extends Thread {
 
     private final Socket clientSocket;
-    private final PrintWriter writer;
+    private final OutputStream writer;
     private final RequestParser requestParser;
     private final RequestRouter requestRouter;
 
     public ConnectionManager(Socket clientSocket, RequestParser requestParser, RequestRouter requestRouter) throws IOException {
         this.clientSocket = clientSocket;
-        this.writer = new PrintWriter(clientSocket.getOutputStream(), true);
+        this.writer = clientSocket.getOutputStream();
         this.requestParser = requestParser;
         this.requestRouter = requestRouter;
     }
@@ -37,7 +38,8 @@ public class ConnectionManager extends Thread {
         Request request = this.requestParser.parse(clientSocket.getInputStream());
         Handler handler = this.requestRouter.findHandler(request);
         Response response = handler.getResponse(request);
-        writer.println(response.getFullResponse());
-        writer.close();
+        ResponseWriter responseWriter = new ResponseWriter(writer, response);
+        responseWriter.write();
+        clientSocket.close();
     }
 }

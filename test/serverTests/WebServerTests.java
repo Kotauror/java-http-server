@@ -76,7 +76,7 @@ public class WebServerTests {
 
         webServer.start();
 
-        assertEquals("HTTP/1.1 200", mockClientOutputStream.toString().trim());
+        assertEquals("HTTP/1.1 200\r\nfile1 contents", mockClientOutputStream.toString().trim());
     }
 
     @Test
