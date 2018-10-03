@@ -3,6 +3,9 @@ package serverTests;
 import httpserver.handlers.RequestRouter;
 import httpserver.request.RequestParser;
 import httpserver.server.*;
+import httpserver.server.mocks.MockServerSocket;
+import httpserver.server.mocks.MockServerStatus;
+import httpserver.server.mocks.MockSocket;
 import org.junit.Before;
 import org.junit.Test;
 

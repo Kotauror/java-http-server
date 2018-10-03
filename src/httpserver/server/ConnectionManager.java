@@ -34,12 +34,9 @@ public class ConnectionManager extends Thread {
     }
 
     public void handleConnection() throws IOException {
-        System.out.println(clientSocket);
         Request request = this.requestParser.parse(clientSocket.getInputStream());
         Handler handler = this.requestRouter.findHandler(request);
-        System.out.println(request);
         Response response = handler.getResponse(request);
-        System.out.println(response);
         writer.println(response.getHttpVersion() + " " + response.getStatus().getStatus());
         writer.close();
     }

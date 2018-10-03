@@ -1,7 +1,7 @@
-package httpserver.server;
+package httpserver.server.mocks;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import httpserver.server.mocks.MockSocket;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 
