@@ -2,10 +2,10 @@ package serverTests;
 
 import httpserver.handlers.RequestRouter;
 import httpserver.request.RequestParser;
-import httpserver.server.MockServerSocket;
-import httpserver.server.MockServerStatus;
-import httpserver.server.MockSocket;
-import httpserver.server.WebServer;
+import httpserver.server.*;
+import httpserver.server.mocks.MockServerSocket;
+import httpserver.server.mocks.MockServerStatus;
+import httpserver.server.mocks.MockSocket;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,6 +13,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -42,17 +44,19 @@ public class WebServerTests {
         MockServerStatus mockServerStatus = new MockServerStatus();
         RequestParser requestParser = new RequestParser();
         RequestRouter requestRouter = new RequestRouter();
-        webServer = new WebServer(mockSystemOut, mockServerSocket, mockServerStatus, requestParser, requestRouter);
+        Executor executor = Executors.newFixedThreadPool(20);
+        Executor executor1 = new CurrentThreadExecutor();
+        webServer = new WebServer(mockSystemOut, mockServerSocket, mockServerStatus, requestParser, requestRouter, executor1);
     }
 
     @Test
-    public void serverTellsItsRunning() throws IOException {
+    public void serverTellsItsRunning() {
         webServer.start();
         assertEquals("I'm listening for connections", mockOutputStream.toString().trim());
     }
 
     @Test
-    public void integrationServerSendsResponseToClient() throws IOException {
+    public void integrationServerSendsResponseToClient(){
         webServer.start();
 
         assertEquals("HTTP/1.1 404", mockClientOutputStream.toString().trim());

@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class ConnectionManager {
+public class ConnectionManager extends Thread {
 
     private final Socket clientSocket;
     private final PrintWriter writer;
@@ -22,6 +22,15 @@ public class ConnectionManager {
         this.writer = new PrintWriter(clientSocket.getOutputStream(), true);
         this.requestParser = requestParser;
         this.requestRouter = requestRouter;
+    }
+
+    @Override
+    public void run() {
+        try {
+            this.handleConnection();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void handleConnection() throws IOException {

@@ -1,4 +1,6 @@
-package httpserver.server;
+package httpserver.server.mocks;
+
+import httpserver.server.ServerStatus;
 
 import java.util.ArrayList;
 import java.util.Collections;

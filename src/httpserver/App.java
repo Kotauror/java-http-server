@@ -7,6 +7,8 @@ import httpserver.server.WebServer;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class App {
 
@@ -18,7 +20,8 @@ public class App {
         ServerStatus serverStatus = new ServerStatus();
         RequestParser requestParser = new RequestParser();
         RequestRouter requestRouter = new RequestRouter();
-        WebServer webServer = new WebServer(System.out, serverSocket, serverStatus, requestParser, requestRouter);
+        Executor executor = Executors.newFixedThreadPool(7);
+        WebServer webServer = new WebServer(System.out, serverSocket, serverStatus, requestParser, requestRouter, executor);
         webServer.start();
     }
 }
