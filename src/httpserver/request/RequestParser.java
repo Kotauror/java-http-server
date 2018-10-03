@@ -14,18 +14,15 @@ public class RequestParser {
 
     public Request parse(InputStream inputStream) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-
         String firstLine = reader.readLine();
+
         Method method = getMethod(firstLine);
         String path = getPath(firstLine);
         String httpVersion = getHttpVersion(firstLine);
         LinkedHashMap<String, String> headers = getHeaders(reader);
 
-        String body = "";
-        if (headers.get("Content-Length") != null) {
-            int contentLength = Integer.parseInt(headers.get("Content-Length"));
-            body = getBody(reader, contentLength);
-        }
+        String contentLengthKey = headers.get("Content-Length");
+        String body = getBody(contentLengthKey, reader);
         return new Request(method, path, httpVersion, headers, body);
     }
 
@@ -61,12 +58,18 @@ public class RequestParser {
         return headers;
     }
 
-    private String getBody(BufferedReader bufferedReader, int contentLength) throws IOException {
-        StringBuilder body = new StringBuilder();
-        for (int i = 0; i < contentLength -1; i++) {
-            body.append((char)bufferedReader.read());
+
+    private String getBody(String contentLengthKey, BufferedReader bufferedReader) throws IOException {
+        if (contentLengthKey == null) {
+            return "";
+        } else {
+            int contentLengthAsInt = Integer.parseInt(contentLengthKey);
+            StringBuilder body = new StringBuilder();
+            for (int i = 0; i < contentLengthAsInt -1; i++) {
+                body.append((char)bufferedReader.read());
+            }
+            return body.toString().trim();
         }
-        return body.toString();
     }
 
     private String[] getMethodPathAndHttpVersion(String FirstLineOfRequest) {
