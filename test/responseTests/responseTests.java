@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertArrayEquals;
 
 public class responseTests {
 
@@ -34,5 +35,13 @@ public class responseTests {
         String expected = "HTTP/1.1 200";
 
         assertEquals(expected, response.getFullResponse());
+    }
+
+    @Test
+    public void setBodyContentSetsContentOfBody() {
+        byte[] bodyContent = "Future Body Content".getBytes();
+        response.setBodyContent(bodyContent);
+
+        assertArrayEquals(bodyContent, response.getBodyContent());
     }
 }
