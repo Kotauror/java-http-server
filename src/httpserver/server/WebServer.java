@@ -30,12 +30,8 @@ public class WebServer {
         stdOut.println("I'm listening for connections");
         while (serverStatus.isRunning()) {
             Socket clientConnection = serverSocket.accept();
-            PrintWriter pw = new PrintWriter(clientConnection.getOutputStream(), true);
-            Request request = this.requestParser.parse(clientConnection.getInputStream());
-            Handler handler = this.requestRouter.findHandler(request);
-            Response response = handler.getResponse(request);
-            pw.println(response);
-            pw.close();
+            ConnectionManager connectionManager = new ConnectionManager(clientConnection, this.requestParser, this.requestRouter);
+            connectionManager.handleConnection();
         }
     }
 }

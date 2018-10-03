@@ -27,14 +27,15 @@ public class WebServerTests {
         // Server output
         mockOutputStream = new ByteArrayOutputStream();
         PrintStream mockSystemOut = new PrintStream(mockOutputStream);
-
-        // Client
+        // Client Input
         String requestString = "GET http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1\n" +
                 "Host: 0.0.0.0:5000\n" +
                 "Content-Length: 23\n\r\n" +
                 "nomethod body\ntestbody";
         ByteArrayInputStream mockInputSteam = new ByteArrayInputStream(requestString.getBytes());
+        // Client Output
         mockClientOutputStream = new ByteArrayOutputStream();
+        // Client Socket
         MockSocket mockSocket = new MockSocket(mockClientOutputStream, mockInputSteam);
 
         MockServerSocket mockServerSocket = new MockServerSocket(mockSocket);
@@ -45,9 +46,15 @@ public class WebServerTests {
     }
 
     @Test
-    public void tellsItsRunning() throws IOException {
+    public void serverTellsItsRunning() throws IOException {
+        webServer.start();
+        assertEquals("I'm listening for connections", mockOutputStream.toString().trim());
+    }
+
+    @Test
+    public void integrationServerSendsResponseToClient() throws IOException {
         webServer.start();
 
-        assertEquals("I'm listening for connections", mockOutputStream.toString().trim());
+        assertEquals("HTTP/1.1 404", mockClientOutputStream.toString().trim());
     }
 }
