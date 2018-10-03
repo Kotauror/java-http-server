@@ -15,7 +15,7 @@ public class GetHandler extends Handler{
     @Override
     public Response getResponse(Request request) {
         Response response = new Response();
-        response.setStatus(ResponseStatus.OK);
+        response.setStatus(ResponseStatus.NOT_FOUND);
         return response;
     };
 }

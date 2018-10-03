@@ -34,6 +34,6 @@ public class getHandlerTests {
     @Test
     public void createsAResponseWithStatus200() {
         Response response = getHandler.getResponse(request);
-        assertEquals(ResponseStatus.OK, response.getStatus());
+        assertEquals(ResponseStatus.NOT_FOUND, response.getStatus());
     }
 }
