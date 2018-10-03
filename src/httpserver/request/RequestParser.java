@@ -58,7 +58,6 @@ public class RequestParser {
         return headers;
     }
 
-
     private String getBody(String contentLengthKey, BufferedReader bufferedReader) throws IOException {
         if (contentLengthKey == null) {
             return "";
