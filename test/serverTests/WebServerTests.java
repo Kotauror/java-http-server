@@ -39,8 +39,8 @@ public class WebServerTests {
 
     @Test
     public void tellsItsRunning() throws IOException {
-//        webServer.start();
-//
-//        assertEquals("I'm listening for connections", mockOutputStream.toString().trim());
+        webServer.start();
+
+        assertEquals("I'm listening for connections", mockOutputStream.toString().trim());
     }
 }
