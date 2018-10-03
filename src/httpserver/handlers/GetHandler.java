@@ -20,18 +20,22 @@ public class GetHandler extends Handler{
 
     @Override
     public Response getResponse(Request request) {
-        if (pathExists(request)) {
-            Response response = new Response();
-            response.setStatus(ResponseStatus.OK);
-            return response;
-        } else {
-            Response response = new Response();
-            response.setStatus(ResponseStatus.NOT_FOUND);
-            return response;
-        }
-    };
+        return (pathExists(request)) ? this.getFullResponse() : this.getNotFoundResponse();
+    }
 
-    public boolean pathExists(Request request) {
+    private boolean pathExists(Request request) {
         return Files.exists(Paths.get(rootPath + request.getPath()));
+    }
+
+    private Response getNotFoundResponse() {
+        Response response = new Response();
+        response.setStatus(ResponseStatus.NOT_FOUND);
+        return response;
+    }
+
+    private Response getFullResponse() {
+        Response response = new Response();
+        response.setStatus(ResponseStatus.OK);
+        return response;
     }
 }

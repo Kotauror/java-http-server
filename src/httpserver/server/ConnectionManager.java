@@ -37,7 +37,6 @@ public class ConnectionManager extends Thread {
         Request request = this.requestParser.parse(clientSocket.getInputStream());
         Handler handler = this.requestRouter.findHandler(request);
         Response response = handler.getResponse(request);
-        System.out.println(response.getStatus());
         writer.println(response.getFullResponse());
         writer.close();
     }
