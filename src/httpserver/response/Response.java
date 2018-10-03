@@ -21,4 +21,8 @@ public class Response {
     public void setStatus(ResponseStatus status) {
         this.responseStatus = status;
     }
+
+    public String getFullResponse() {
+        return this.httpVersion + " " + this.responseStatus.getStatus();
+    }
 }

@@ -27,4 +27,12 @@ public class responseTests {
 
         assertEquals(ResponseStatus.OK, response.getStatus());
     }
+
+    @Test
+    public void returnsFullResponse() {
+        response.setStatus(ResponseStatus.OK);
+        String expected = "HTTP/1.1 200";
+
+        assertEquals(expected, response.getFullResponse());
+    }
 }
