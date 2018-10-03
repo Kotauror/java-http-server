@@ -44,4 +44,14 @@ public class responseTests {
 
         assertArrayEquals(bodyContent, response.getBodyContent());
     }
+
+    @Test
+    public void contentTypeHeaderIsHardcodedToTXTPlain() {
+        byte[] expected = "text/plain".getBytes();
+        response.setContentTypeHeader();
+        byte[] actual = (byte[]) response.getHeaders().get("Content-Type");
+
+        assertArrayEquals(expected, actual);
+    }
+
 }
