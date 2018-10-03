@@ -19,7 +19,8 @@ public class getHandlerTests {
 
     @Before
     public void setup() {
-        getHandler = new GetHandler();
+        String rootPath = "/Users/justynazygmunt/Desktop/HttpServerFitnesse/cob_spec/public/";
+        getHandler = new GetHandler(rootPath);
         String path = "http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages";
         String httpVersion = "HTTP/1.1";
         LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{

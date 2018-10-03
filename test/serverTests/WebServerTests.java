@@ -14,7 +14,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -30,7 +29,7 @@ public class WebServerTests {
         mockOutputStream = new ByteArrayOutputStream();
         PrintStream mockSystemOut = new PrintStream(mockOutputStream);
         // Client Input
-        String requestString = "GET http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1\n" +
+        String requestString = "GET /file1 HTTP/1.1\n" +
                 "Host: 0.0.0.0:5000\n" +
                 "Content-Length: 23\n\r\n" +
                 "nomethod body\ntestbody";
@@ -43,10 +42,10 @@ public class WebServerTests {
         MockServerSocket mockServerSocket = new MockServerSocket(mockSocket);
         MockServerStatus mockServerStatus = new MockServerStatus();
         RequestParser requestParser = new RequestParser();
-        RequestRouter requestRouter = new RequestRouter();
-        Executor executor = Executors.newFixedThreadPool(20);
-        Executor executor1 = new CurrentThreadExecutor();
-        webServer = new WebServer(mockSystemOut, mockServerSocket, mockServerStatus, requestParser, requestRouter, executor1);
+        String rootPath = "/Users/justynazygmunt/Desktop/cob_spec/public/";
+        RequestRouter requestRouter = new RequestRouter(rootPath);
+        Executor executor = new CurrentThreadExecutor();
+        webServer = new WebServer(mockSystemOut, mockServerSocket, mockServerStatus, requestParser, requestRouter, executor);
     }
 
     @Test
@@ -59,6 +58,6 @@ public class WebServerTests {
     public void integrationServerSendsResponseToClient(){
         webServer.start();
 
-        assertEquals("HTTP/1.1 404", mockClientOutputStream.toString().trim());
+        assertEquals("HTTP/1.1 200", mockClientOutputStream.toString().trim());
     }
 }

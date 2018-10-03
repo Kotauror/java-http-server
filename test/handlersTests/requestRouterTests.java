@@ -24,7 +24,8 @@ public class requestRouterTests {
 
     @Before
     public void setup() {
-        requestRouter = new RequestRouter();
+        String rootPath = "/Users/justynazygmunt/Desktop/HttpServerFitnesse/cob_spec/public/";
+        requestRouter = new RequestRouter(rootPath);
         method1 = Method.GET;
         method2 = Method.POST;
         method3 = Method.OPTIONS;

@@ -10,8 +10,9 @@ public class RequestRouter {
 
     private final ArrayList<Handler> handlers = new ArrayList<Handler>();
 
-    public RequestRouter() {
-        addHandlers(Arrays.asList(new GetHandler(),
+    public RequestRouter(String rootPath) {
+        addHandlers(Arrays.asList(
+                new GetHandler(rootPath),
                 new PostHandler()));
     }
 
