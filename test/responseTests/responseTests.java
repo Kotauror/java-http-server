@@ -53,5 +53,4 @@ public class responseTests {
 
         assertArrayEquals(expected, actual);
     }
-
 }

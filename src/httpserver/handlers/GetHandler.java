@@ -40,6 +40,7 @@ public class GetHandler extends Handler{
         response.setStatus(ResponseStatus.OK);
         File file = new File(rootPath + request.getPath());
         response.setBodyContent(this.getFileContentConverter().getFileContent(file));
+        response.setContentTypeHeader();
         return response;
     }
 }
