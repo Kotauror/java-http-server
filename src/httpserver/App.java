@@ -1,5 +1,7 @@
 package httpserver;
 
+import httpserver.handlers.RequestRouter;
+import httpserver.request.RequestParser;
 import httpserver.server.ServerStatus;
 import httpserver.server.WebServer;
 
@@ -14,7 +16,9 @@ public class App {
 
         ServerSocket serverSocket = new ServerSocket(portNumber);
         ServerStatus serverStatus = new ServerStatus();
-        WebServer webServer = new WebServer(System.out, serverSocket, serverStatus);
+        RequestParser requestParser = new RequestParser();
+        RequestRouter requestRouter = new RequestRouter();
+        WebServer webServer = new WebServer(System.out, serverSocket, serverStatus, requestParser, requestRouter);
         webServer.start();
     }
 }

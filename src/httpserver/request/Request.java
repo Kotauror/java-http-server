@@ -9,12 +9,14 @@ public class Request {
 
     private final Method method;
     private final String path;
+    private final String httpVersion;
     private final LinkedHashMap<String, String> headers;
     private final String body;
 
-    public Request(Method method, String path, LinkedHashMap<String, String> headers, String body) {
+    public Request(Method method, String path, String httpVersion, LinkedHashMap<String, String> headers, String body) {
         this.method = method;
         this.path = path;
+        this.httpVersion = httpVersion;
         this.headers = headers;
         this.body = body;
     }
@@ -26,6 +28,8 @@ public class Request {
     public String getPath() {
         return this.path;
     }
+
+    public String getHttpVersion() { return this.httpVersion; }
 
     public LinkedHashMap getHeaders() {
         return this.headers;

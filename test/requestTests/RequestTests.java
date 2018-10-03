@@ -16,14 +16,15 @@ public class RequestTests {
 
     @Before
     public void setup() {
-        String path = "http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1";
+        String path = "http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages";
+        String httpVersion = "HTTP/1.1";
         LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
             put("Host", "localhost");
             put("Accept-Language", "en-US");
         }};
         String body = "example body";
 
-        request = new Request(Method.GET, path, headers, body);
+        request = new Request(Method.GET, path, httpVersion, headers, body);
     }
 
     @Test
@@ -33,7 +34,12 @@ public class RequestTests {
 
     @Test
     public void returnsPath() {
-        assertEquals("http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1", request.getPath());
+        assertEquals("http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages", request.getPath());
+    }
+
+    @Test
+    public void returnsHttpVersion() {
+        assertEquals("HTTP/1.1", request.getHttpVersion());
     }
 
     @Test

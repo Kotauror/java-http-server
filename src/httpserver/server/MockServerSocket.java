@@ -7,18 +7,15 @@ import java.net.ServerSocket;
 
 public class MockServerSocket extends ServerSocket {
 
-    private final ByteArrayOutputStream output;
-    private final ByteArrayInputStream input;
 
-    public MockServerSocket(ByteArrayInputStream inputStream, ByteArrayOutputStream outputStream) throws IOException {
-        super();
-        this.input = inputStream;
-        this.output = outputStream;
+    private final MockSocket mockSocket;
+
+    public MockServerSocket(MockSocket mockSocket) throws IOException {
+        this.mockSocket = mockSocket;
     }
 
     @Override
     public MockSocket accept() {
-        return new MockSocket(this.output, this.input);
+        return this.mockSocket;
     }
-
 }

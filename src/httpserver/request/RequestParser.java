@@ -2,41 +2,53 @@ package httpserver.request;
 
 import httpserver.Method;
 
-import java.util.Arrays;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.LinkedHashMap;
 
 public class RequestParser {
 
     public RequestParser() {}
 
-    public Request parse(String requestString) {
-        String[] linesOfRequest = this.splitRequestIntoLines(requestString);
+    public Request parse(InputStream inputStream) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        String firstLine = reader.readLine();
 
-        Method method = getMethod(linesOfRequest[0]);
-        String path = getPath(linesOfRequest[0]);
-        LinkedHashMap<String, String> headers = getHeaders(linesOfRequest);
-        String body = getBody(requestString);
-        return new Request(method, path, headers, body);
+        Method method = getMethod(firstLine);
+        String path = getPath(firstLine);
+        String httpVersion = getHttpVersion(firstLine);
+        LinkedHashMap<String, String> headers = getHeaders(reader);
+
+        String contentLengthKey = headers.get("Content-Length");
+        String body = getBody(contentLengthKey, reader);
+        return new Request(method, path, httpVersion, headers, body);
     }
 
     private Method getMethod(String firstLineOfRequest) {
-        String[] methodAndPath = this.getMethodAndPath(firstLineOfRequest);
+        String[] methodAndPath = this.getMethodPathAndHttpVersion(firstLineOfRequest);
         return Method.valueOf(methodAndPath[0]);
     }
 
     private String getPath(String firstLineOfRequest) {
-        String[] methodAndPath = this.getMethodAndPath(firstLineOfRequest);
+        String[] methodAndPath = this.getMethodPathAndHttpVersion(firstLineOfRequest);
         return stripOfNewLine(methodAndPath[1]);
     }
 
-    private LinkedHashMap getHeaders(String[] linesOfRequest) {
+    private String getHttpVersion(String firstLineOfRequest) {
+        String[] methodAndPath = this.getMethodPathAndHttpVersion(firstLineOfRequest);
+        return stripOfNewLine(methodAndPath[2]);
+    }
+
+    private LinkedHashMap getHeaders(BufferedReader bufferedReader) throws IOException {
         LinkedHashMap<String, String> headers = new LinkedHashMap<>();
-        String linesOfRequestWithoutFirst[] = Arrays.copyOfRange(linesOfRequest, 1, linesOfRequest.length);
-        for (String line : linesOfRequestWithoutFirst) {
+
+        String line;
+        while ((line = bufferedReader.readLine()) != null) {
             if (this.hitAnEmptyLine(line)) {
                 break;
-            }
-            if (!(this.hitAnEmptyLine(line))) {
+            } else {
                 String ElementsOfLine[] = line.split(" ", 2);
                 String key = this.removeLastCharacter(ElementsOfLine[0]);
                 String value = this.stripOfNewLine(ElementsOfLine[1]);
@@ -46,21 +58,25 @@ public class RequestParser {
         return headers;
     }
 
-    private String getBody(String requestString) {
-        String partsOfInputString[] = requestString.split("\\r");
-        return (hasNoBody(partsOfInputString)) ? "" : this.removeEmptyLines(partsOfInputString[1]);
+    private String getBody(String contentLengthKey, BufferedReader bufferedReader) throws IOException {
+        if (contentLengthKey == null) {
+            return "";
+        } else {
+            int contentLengthAsInt = Integer.parseInt(contentLengthKey);
+            StringBuilder body = new StringBuilder();
+            for (int i = 0; i < contentLengthAsInt -1; i++) {
+                body.append((char)bufferedReader.read());
+            }
+            return body.toString().trim();
+        }
     }
 
-    private String[] getMethodAndPath(String FirstLineOfRequest) {
-        return FirstLineOfRequest.split(" ", 2);
+    private String[] getMethodPathAndHttpVersion(String FirstLineOfRequest) {
+        return FirstLineOfRequest.split(" ", 3);
     }
 
     private Boolean hitAnEmptyLine(String line) {
         return line.equals("");
-    }
-
-    private String[] splitRequestIntoLines(String requestString) {
-        return requestString.split("\\r?\\n");
     }
 
     private String stripOfNewLine(String string) {
@@ -69,13 +85,5 @@ public class RequestParser {
 
     private String removeLastCharacter(String string) {
         return string.substring(0, string.length() -1);
-    }
-
-    private String removeEmptyLines(String string) {
-        return string.replaceAll("(?m)^[ \t]*\r?\n", "");
-    }
-
-    private Boolean hasNoBody(String[] partsOfInputString) {
-        return partsOfInputString.length == 1;
     }
 }

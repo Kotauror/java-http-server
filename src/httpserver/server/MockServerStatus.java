@@ -9,13 +9,11 @@ public class MockServerStatus extends ServerStatus {
 
     public MockServerStatus() {
         this.runServerBooleans = new ArrayList<Boolean>();
-        fillBooleans(true, true, true, false);
+        fillBooleans(true, false);
     }
 
-    private void fillBooleans(boolean runServer, boolean runServer2, boolean runServer3, boolean stopServer) {
+    private void fillBooleans(boolean runServer, boolean stopServer) {
         Collections.addAll(this.runServerBooleans, runServer);
-        Collections.addAll(this.runServerBooleans, runServer2);
-        Collections.addAll(this.runServerBooleans, runServer3);
         Collections.addAll(this.runServerBooleans, stopServer);
     }
 

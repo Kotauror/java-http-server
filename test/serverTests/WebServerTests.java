@@ -1,7 +1,10 @@
 package serverTests;
 
+import httpserver.handlers.RequestRouter;
+import httpserver.request.RequestParser;
 import httpserver.server.MockServerSocket;
 import httpserver.server.MockServerStatus;
+import httpserver.server.MockSocket;
 import httpserver.server.WebServer;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,22 +20,41 @@ public class WebServerTests {
 
     private WebServer webServer;
     private ByteArrayOutputStream mockOutputStream;
+    private ByteArrayOutputStream mockClientOutputStream;
 
     @Before
     public void setup() throws IOException {
+        // Server output
         mockOutputStream = new ByteArrayOutputStream();
         PrintStream mockSystemOut = new PrintStream(mockOutputStream);
-        ByteArrayOutputStream mockClientOutputStream = new ByteArrayOutputStream();
-        ByteArrayInputStream mockClientInputStream = new ByteArrayInputStream("test String".getBytes());
-        MockServerSocket mockServerSocket = new MockServerSocket(mockClientInputStream, mockClientOutputStream);
+        // Client Input
+        String requestString = "GET http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1\n" +
+                "Host: 0.0.0.0:5000\n" +
+                "Content-Length: 23\n\r\n" +
+                "nomethod body\ntestbody";
+        ByteArrayInputStream mockInputSteam = new ByteArrayInputStream(requestString.getBytes());
+        // Client Output
+        mockClientOutputStream = new ByteArrayOutputStream();
+        // Client Socket
+        MockSocket mockSocket = new MockSocket(mockClientOutputStream, mockInputSteam);
+
+        MockServerSocket mockServerSocket = new MockServerSocket(mockSocket);
         MockServerStatus mockServerStatus = new MockServerStatus();
-        webServer = new WebServer(mockSystemOut, mockServerSocket, mockServerStatus);
+        RequestParser requestParser = new RequestParser();
+        RequestRouter requestRouter = new RequestRouter();
+        webServer = new WebServer(mockSystemOut, mockServerSocket, mockServerStatus, requestParser, requestRouter);
     }
 
     @Test
-    public void tellsItsRunning() throws IOException {
+    public void serverTellsItsRunning() throws IOException {
+        webServer.start();
+        assertEquals("I'm listening for connections", mockOutputStream.toString().trim());
+    }
+
+    @Test
+    public void integrationServerSendsResponseToClient() throws IOException {
         webServer.start();
 
-        assertEquals("I'm listening for connections", mockOutputStream.toString().trim());
+        assertEquals("HTTP/1.1 404", mockClientOutputStream.toString().trim());
     }
 }
