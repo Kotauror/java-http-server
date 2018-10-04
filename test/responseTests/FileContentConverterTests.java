@@ -1,6 +1,6 @@
 package responseTests;
 
-import httpserver.response.FileContentConverter;
+import httpserver.utilities.FileContentConverter;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,7 +22,7 @@ public class FileContentConverterTests {
 
     @Test
     public void transformsFileIntoArrayOfBytes() throws IOException {
-        String filePath = "test/responseTests/sampleTestFiles/testFile.txt";
+        String filePath = "src/httpserver/utilities/sampleTestFiles/testFile.txt";
         byte[] fileContent = "test strjjing hehhe\n".getBytes();
         Files.write(Paths.get(filePath), fileContent);
 

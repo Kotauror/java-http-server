@@ -1,5 +1,8 @@
-package httpserver.handlers;
+package httpserver.request;
 
+import httpserver.handlers.GetHandler;
+import httpserver.handlers.Handler;
+import httpserver.handlers.PostHandler;
 import httpserver.request.Request;
 
 import java.util.ArrayList;

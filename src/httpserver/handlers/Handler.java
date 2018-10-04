@@ -1,8 +1,8 @@
 package httpserver.handlers;
 
-import httpserver.Method;
+import httpserver.utilities.Method;
 import httpserver.request.Request;
-import httpserver.response.FileContentConverter;
+import httpserver.utilities.FileContentConverter;
 import httpserver.response.Response;
 
 import java.io.IOException;

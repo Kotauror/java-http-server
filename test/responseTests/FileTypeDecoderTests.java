@@ -1,6 +1,6 @@
 package responseTests;
 
-import httpserver.response.FileTypeDecoder;
+import httpserver.utilities.FileTypeDecoder;
 import org.junit.Before;
 import org.junit.Test;
 

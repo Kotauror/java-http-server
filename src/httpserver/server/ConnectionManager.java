@@ -1,7 +1,7 @@
 package httpserver.server;
 
 import httpserver.handlers.Handler;
-import httpserver.handlers.RequestRouter;
+import httpserver.request.RequestRouter;
 import httpserver.request.Request;
 import httpserver.request.RequestParser;
 import httpserver.response.Response;

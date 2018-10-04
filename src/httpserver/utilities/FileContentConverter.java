@@ -1,4 +1,4 @@
-package httpserver.response;
+package httpserver.utilities;
 
 import java.io.File;
 import java.io.FileInputStream;

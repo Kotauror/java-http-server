@@ -1,9 +1,9 @@
 package handlersTests;
 
-import httpserver.Method;
+import httpserver.utilities.Method;
 import httpserver.handlers.GetHandler;
 import httpserver.request.Request;
-import httpserver.response.FileContentConverter;
+import httpserver.utilities.FileContentConverter;
 import httpserver.response.Response;
 import httpserver.response.ResponseStatus;
 import org.junit.Before;
@@ -25,7 +25,7 @@ public class getHandlerTests {
     @Before
     public void setup() {
         fileContentConverter = new FileContentConverter();
-        String rootPath = "test/handlersTests/sampleTestFiles";
+        String rootPath = "src/httpserver/utilities/sampleTestFiles";
         getHandler = new GetHandler(rootPath);
         String path = "/testFile";
         String httpVersion = "HTTP/1.1";
@@ -46,7 +46,7 @@ public class getHandlerTests {
 
     @Test
     public void createsResponseWithBody() throws IOException {
-        String pathToTestFile = "test/handlersTests/sampleTestFiles/testFile";
+        String pathToTestFile = "src/httpserver/utilities/sampleTestFiles/testFile";
         byte[] expected = fileContentConverter.getFileContent(new File(pathToTestFile));
 
         Response response = getHandler.getResponse(request);

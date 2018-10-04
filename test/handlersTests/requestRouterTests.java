@@ -1,8 +1,8 @@
 package handlersTests;
 
-import httpserver.Method;
+import httpserver.utilities.Method;
 import httpserver.handlers.Handler;
-import httpserver.handlers.RequestRouter;
+import httpserver.request.RequestRouter;
 import httpserver.request.Request;
 import org.junit.Before;
 import org.junit.Test;

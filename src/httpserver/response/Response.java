@@ -1,5 +1,7 @@
 package httpserver.response;
 
+import httpserver.utilities.FileTypeDecoder;
+
 import java.util.HashMap;
 
 public class Response {
