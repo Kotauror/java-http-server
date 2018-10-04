@@ -40,10 +40,6 @@ public class Response {
         this.responseStatus = status;
     }
 
-    public String getFullResponse() {
-        return this.httpVersion + " " + this.responseStatus.getStatusCode();
-    }
-
     public void setBodyContent(byte[] bodyContent) {
         this.bodyContent = bodyContent;
     }
