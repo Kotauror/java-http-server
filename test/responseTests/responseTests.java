@@ -9,48 +9,52 @@ import java.util.HashMap;
 
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertTrue;
 
 public class responseTests {
 
-    private Response response;
+    private Response fullResponse;
+    private byte[] fileContent;
+    private Response emptyResponse;
 
     @Before
     public void setup() {
         ResponseStatus responseStatus = ResponseStatus.OK;
-        response = new Response(responseStatus);
+        fileContent = "Kocia test".getBytes();
+        String fileType = "text/plain";
+        fullResponse = new Response(responseStatus, fileContent, fileType);
+        emptyResponse = new Response(ResponseStatus.NOT_FOUND, null, null);
     }
 
     @Test
-    public void responseHasStatusOK() {
-        assertEquals(ResponseStatus.OK, response.getStatus());
+    public void fullResponseHasStatusOK() {
+        assertEquals(ResponseStatus.OK, fullResponse.getStatus());
     }
 
     @Test
-    public void setBodyContentSetsContentOfBody() {
-        byte[] bodyContent = "Future Body Content".getBytes();
-        response.setBodyContent(bodyContent);
-
-        assertArrayEquals(bodyContent, response.getBodyContent());
+    public void emptyResponseHasStatusNOT_FOUND() {
+        assertEquals(ResponseStatus.NOT_FOUND, emptyResponse.getStatus());
     }
 
     @Test
-    public void contentTypeHeaderIsSetToTxt() {
-        response.setContentTypeHeader("text/plain");
-        HashMap<String, String> actual = response.getHeaders();
-        assertEquals(actual.get("Content-Type"), "text/plain");
+    public void fullResponseHasBodyContent() {
+        assertArrayEquals(fileContent, fullResponse.getBodyContent());
     }
 
     @Test
-    public void contentTypeHeaderIsSetToJPEG() {
-        response.setContentTypeHeader("image/jpeg");
-        HashMap<String, String> actual = response.getHeaders();
-        assertEquals(actual.get("Content-Type"), "image/jpeg");
+    public void emptyResponseHasEmptyBodyContent() {
+        assertArrayEquals(null, emptyResponse.getBodyContent());
     }
 
     @Test
-    public void contentTypeHeaderDefaultTOTxt() {
-        response.setContentTypeHeader("text/plain");
-        HashMap<String, String> actual = response.getHeaders();
-        assertEquals(actual.get("Content-Type"), "text/plain");
+    public void fullResponseHasNoContentHeader() {
+        HashMap<String, String> actual = fullResponse.getHeaders();
+        assertEquals("text/plain", actual.get("Content-Type"));
+    }
+
+    @Test
+    public void emptyResponseHasContentHeader() {
+        HashMap<String, String> actual = emptyResponse.getHeaders();
+        assertTrue(actual.isEmpty());
     }
 }

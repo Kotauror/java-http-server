@@ -51,6 +51,6 @@ public class ResponseWriter {
     }
 
     private boolean bodyIsNotEmpty() {
-        return response.getBodyContent().length > 0;
+        return response.getBodyContent() != null;
     }
 }

@@ -30,7 +30,7 @@ public class GetHandler extends Handler{
     }
 
     private Response getNotFoundResponse() {
-        return new Response(ResponseStatus.NOT_FOUND);
+        return new Response(ResponseStatus.NOT_FOUND, null, null);
     }
 
     private Response getFullResponse(Request request) throws IOException {
@@ -38,9 +38,7 @@ public class GetHandler extends Handler{
         byte[] fileContentInBytes = this.getFileContentConverter().getFileContent(file);
         String fileType = this.getFileTypeDecoder().getFileType(file.getName());
 
-        Response response = new Response(ResponseStatus.OK);
-        response.setBodyContent(fileContentInBytes);
-        response.setContentTypeHeader(fileType);
+        Response response = new Response(ResponseStatus.OK, fileContentInBytes, fileType);
         return response;
     }
 }
