@@ -18,11 +18,7 @@ public class FileTypeDecoder {
     }
 
     public String getFileType(String fileName) {
-        if (hasExtension(fileName)) {
-            return this.getFileTypeWhenOneExists(fileName);
-        } else {
-            return this.getDefaultFileType();
-        }
+        return (hasExtension(fileName)) ? this.getFileTypeWhenOneExists(fileName) : this.getDefaultFileType();
     }
 
     private boolean hasExtension(String fileName) {
