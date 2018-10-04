@@ -2,6 +2,7 @@ package httpserver.request;
 
 import httpserver.handlers.GetHandler;
 import httpserver.handlers.Handler;
+import httpserver.handlers.HeadHandler;
 import httpserver.handlers.PostHandler;
 
 import java.util.ArrayList;
@@ -15,7 +16,8 @@ public class RequestRouter {
     public RequestRouter(String rootPath) {
         addHandlers(Arrays.asList(
                 new GetHandler(rootPath),
-                new PostHandler()));
+                new PostHandler(),
+                new HeadHandler(rootPath)));
     }
 
     public Handler findHandler(Request request) {
