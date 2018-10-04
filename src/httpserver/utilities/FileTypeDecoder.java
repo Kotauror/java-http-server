@@ -8,31 +8,21 @@ public class FileTypeDecoder {
     private HashMap<String, String> fileExtensionsWithTypes;
 
     public FileTypeDecoder() {
-        this.fileExtensionsWithTypes = new HashMap();
-        fillMapWithFileTypes();
+        this.fileExtensionsWithTypes = new HashMap<String, String>() {{
+            put("txt", "text/plain");
+            put("jpeg", "image/jpeg");
+            put("gif", "image/gif");
+            put("png", "image/png");
+            put("html", "text/html");
+        }};
     }
 
     public String getFileType(String fileName) {
         if (hasExtension(fileName)) {
-            String clientFileExtension = getFileExtension(fileName);
-            for (Map.Entry<String, String> fileExtensionWithType : this.fileExtensionsWithTypes.entrySet()) {
-                String currentExtension = fileExtensionWithType.getKey();
-                if (currentExtension.equals(clientFileExtension)) {
-                    return fileExtensionWithType.getValue();
-                }
-            }
-            return this.getDefaultFileType();
+            return this.getFileTypeWhenOneExists(fileName);
         } else {
             return this.getDefaultFileType();
         }
-    }
-
-    private void fillMapWithFileTypes() {
-        fileExtensionsWithTypes.put("txt", "text/plain");
-        fileExtensionsWithTypes.put("jpeg", "image/jpeg");
-        fileExtensionsWithTypes.put("gif", "image/gif");
-        fileExtensionsWithTypes.put("png", "image/png");
-        fileExtensionsWithTypes.put("html", "text/html");
     }
 
     private boolean hasExtension(String fileName) {
@@ -45,5 +35,16 @@ public class FileTypeDecoder {
 
     private String getDefaultFileType() {
         return "text/plain";
+    }
+
+    private String getFileTypeWhenOneExists(String fileName) {
+        String clientFileExtension = getFileExtension(fileName);
+        for (Map.Entry<String, String> fileExtensionWithType : this.fileExtensionsWithTypes.entrySet()) {
+            String currentExtension = fileExtensionWithType.getKey();
+            if (currentExtension.equals(clientFileExtension)) {
+                return fileExtensionWithType.getValue();
+            }
+        }
+        return this.getDefaultFileType();
     }
 }
