@@ -1,7 +1,5 @@
 package httpserver.server.mocks;
 
-import httpserver.server.mocks.MockSocket;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 
