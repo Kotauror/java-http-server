@@ -16,18 +16,12 @@ public class responseTests {
 
     @Before
     public void setup() {
-        response = new Response();
+        ResponseStatus responseStatus = ResponseStatus.OK;
+        response = new Response(responseStatus);
     }
 
     @Test
-    public void responseHasDefaultStatusOf500() {
-        assertEquals(ResponseStatus.INTERNAL_SERVER_ERROR, response.getStatus());
-    }
-
-    @Test
-    public void setStatusChangesResponseStatus() {
-        response.setStatus(ResponseStatus.OK);
-
+    public void responseHasStatusOK() {
         assertEquals(ResponseStatus.OK, response.getStatus());
     }
 

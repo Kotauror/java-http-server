@@ -30,8 +30,7 @@ public class GetHandler extends Handler{
     }
 
     private Response getNotFoundResponse() {
-        Response response = new Response();
-        response.setStatus(ResponseStatus.NOT_FOUND);
+        Response response = new Response(ResponseStatus.NOT_FOUND);
         return response;
     }
 
@@ -40,8 +39,7 @@ public class GetHandler extends Handler{
         byte[] fileContentInBytes = this.getFileContentConverter().getFileContent(file);
         String fileType = this.getFileTypeDecoder().getFileType(file.getName());
 
-        Response response = new Response();
-        response.setStatus(ResponseStatus.OK);
+        Response response = new Response(ResponseStatus.OK);
         response.setBodyContent(fileContentInBytes);
         response.setContentTypeHeader(fileType);
         return response;

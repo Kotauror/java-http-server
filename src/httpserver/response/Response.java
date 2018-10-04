@@ -1,23 +1,19 @@
 package httpserver.response;
 
-import httpserver.utilities.FileTypeDecoder;
-
 import java.util.HashMap;
 
 public class Response {
 
     private final HashMap<String, String> headers;
-    private final FileTypeDecoder fileTypeDecoder;
     private byte[] bodyContent;
     private ResponseStatus responseStatus;
     private String httpVersion;
 
-    public Response() {
+    public Response(ResponseStatus responseStatus) {
         this.httpVersion = "HTTP/1.1";
-        this.responseStatus = ResponseStatus.INTERNAL_SERVER_ERROR;
+        this.responseStatus = responseStatus;
         this.bodyContent = new byte[0];
         this.headers = new HashMap<>();
-        this.fileTypeDecoder = new FileTypeDecoder();
     }
 
     public ResponseStatus getStatus() {
@@ -34,10 +30,6 @@ public class Response {
 
     public HashMap getHeaders() {
         return this.headers;
-    }
-
-    public void setStatus(ResponseStatus status) {
-        this.responseStatus = status;
     }
 
     public void setBodyContent(byte[] bodyContent) {
