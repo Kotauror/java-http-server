@@ -100,6 +100,6 @@ public class WebServerTests {
 
         webServer.start();
 
-        assertEquals("HTTP/1.1 404\nContent-Type: null", mockClientOutputStream.toString().trim());
+        assertEquals("HTTP/1.1 404", mockClientOutputStream.toString().trim());
     }
 }

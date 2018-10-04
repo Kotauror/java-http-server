@@ -26,8 +26,10 @@ public class ResponseWriter {
     }
 
     private void writeHeaders() throws IOException {
-        String contentType = "Content-Type" + ": " + this.response.getHeaders().get("Content-Type") + "\r\n";
-        write(contentType.getBytes());
+        if (this.headersAreNotEmpty()) {
+            String contentType = "Content-Type" + ": " + this.response.getHeaders().get("Content-Type") + "\r\n";
+            write(contentType.getBytes());
+        }
     }
 
     private void writeEmptyLine() throws IOException {
@@ -40,5 +42,9 @@ public class ResponseWriter {
 
     private void write (byte[] bytes) throws IOException {
         this.outputStream.write(bytes);
+    }
+
+    private boolean headersAreNotEmpty() {
+        return !(response.getHeaders().isEmpty());
     }
 }

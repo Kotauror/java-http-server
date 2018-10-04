@@ -30,8 +30,7 @@ public class GetHandler extends Handler{
     }
 
     private Response getNotFoundResponse() {
-        Response response = new Response(ResponseStatus.NOT_FOUND);
-        return response;
+        return new Response(ResponseStatus.NOT_FOUND);
     }
 
     private Response getFullResponse(Request request) throws IOException {
