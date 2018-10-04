@@ -5,6 +5,8 @@ import httpserver.response.ResponseStatus;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.HashMap;
+
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertArrayEquals;
 
@@ -47,10 +49,9 @@ public class responseTests {
 
     @Test
     public void contentTypeHeaderIsHardcodedToTXTPlain() {
-        byte[] expected = "text/plain".getBytes();
-        response.setContentTypeHeader();
-        byte[] actual = (byte[]) response.getHeaders().get("Content-Type");
-
-        assertArrayEquals(expected, actual);
+        byte[] expectedFormat = "text/plain".getBytes();
+        response.setContentTypeHeader("Test.txt");
+        HashMap<String, byte[]> actual = response.getHeaders();
+        assertArrayEquals(actual.get("Content-Type"), expectedFormat);
     }
 }

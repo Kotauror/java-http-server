@@ -44,7 +44,9 @@ public class Response {
         this.bodyContent = bodyContent;
     }
 
-    public void setContentTypeHeader() {
-        headers.put("Content-Type", "text/plain".getBytes());
+    public void setContentTypeHeader(String fileName) {
+        FileTypeDecoder fileTypeDecoder = new FileTypeDecoder();
+        String fileType = fileTypeDecoder.getFileType(fileName);
+        headers.put("Content-Type", fileType.getBytes());
     }
 }
