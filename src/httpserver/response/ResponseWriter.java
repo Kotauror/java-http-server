@@ -21,7 +21,7 @@ public class ResponseWriter {
     }
 
     private void writeStatusCode() throws IOException {
-        String statusLine = this.response.getHttpVersion() + " " + this.response.getStatus().getStatus() + "\n";
+        String statusLine = this.response.getHttpVersion() + " " + this.response.getStatus().getStatusCode() + "\n";
         write(statusLine.getBytes());
     }
 

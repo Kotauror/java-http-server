@@ -41,7 +41,7 @@ public class Response {
     }
 
     public String getFullResponse() {
-        return this.httpVersion + " " + this.responseStatus.getStatus();
+        return this.httpVersion + " " + this.responseStatus.getStatusCode();
     }
 
     public void setBodyContent(byte[] bodyContent) {
