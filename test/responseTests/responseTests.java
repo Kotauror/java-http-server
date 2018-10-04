@@ -48,10 +48,16 @@ public class responseTests {
     }
 
     @Test
-    public void contentTypeHeaderIsHardcodedToTXTPlain() {
-        byte[] expectedFormat = "text/plain".getBytes();
+    public void contentTypeHeaderIsSetToTxt() {
         response.setContentTypeHeader("Test.txt");
-        HashMap<String, byte[]> actual = response.getHeaders();
-        assertArrayEquals(actual.get("Content-Type"), expectedFormat);
+        HashMap<String, String> actual = response.getHeaders();
+        assertEquals(actual.get("Content-Type"), "text/plain");
+    }
+
+    @Test
+    public void contentTypeHeaderDefaultTOTxt() {
+        response.setContentTypeHeader("Test");
+        HashMap<String, String> actual = response.getHeaders();
+        assertEquals(actual.get("Content-Type"), "text/plain");
     }
 }
