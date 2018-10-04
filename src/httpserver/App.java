@@ -19,7 +19,6 @@ public class App {
         ServerSocket serverSocket = new ServerSocket(portNumber);
         ServerStatus serverStatus = new ServerStatus();
         RequestParser requestParser = new RequestParser();
-        System.out.println(rootPath);
         RequestRouter requestRouter = new RequestRouter(rootPath);
         Executor executor = Executors.newFixedThreadPool(7);
         WebServer webServer = new WebServer(System.out, serverSocket, serverStatus, requestParser, requestRouter, executor);

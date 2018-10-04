@@ -6,14 +6,14 @@ import java.io.OutputStream;
 public class ResponseWriter {
 
     private final OutputStream outputStream;
-    private final Response response;
+    private Response response;
 
-    public ResponseWriter(OutputStream outputStream, Response response) {
+    public ResponseWriter(OutputStream outputStream) {
         this.outputStream = outputStream;
-        this.response = response;
     }
 
-    public void write() throws IOException {
+    public void write(Response response) throws IOException {
+        this.response = response;
         writeStatusCode();
         writeHeaders();
         writeEmptyLine();

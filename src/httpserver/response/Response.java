@@ -7,6 +7,7 @@ import java.util.HashMap;
 public class Response {
 
     private final HashMap<String, String> headers;
+    private final FileTypeDecoder fileTypeDecoder;
     private byte[] bodyContent;
     private ResponseStatus responseStatus;
     private String httpVersion;
@@ -16,6 +17,7 @@ public class Response {
         this.responseStatus = ResponseStatus.INTERNAL_SERVER_ERROR;
         this.bodyContent = new byte[0];
         this.headers = new HashMap<>();
+        this.fileTypeDecoder = new FileTypeDecoder();
     }
 
     public ResponseStatus getStatus() {
@@ -47,8 +49,7 @@ public class Response {
     }
 
     public void setContentTypeHeader(String fileName) {
-        FileTypeDecoder fileTypeDecoder = new FileTypeDecoder();
-        String fileType = fileTypeDecoder.getFileType(fileName);
-        headers.put("Content-Type", fileType);
+        String fileType = this.fileTypeDecoder.getFileType(fileName);
+        this.headers.put("Content-Type", fileType);
     }
 }
