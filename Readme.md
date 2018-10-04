@@ -22,6 +22,10 @@ This server should now be running even though there is no confirmation message.
 Replace DIRECTORY_TO_SERVE with the absolute path to the cloned Cob spec folder, for me it is:
 ```java -jar java-http-server.jar -p 8085 -d ~/Desktop/cob_spec/public/```
 
+### Run the Fitnesse end to end tests 
+
+Go to the cob_spec cloned directory and run:
+```java -jar fitnesse.jar -p 9090```
 
 
 
