@@ -16,7 +16,6 @@ public class ResponseWriter {
         this.response = response;
         writeStatusCode();
         writeHeaders();
-        writeEmptyLine();
         writeBody();
     }
 
@@ -37,7 +36,10 @@ public class ResponseWriter {
     }
 
     private void writeBody() throws IOException {
-        write(response.getBodyContent());
+        if (this.bodyIsNotEmpty()) {
+            this.writeEmptyLine();
+            write(response.getBodyContent());
+        }
     }
 
     private void write (byte[] bytes) throws IOException {
@@ -46,5 +48,9 @@ public class ResponseWriter {
 
     private boolean headersAreNotEmpty() {
         return !(response.getHeaders().isEmpty());
+    }
+
+    private boolean bodyIsNotEmpty() {
+        return response.getBodyContent().length > 0;
     }
 }
