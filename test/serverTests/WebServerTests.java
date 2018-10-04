@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class WebServerTests {
 
@@ -76,7 +77,9 @@ public class WebServerTests {
 
         webServer.start();
 
-        assertEquals("HTTP/1.1 200\r\nfile1 contents", mockClientOutputStream.toString().trim());
+        assertTrue(mockClientOutputStream.toString().trim().contains("HTTP/1.1 200"));
+        assertTrue(mockClientOutputStream.toString().trim().contains("Content-Type: text/plain"));
+        assertTrue(mockClientOutputStream.toString().trim().contains("file1 contents"));
     }
 
     @Test
@@ -97,6 +100,6 @@ public class WebServerTests {
 
         webServer.start();
 
-        assertEquals("HTTP/1.1 404", mockClientOutputStream.toString().trim());
+        assertEquals("HTTP/1.1 404\nContent-Type: null", mockClientOutputStream.toString().trim());
     }
 }
