@@ -2,7 +2,6 @@ package httpserver.response;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Map;
 
 public class ResponseWriter {
 
@@ -22,12 +21,12 @@ public class ResponseWriter {
     }
 
     private void writeStatusCode() throws IOException {
-        String statusLine = response.getHttpVersion() + " " + response.getStatus().getStatus() + "\n";
+        String statusLine = this.response.getHttpVersion() + " " + this.response.getStatus().getStatus() + "\n";
         write(statusLine.getBytes());
     }
 
     private void writeHeaders() throws IOException {
-        String contentType = "Content-Type" + ": " + "text/plain"+ "\r\n";
+        String contentType = "Content-Type" + ": " + this.response.getHeaders().get("Content-Type") + "\r\n";
         write(contentType.getBytes());
     }
 
