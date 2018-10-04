@@ -1,4 +1,4 @@
-package responseTests;
+package utilitiesTests;
 
 import httpserver.utilities.FileTypeDecoder;
 import org.junit.Before;

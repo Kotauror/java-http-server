@@ -1,5 +1,6 @@
 package httpserver.handlers;
 
+import httpserver.utilities.FileTypeDecoder;
 import httpserver.utilities.Method;
 import httpserver.request.Request;
 import httpserver.utilities.FileContentConverter;
@@ -27,6 +28,10 @@ public abstract class Handler {
 
     public FileContentConverter getFileContentConverter() {
         return new FileContentConverter();
+    }
+
+    public FileTypeDecoder getFileTypeDecoder() {
+        return new FileTypeDecoder();
     }
 
     public boolean handles(Request request) {

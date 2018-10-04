@@ -36,11 +36,14 @@ public class GetHandler extends Handler{
     }
 
     private Response getFullResponse(Request request) throws IOException {
+        File file = new File(rootPath + request.getPath());
+        byte[] fileContentInBytes = this.getFileContentConverter().getFileContent(file);
+        String fileType = this.getFileTypeDecoder().getFileType(file.getName());
+
         Response response = new Response();
         response.setStatus(ResponseStatus.OK);
-        File file = new File(rootPath + request.getPath());
-        response.setBodyContent(this.getFileContentConverter().getFileContent(file));
-        response.setContentTypeHeader(file.getName());
+        response.setBodyContent(fileContentInBytes);
+        response.setContentTypeHeader(fileType);
         return response;
     }
 }

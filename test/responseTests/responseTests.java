@@ -49,14 +49,21 @@ public class responseTests {
 
     @Test
     public void contentTypeHeaderIsSetToTxt() {
-        response.setContentTypeHeader("Test.txt");
+        response.setContentTypeHeader("text/plain");
         HashMap<String, String> actual = response.getHeaders();
         assertEquals(actual.get("Content-Type"), "text/plain");
     }
 
     @Test
+    public void contentTypeHeaderIsSetToJPEG() {
+        response.setContentTypeHeader("image/jpeg");
+        HashMap<String, String> actual = response.getHeaders();
+        assertEquals(actual.get("Content-Type"), "image/jpeg");
+    }
+
+    @Test
     public void contentTypeHeaderDefaultTOTxt() {
-        response.setContentTypeHeader("Test");
+        response.setContentTypeHeader("text/plain");
         HashMap<String, String> actual = response.getHeaders();
         assertEquals(actual.get("Content-Type"), "text/plain");
     }

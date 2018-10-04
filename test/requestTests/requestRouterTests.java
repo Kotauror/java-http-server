@@ -1,4 +1,4 @@
-package handlersTests;
+package requestTests;
 
 import httpserver.utilities.Method;
 import httpserver.handlers.Handler;

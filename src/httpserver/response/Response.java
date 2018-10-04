@@ -48,8 +48,7 @@ public class Response {
         this.bodyContent = bodyContent;
     }
 
-    public void setContentTypeHeader(String fileName) {
-        String fileType = this.fileTypeDecoder.getFileType(fileName);
+    public void setContentTypeHeader(String fileType) {
         this.headers.put("Content-Type", fileType);
     }
 }

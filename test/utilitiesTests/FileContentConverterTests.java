@@ -1,4 +1,4 @@
-package responseTests;
+package utilitiesTests;
 
 import httpserver.utilities.FileContentConverter;
 import org.junit.Before;
