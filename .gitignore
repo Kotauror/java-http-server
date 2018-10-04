@@ -1,3 +1,5 @@
 *.class
 .idea/
 .DS_Store
+out/production/
+out/test/

@@ -1,26 +1,33 @@
 package handlersTests;
 
-import httpserver.Method;
+import httpserver.utilities.Method;
 import httpserver.handlers.GetHandler;
 import httpserver.request.Request;
+import httpserver.utilities.FileContentConverter;
 import httpserver.response.Response;
 import httpserver.response.ResponseStatus;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.LinkedHashMap;
 
 import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertArrayEquals;
 
 public class getHandlerTests {
 
     private GetHandler getHandler;
     private Request request;
+    private FileContentConverter fileContentConverter;
 
     @Before
     public void setup() {
-        getHandler = new GetHandler();
-        String path = "http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages";
+        fileContentConverter = new FileContentConverter();
+        String rootPath = "src/httpserver/utilities/sampleTestFiles";
+        getHandler = new GetHandler(rootPath);
+        String path = "/testFile";
         String httpVersion = "HTTP/1.1";
         LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
             put("Host", "localhost");
@@ -32,8 +39,17 @@ public class getHandlerTests {
     }
 
     @Test
-    public void createsAResponseWithStatus200() {
+    public void createsAResponseWithStatus200WhenFileIsFound() throws IOException {
         Response response = getHandler.getResponse(request);
-        assertEquals(ResponseStatus.NOT_FOUND, response.getStatus());
+        assertEquals(ResponseStatus.OK, response.getStatus());
     }
+
+    @Test
+    public void createsResponseWithBody() throws IOException {
+        String pathToTestFile = "src/httpserver/utilities/sampleTestFiles/testFile";
+        byte[] expected = fileContentConverter.getFileContent(new File(pathToTestFile));
+
+        Response response = getHandler.getResponse(request);
+
+        assertArrayEquals(expected, response.getBodyContent());}
 }

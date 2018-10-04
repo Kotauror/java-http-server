@@ -5,26 +5,56 @@ import httpserver.response.ResponseStatus;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.HashMap;
+
 import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertTrue;
 
 public class responseTests {
 
-    private Response response;
+    private Response fullResponse;
+    private byte[] fileContent;
+    private Response emptyResponse;
 
     @Before
     public void setup() {
-        response = new Response();
+        ResponseStatus responseStatus = ResponseStatus.OK;
+        fileContent = "Kocia test".getBytes();
+        String fileType = "text/plain";
+        fullResponse = new Response(responseStatus, fileContent, fileType);
+        emptyResponse = new Response(ResponseStatus.NOT_FOUND, null, null);
     }
 
     @Test
-    public void responseHasDefaultStatusOf500() {
-        assertEquals(ResponseStatus.INTERNAL_SERVER_ERROR, response.getStatus());
+    public void fullResponseHasStatusOK() {
+        assertEquals(ResponseStatus.OK, fullResponse.getStatus());
     }
 
     @Test
-    public void setStatusChangesResponseStatus() {
-        response.setStatus(ResponseStatus.OK);
+    public void emptyResponseHasStatusNOT_FOUND() {
+        assertEquals(ResponseStatus.NOT_FOUND, emptyResponse.getStatus());
+    }
 
-        assertEquals(ResponseStatus.OK, response.getStatus());
+    @Test
+    public void fullResponseHasBodyContent() {
+        assertArrayEquals(fileContent, fullResponse.getBodyContent());
+    }
+
+    @Test
+    public void emptyResponseHasEmptyBodyContent() {
+        assertArrayEquals(null, emptyResponse.getBodyContent());
+    }
+
+    @Test
+    public void fullResponseHasNoContentHeader() {
+        HashMap<String, String> actual = fullResponse.getHeaders();
+        assertEquals("text/plain", actual.get("Content-Type"));
+    }
+
+    @Test
+    public void emptyResponseHasContentHeader() {
+        HashMap<String, String> actual = emptyResponse.getHeaders();
+        assertTrue(actual.isEmpty());
     }
 }

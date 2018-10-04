@@ -1,6 +1,6 @@
 package httpserver.request;
 
-import httpserver.Method;
+import httpserver.utilities.Method;
 
 import java.io.BufferedReader;
 import java.io.IOException;

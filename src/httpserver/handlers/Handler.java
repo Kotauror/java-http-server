@@ -1,9 +1,12 @@
 package httpserver.handlers;
 
-import httpserver.Method;
+import httpserver.utilities.FileTypeDecoder;
+import httpserver.utilities.Method;
 import httpserver.request.Request;
+import httpserver.utilities.FileContentConverter;
 import httpserver.response.Response;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public abstract class Handler {
@@ -23,9 +26,17 @@ public abstract class Handler {
         handledMethods.add(method);
     }
 
+    public FileContentConverter getFileContentConverter() {
+        return new FileContentConverter();
+    }
+
+    public FileTypeDecoder getFileTypeDecoder() {
+        return new FileTypeDecoder();
+    }
+
     public boolean handles(Request request) {
         return this.handledMethods.contains(request.getMethod());
     }
 
-    public abstract Response getResponse(Request request);
+    public abstract Response getResponse(Request request) throws IOException;
 }

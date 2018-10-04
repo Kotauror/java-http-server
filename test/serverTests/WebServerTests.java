@@ -1,6 +1,6 @@
 package serverTests;
 
-import httpserver.handlers.RequestRouter;
+import httpserver.request.RequestRouter;
 import httpserver.request.RequestParser;
 import httpserver.server.*;
 import httpserver.server.mocks.MockServerSocket;
@@ -13,24 +13,56 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class WebServerTests {
 
-    private WebServer webServer;
     private ByteArrayOutputStream mockOutputStream;
     private ByteArrayOutputStream mockClientOutputStream;
+    private MockServerStatus mockServerStatus;
+    private RequestParser requestParser;
+    private String rootPath;
+    private RequestRouter requestRouter;
+    private CurrentThreadExecutor executor;
+    private PrintStream mockSystemOut;
 
     @Before
-    public void setup() throws IOException {
+    public void setup() {
         // Server output
         mockOutputStream = new ByteArrayOutputStream();
-        PrintStream mockSystemOut = new PrintStream(mockOutputStream);
+        mockSystemOut = new PrintStream(mockOutputStream);
+        // Objects passed to the server on creation
+        mockServerStatus = new MockServerStatus();
+        requestParser = new RequestParser();
+        rootPath = "/Users/justynazygmunt/Desktop/cob_spec/public/";
+        requestRouter = new RequestRouter(rootPath);
+        executor = new CurrentThreadExecutor();
+    }
+
+    @Test
+    public void serverTellsItsRunning() throws IOException {
         // Client Input
-        String requestString = "GET http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1\n" +
+        String requestString = "GET /file1 HTTP/1.1\n";
+        ByteArrayInputStream mockInputSteam = new ByteArrayInputStream(requestString.getBytes());
+        // Client Output
+        mockClientOutputStream = new ByteArrayOutputStream();
+        // Client Socket
+        MockSocket mockSocket = new MockSocket(mockClientOutputStream, mockInputSteam);
+        // Server
+        MockServerSocket mockServerSocket = new MockServerSocket(mockSocket);
+        WebServer webServer = new WebServer(mockSystemOut, mockServerSocket, mockServerStatus, requestParser, requestRouter, executor);
+
+        webServer.start();
+
+        assertEquals("I'm listening for connections", mockOutputStream.toString().trim());
+    }
+
+    @Test
+    public void integrationServerSends200ResponseToClientOnSuccess() throws IOException {
+        // Client Input
+        String requestString = "GET /file1 HTTP/1.1\n" +
                 "Host: 0.0.0.0:5000\n" +
                 "Content-Length: 23\n\r\n" +
                 "nomethod body\ntestbody";
@@ -39,24 +71,33 @@ public class WebServerTests {
         mockClientOutputStream = new ByteArrayOutputStream();
         // Client Socket
         MockSocket mockSocket = new MockSocket(mockClientOutputStream, mockInputSteam);
-
+        // Server
         MockServerSocket mockServerSocket = new MockServerSocket(mockSocket);
-        MockServerStatus mockServerStatus = new MockServerStatus();
-        RequestParser requestParser = new RequestParser();
-        RequestRouter requestRouter = new RequestRouter();
-        Executor executor = Executors.newFixedThreadPool(20);
-        Executor executor1 = new CurrentThreadExecutor();
-        webServer = new WebServer(mockSystemOut, mockServerSocket, mockServerStatus, requestParser, requestRouter, executor1);
-    }
+        WebServer webServer = new WebServer(mockSystemOut, mockServerSocket, mockServerStatus, requestParser, requestRouter, executor);
 
-    @Test
-    public void serverTellsItsRunning() {
         webServer.start();
-        assertEquals("I'm listening for connections", mockOutputStream.toString().trim());
+
+        assertTrue(mockClientOutputStream.toString().trim().contains("HTTP/1.1 200"));
+        assertTrue(mockClientOutputStream.toString().trim().contains("Content-Type: text/plain"));
+        assertTrue(mockClientOutputStream.toString().trim().contains("file1 contents"));
     }
 
     @Test
-    public void integrationServerSendsResponseToClient(){
+    public void integrationServerSends404ResponseToClientWhenFileIsNotThere() throws IOException {
+        // Client Input
+        String requestString = "GET /fileThatDoesntExist HTTP/1.1\n" +
+                "Host: 0.0.0.0:5000\n" +
+                "Content-Length: 23\n\r\n" +
+                "nomethod body\ntestbody";
+        ByteArrayInputStream mockInputSteam = new ByteArrayInputStream(requestString.getBytes());
+        // Client Output
+        mockClientOutputStream = new ByteArrayOutputStream();
+        // Client Socket
+        MockSocket mockSocket = new MockSocket(mockClientOutputStream, mockInputSteam);
+        MockServerSocket mockServerSocket = new MockServerSocket(mockSocket);
+        // Server
+        WebServer webServer = new WebServer(mockSystemOut, mockServerSocket, mockServerStatus, requestParser, requestRouter, executor);
+
         webServer.start();
 
         assertEquals("HTTP/1.1 404", mockClientOutputStream.toString().trim());

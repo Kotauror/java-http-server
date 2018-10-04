@@ -1,27 +1,27 @@
 package httpserver.server;
 
 import httpserver.handlers.Handler;
-import httpserver.handlers.RequestRouter;
+import httpserver.request.RequestRouter;
 import httpserver.request.Request;
 import httpserver.request.RequestParser;
 import httpserver.response.Response;
+import httpserver.response.ResponseWriter;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.Socket;
 
 public class ConnectionManager extends Thread {
 
     private final Socket clientSocket;
-    private final PrintWriter writer;
     private final RequestParser requestParser;
     private final RequestRouter requestRouter;
+    private final ResponseWriter responseWriter;
 
-    public ConnectionManager(Socket clientSocket, RequestParser requestParser, RequestRouter requestRouter) throws IOException {
+    public ConnectionManager(Socket clientSocket, ResponseWriter responseWriter, RequestParser requestParser, RequestRouter requestRouter) {
         this.clientSocket = clientSocket;
-        this.writer = new PrintWriter(clientSocket.getOutputStream(), true);
         this.requestParser = requestParser;
         this.requestRouter = requestRouter;
+        this.responseWriter = responseWriter;
     }
 
     @Override
@@ -33,11 +33,11 @@ public class ConnectionManager extends Thread {
         }
     }
 
-    public void handleConnection() throws IOException {
-        Request request = this.requestParser.parse(clientSocket.getInputStream());
+    private void handleConnection() throws IOException {
+        Request request = this.requestParser.parse(this.clientSocket.getInputStream());
         Handler handler = this.requestRouter.findHandler(request);
         Response response = handler.getResponse(request);
-        writer.println(response.getHttpVersion() + " " + response.getStatus().getStatus());
-        writer.close();
+        this.responseWriter.write(response);
+        this.clientSocket.close();
     }
 }

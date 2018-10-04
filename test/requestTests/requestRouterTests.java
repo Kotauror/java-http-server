@@ -1,8 +1,8 @@
-package handlersTests;
+package requestTests;
 
-import httpserver.Method;
+import httpserver.utilities.Method;
 import httpserver.handlers.Handler;
-import httpserver.handlers.RequestRouter;
+import httpserver.request.RequestRouter;
 import httpserver.request.Request;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +24,8 @@ public class requestRouterTests {
 
     @Before
     public void setup() {
-        requestRouter = new RequestRouter();
+        String rootPath = "/Users/justynazygmunt/Desktop/HttpServerFitnesse/cob_spec/public/";
+        requestRouter = new RequestRouter(rootPath);
         method1 = Method.GET;
         method2 = Method.POST;
         method3 = Method.OPTIONS;

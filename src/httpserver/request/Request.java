@@ -1,8 +1,7 @@
 package httpserver.request;
 
-import httpserver.Method;
+import httpserver.utilities.Method;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 public class Request {

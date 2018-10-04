@@ -1,7 +1,8 @@
 package httpserver.server;
 
-import httpserver.handlers.RequestRouter;
+import httpserver.request.RequestRouter;
 import httpserver.request.RequestParser;
+import httpserver.response.ResponseWriter;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -40,7 +41,8 @@ public class WebServer {
 
     private void connectWithClients() throws IOException {
         Socket clientConnection = serverSocket.accept();
-        ConnectionManager connectionManager = new ConnectionManager(clientConnection, this.requestParser, this.requestRouter);
+        ResponseWriter responseWriter = new ResponseWriter(clientConnection.getOutputStream());
+        ConnectionManager connectionManager = new ConnectionManager(clientConnection, responseWriter, this.requestParser, this.requestRouter);
         executor.execute(connectionManager);
     }
 }
