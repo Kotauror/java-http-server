@@ -7,8 +7,6 @@ import httpserver.response.ResponseStatus;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class GetHandler extends Handler{
 
@@ -22,11 +20,7 @@ public class GetHandler extends Handler{
 
     @Override
     public Response getResponse(Request request) throws IOException {
-        return (pathExists(request)) ? this.getFullResponse(request) : this.getNotFoundResponse();
-    }
-
-    private boolean pathExists(Request request) {
-        return Files.exists(Paths.get(rootPath + request.getPath()));
+        return (pathExists(request, this.rootPath)) ? this.getFullResponse(request) : this.getNotFoundResponse();
     }
 
     private Response getNotFoundResponse() {
@@ -38,7 +32,6 @@ public class GetHandler extends Handler{
         byte[] fileContentInBytes = this.getFileContentConverter().getFileContent(file);
         String fileType = this.getFileTypeDecoder().getFileType(file.getName());
 
-        Response response = new Response(ResponseStatus.OK, fileContentInBytes, fileType);
-        return response;
+        return new Response(ResponseStatus.OK, fileContentInBytes, fileType);
     }
 }

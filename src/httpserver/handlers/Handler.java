@@ -7,6 +7,8 @@ import httpserver.utilities.FileContentConverter;
 import httpserver.response.Response;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public abstract class Handler {
@@ -36,6 +38,10 @@ public abstract class Handler {
 
     public boolean handles(Request request) {
         return this.handledMethods.contains(request.getMethod());
+    }
+
+    public boolean pathExists(Request request, String rootPath) {
+        return Files.exists(Paths.get(rootPath + request.getPath()));
     }
 
     public abstract Response getResponse(Request request) throws IOException;

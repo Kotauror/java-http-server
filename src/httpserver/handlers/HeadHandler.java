@@ -5,9 +5,6 @@ import httpserver.response.Response;
 import httpserver.response.ResponseStatus;
 import httpserver.utilities.Method;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
 public class HeadHandler extends Handler {
 
     private final String rootPath;
@@ -20,11 +17,7 @@ public class HeadHandler extends Handler {
 
     @Override
     public Response getResponse(Request request) {
-        return (pathExists(request)) ? this.getFullResponse(request) : this.getNotFoundResponse();
-    }
-
-    private boolean pathExists(Request request) {
-        return Files.exists(Paths.get(rootPath + request.getPath()));
+        return (pathExists(request, this.rootPath)) ? this.getFullResponse(request) : this.getNotFoundResponse();
     }
 
     private Response getFullResponse(Request request) {
