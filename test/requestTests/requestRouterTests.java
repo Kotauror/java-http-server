@@ -21,6 +21,7 @@ public class requestRouterTests {
     private String body;
     private Method method3;
     private String httpVersion;
+    private Method method4;
 
     @Before
     public void setup() {
@@ -29,6 +30,7 @@ public class requestRouterTests {
         method1 = Method.GET;
         method2 = Method.POST;
         method3 = Method.OPTIONS;
+        method4 = Method.HEAD;
         path = "http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1";
         httpVersion = " HTTP/1.1";
         headers = new LinkedHashMap<String, String>() {{
@@ -40,24 +42,40 @@ public class requestRouterTests {
 
     @Test
     public void findHandlerReturnsRightHandlerForGet() {
-        Request request1 = new Request(method1, path, httpVersion, headers, body);
-        Handler handler = requestRouter.findHandler(request1);
+        Request request = new Request(method1, path, httpVersion, headers, body);
+        Handler handler = requestRouter.findHandler(request);
 
         assertEquals("getHandler", handler.getType());
     }
 
     @Test
-    public void findHandlerReturnsRightHandler() {
-        Request request2 = new Request(method2, path, httpVersion, headers, body);
-        Handler handler = requestRouter.findHandler(request2);
+    public void findHandlerReturnsRightHandlerForPost() {
+        Request request = new Request(method2, path, httpVersion, headers, body);
+        Handler handler = requestRouter.findHandler(request);
 
         assertEquals("postHandler", handler.getType());
     }
 
     @Test
-    public void returnsNullWHenThereIsNoHandler() {
-        Request request3 = new Request(method3, path, httpVersion, headers, body);
+    public void findHandlerReturnsRightHandlerForDirectoryListing() {
+        Request request = new Request(method1, "/", httpVersion, headers, body);
+        Handler handler = requestRouter.findHandler(request);
 
-        assertEquals(null, requestRouter.findHandler(request3));
+        assertEquals("directoryListingHandler", handler.getType());
+    }
+
+    @Test
+    public void findHandlerReturnsRightHandlerForHead() {
+        Request request = new Request(method4, "/", httpVersion, headers, body);
+        Handler handler = requestRouter.findHandler(request);
+
+        assertEquals("headHandler", handler.getType());
+    }
+
+    @Test
+    public void returnsInternalErrorHandlerWjenThereIsNoOtherHandler() {
+        Request request = new Request(method3, path, httpVersion, headers, body);
+        Handler handler = requestRouter.findHandler(request);
+        assertEquals("internalErrorHandler", handler.getType());
     }
 }

@@ -51,5 +51,24 @@ public class getHandlerTests {
 
         Response response = getHandler.getResponse(request);
 
-        assertArrayEquals(expected, response.getBodyContent());}
+        assertArrayEquals(expected, response.getBodyContent());
+    }
+
+    @Test
+    public void pathExistsReturnsTrueWHenExists() {
+        String pathToTestFile = "src/httpserver/utilities/sampleTestFiles/";
+
+        boolean actual = getHandler.fileExistsOnPath(request, pathToTestFile);
+
+        assertEquals(true, actual);
+    }
+
+    @Test
+    public void pathExistsReturnsFalseeWHenExists() {
+        String pathToTestFile = "src/httpserver/utilities/sampleTestFiles/testFolder";
+
+        boolean actual = getHandler.fileExistsOnPath(request, pathToTestFile);
+
+        assertEquals(false, actual);
+    }
 }

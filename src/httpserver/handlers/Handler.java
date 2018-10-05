@@ -7,12 +7,18 @@ import httpserver.utilities.FileContentConverter;
 import httpserver.response.Response;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public abstract class Handler {
 
     private final ArrayList<Method> handledMethods = new ArrayList<>();
     private String typeOfHandler = "";
+
+    public abstract Response getResponse(Request request) throws IOException;
+
+    public abstract boolean coversPathFromRequest(Request request);
 
     public String getType() {
         return typeOfHandler;
@@ -35,8 +41,10 @@ public abstract class Handler {
     }
 
     public boolean handles(Request request) {
-        return this.handledMethods.contains(request.getMethod());
+        return (this.handledMethods.contains(request.getMethod()) && this.coversPathFromRequest(request));
     }
 
-    public abstract Response getResponse(Request request) throws IOException;
+    public boolean fileExistsOnPath(Request request, String rootPath) {
+        return Files.exists(Paths.get(rootPath + request.getPath()));
+    }
 }

@@ -1,9 +1,6 @@
 package httpserver.request;
 
-import httpserver.handlers.GetHandler;
-import httpserver.handlers.Handler;
-import httpserver.handlers.HeadHandler;
-import httpserver.handlers.PostHandler;
+import httpserver.handlers.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,6 +12,7 @@ public class RequestRouter {
 
     public RequestRouter(String rootPath) {
         addHandlers(Arrays.asList(
+                new DirectoryListingHandler(rootPath),
                 new GetHandler(rootPath),
                 new PostHandler(),
                 new HeadHandler(rootPath)));
@@ -26,7 +24,7 @@ public class RequestRouter {
                 return handler;
             }
         }
-        return null;
+        return new InternalErrorHandler();
     }
 
     private void addHandlers(List<Handler> handlersToAdd) {

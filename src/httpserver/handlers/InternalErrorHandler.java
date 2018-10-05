@@ -1,19 +1,18 @@
 package httpserver.handlers;
 
-import httpserver.utilities.Method;
 import httpserver.request.Request;
 import httpserver.response.Response;
+import httpserver.response.ResponseStatus;
 
-public class PostHandler extends Handler {
+public class InternalErrorHandler extends Handler {
 
-    public PostHandler() {
-        setType("postHandler");
-        addHandledMethod(Method.POST);
+    public InternalErrorHandler() {
+        setType("internalErrorHandler");
     }
 
     @Override
     public Response getResponse(Request request) {
-        return null;
+        return new Response(ResponseStatus.INTERNAL_SERVER_ERROR, null, null);
     }
 
     @Override
