@@ -5,6 +5,9 @@ import httpserver.response.Response;
 import httpserver.response.ResponseStatus;
 import httpserver.utilities.Method;
 
+import java.io.File;
+import java.io.IOException;
+
 public class PutHandler extends Handler{
 
     private final String rootPath;
@@ -16,8 +19,11 @@ public class PutHandler extends Handler{
     }
 
     @Override
-    public Response getResponse(Request request) {
-        return new Response(ResponseStatus.CREATED, null, null);
+    public Response getResponse(Request request) throws IOException {
+        String fileName = request.getPath();
+        File file = new File(this.rootPath + "/" + fileName);
+        return file.createNewFile() ? new Response(ResponseStatus.CREATED, null, null) :
+                new Response(ResponseStatus.INTERNAL_SERVER_ERROR, null ,null);
     }
 
     @Override
