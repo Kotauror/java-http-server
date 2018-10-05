@@ -1,5 +1,6 @@
 package requestTests;
 
+import httpserver.handlers.HandlerType;
 import httpserver.utilities.Method;
 import httpserver.handlers.Handler;
 import httpserver.request.RequestRouter;
@@ -45,7 +46,7 @@ public class requestRouterTests {
         Request request = new Request(method1, path, httpVersion, headers, body);
         Handler handler = requestRouter.findHandler(request);
 
-        assertEquals("getHandler", handler.getType());
+        assertEquals(HandlerType.GET_HANDLER, handler.getType());
     }
 
     @Test
@@ -53,7 +54,7 @@ public class requestRouterTests {
         Request request = new Request(method2, path, httpVersion, headers, body);
         Handler handler = requestRouter.findHandler(request);
 
-        assertEquals("postHandler", handler.getType());
+        assertEquals(HandlerType.POST_HANDLER, handler.getType());
     }
 
     @Test
@@ -61,7 +62,7 @@ public class requestRouterTests {
         Request request = new Request(method1, "/", httpVersion, headers, body);
         Handler handler = requestRouter.findHandler(request);
 
-        assertEquals("directoryListingHandler", handler.getType());
+        assertEquals(HandlerType.DIRECTORY_LISTING_HANDLER, handler.getType());
     }
 
     @Test
@@ -69,13 +70,13 @@ public class requestRouterTests {
         Request request = new Request(method4, "/", httpVersion, headers, body);
         Handler handler = requestRouter.findHandler(request);
 
-        assertEquals("headHandler", handler.getType());
+        assertEquals(HandlerType.HEAD_HANDLER, handler.getType());
     }
 
     @Test
     public void returnsInternalErrorHandlerWjenThereIsNoOtherHandler() {
         Request request = new Request(method3, path, httpVersion, headers, body);
         Handler handler = requestRouter.findHandler(request);
-        assertEquals("internalErrorHandler", handler.getType());
+        assertEquals(HandlerType.INTERNAL_ERROR_HANDLER, handler.getType());
     }
 }

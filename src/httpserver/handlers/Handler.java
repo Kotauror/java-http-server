@@ -14,18 +14,18 @@ import java.util.ArrayList;
 public abstract class Handler {
 
     private final ArrayList<Method> handledMethods = new ArrayList<>();
-    private String typeOfHandler = "";
+    private HandlerType typeOfHandler = null;
 
     public abstract Response getResponse(Request request) throws IOException;
 
     public abstract boolean coversPathFromRequest(Request request);
 
-    public String getType() {
+    public HandlerType getType() {
         return typeOfHandler;
     }
 
-    public void setType(String type) {
-        typeOfHandler = type;
+    public void setType(HandlerType handlerType) {
+        typeOfHandler = handlerType;
     }
 
     public void addHandledMethod(Method method) {

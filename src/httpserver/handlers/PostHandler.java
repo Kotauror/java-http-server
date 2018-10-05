@@ -7,7 +7,7 @@ import httpserver.response.Response;
 public class PostHandler extends Handler {
 
     public PostHandler() {
-        setType("postHandler");
+        setType(HandlerType.POST_HANDLER);
         addHandledMethod(Method.POST);
     }
 
