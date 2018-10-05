@@ -12,7 +12,7 @@ public class RequestRouter {
 
     public RequestRouter(String rootPath) {
         addHandlers(Arrays.asList(
-                new DirectoryListingHandler(),
+                new DirectoryListingHandler(rootPath),
                 new GetHandler(rootPath),
                 new PostHandler(),
                 new HeadHandler(rootPath)));

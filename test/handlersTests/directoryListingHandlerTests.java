@@ -2,12 +2,14 @@ package handlersTests;
 
 import httpserver.handlers.DirectoryListingHandler;
 import httpserver.request.Request;
+import httpserver.response.Response;
 import httpserver.utilities.Method;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.LinkedHashMap;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -28,7 +30,8 @@ public class directoryListingHandlerTests {
         }};
         body = "example body";
         method = Method.GET;
-        directoryListingHandler = new DirectoryListingHandler();
+        String rootPath = "src/httpserver/utilities/sampleTestFiles";
+        directoryListingHandler = new DirectoryListingHandler(rootPath);
     }
 
     @Test
@@ -45,5 +48,16 @@ public class directoryListingHandlerTests {
         Request request = new Request(method, path, httpVersion, headers, body);
 
         assertFalse(directoryListingHandler.coversPathFromRequest(request));
+    }
+
+    @Test
+    public void returnsResponseWithStatus200() {
+        String path = "/";
+        Request request = new Request(method, path, httpVersion, headers, body);
+        byte[] expectedBody = "testFiletestFile.txt".getBytes();
+
+        Response response = directoryListingHandler.getResponse(request);
+
+        assertArrayEquals(expectedBody, response.getBodyContent());
     }
 }
