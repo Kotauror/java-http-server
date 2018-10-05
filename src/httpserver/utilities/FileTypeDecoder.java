@@ -5,15 +5,15 @@ import java.util.Map;
 
 public class FileTypeDecoder {
 
-    private HashMap<String, String> fileExtensionsWithTypes;
+    private HashMap<String, FileType> fileExtensionsWithTypes;
 
     public FileTypeDecoder() {
-        this.fileExtensionsWithTypes = new HashMap<String, String>() {{
-            put("txt", "text/plain");
-            put("jpeg", "image/jpeg");
-            put("gif", "image/gif");
-            put("png", "image/png");
-            put("html", "text/html");
+        this.fileExtensionsWithTypes = new HashMap<String, FileType>() {{
+            put("txt", FileType.TXT);
+            put("jpeg",FileType.JPEG);
+            put("gif", FileType.GIF);
+            put("png", FileType.PNG);
+            put("html", FileType.HTML);
         }};
     }
 
@@ -30,15 +30,15 @@ public class FileTypeDecoder {
     }
 
     private String getDefaultFileType() {
-        return "text/plain";
+        return FileType.TXT.value();
     }
 
     private String getFileTypeWhenOneExists(String fileName) {
         String clientFileExtension = getFileExtension(fileName);
-        for (Map.Entry<String, String> fileExtensionWithType : this.fileExtensionsWithTypes.entrySet()) {
+        for (Map.Entry<String, FileType> fileExtensionWithType : this.fileExtensionsWithTypes.entrySet()) {
             String currentExtension = fileExtensionWithType.getKey();
             if (currentExtension.equals(clientFileExtension)) {
-                return fileExtensionWithType.getValue();
+                return fileExtensionWithType.getValue().value();
             }
         }
         return this.getDefaultFileType();
