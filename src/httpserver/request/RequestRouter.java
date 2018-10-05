@@ -15,6 +15,7 @@ public class RequestRouter {
         this.rootPath = rootPath;
         addHandlers(Arrays.asList(
                 new DirectoryListingHandler(rootPath),
+                new PutHandler(rootPath),
                 new GetHandler(rootPath),
                 new PostHandler(),
                 new HeadHandler(rootPath)));

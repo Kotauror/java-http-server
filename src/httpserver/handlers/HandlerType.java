@@ -6,4 +6,5 @@ public enum HandlerType {
     POST_HANDLER,
     INTERNAL_ERROR_HANDLER,
     DIRECTORY_LISTING_HANDLER,
+    PUT_HANDLER,
 }
