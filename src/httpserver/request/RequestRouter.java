@@ -9,8 +9,10 @@ import java.util.List;
 public class RequestRouter {
 
     private final ArrayList<Handler> handlers = new ArrayList<Handler>();
+    private final String rootPath;
 
     public RequestRouter(String rootPath) {
+        this.rootPath = rootPath;
         addHandlers(Arrays.asList(
                 new DirectoryListingHandler(rootPath),
                 new GetHandler(rootPath),
@@ -24,7 +26,7 @@ public class RequestRouter {
                 return handler;
             }
         }
-        return new InternalErrorHandler();
+        return new GetHandler(this.rootPath);
     }
 
     private void addHandlers(List<Handler> handlersToAdd) {

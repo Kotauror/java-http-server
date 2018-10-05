@@ -1,6 +1,8 @@
 package requestTests;
 
 import httpserver.handlers.HandlerType;
+import httpserver.response.Response;
+import httpserver.response.ResponseStatus;
 import httpserver.utilities.Method;
 import httpserver.handlers.Handler;
 import httpserver.request.RequestRouter;
@@ -8,6 +10,7 @@ import httpserver.request.Request;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.LinkedHashMap;
 
 import static junit.framework.Assert.assertEquals;
@@ -74,9 +77,15 @@ public class requestRouterTests {
     }
 
     @Test
-    public void returnsInternalErrorHandlerWjenThereIsNoOtherHandler() {
+    public void returnsGetWith404StatusWhenThereIsNoAppropriateHandler() throws IOException {
         Request request = new Request(method3, path, httpVersion, headers, body);
         Handler handler = requestRouter.findHandler(request);
-        assertEquals(HandlerType.INTERNAL_ERROR_HANDLER, handler.getType());
+
+        assertEquals(HandlerType.GET_HANDLER, handler.getType());
+        Response response = handler.getResponse(request);
+        ResponseStatus responseStatus = response.getStatus();
+
+        assertEquals(HandlerType.GET_HANDLER, handler.getType());
+        assertEquals(ResponseStatus.NOT_FOUND, responseStatus);
     }
 }
