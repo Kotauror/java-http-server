@@ -18,7 +18,7 @@ public abstract class Handler {
 
     public abstract Response getResponse(Request request) throws IOException;
 
-    public abstract boolean coversPath(Request request);
+    public abstract boolean coversPathFromRequest(Request request);
 
     public String getType() {
         return typeOfHandler;
@@ -41,7 +41,7 @@ public abstract class Handler {
     }
 
     public boolean handles(Request request) {
-        return (this.handledMethods.contains(request.getMethod()) && this.coversPath(request));
+        return (this.handledMethods.contains(request.getMethod()) && this.coversPathFromRequest(request));
     }
 
     public boolean fileExistsOnPath(Request request, String rootPath) {

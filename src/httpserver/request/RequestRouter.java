@@ -24,7 +24,7 @@ public class RequestRouter {
                 return handler;
             }
         }
-        return null;
+        return new InternalErrorHandler();
     }
 
     private void addHandlers(List<Handler> handlersToAdd) {

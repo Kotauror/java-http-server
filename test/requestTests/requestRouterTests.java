@@ -42,40 +42,40 @@ public class requestRouterTests {
 
     @Test
     public void findHandlerReturnsRightHandlerForGet() {
-        Request request1 = new Request(method1, path, httpVersion, headers, body);
-        Handler handler = requestRouter.findHandler(request1);
+        Request request = new Request(method1, path, httpVersion, headers, body);
+        Handler handler = requestRouter.findHandler(request);
 
         assertEquals("getHandler", handler.getType());
     }
 
     @Test
     public void findHandlerReturnsRightHandlerForPost() {
-        Request request2 = new Request(method2, path, httpVersion, headers, body);
-        Handler handler = requestRouter.findHandler(request2);
+        Request request = new Request(method2, path, httpVersion, headers, body);
+        Handler handler = requestRouter.findHandler(request);
 
         assertEquals("postHandler", handler.getType());
     }
 
     @Test
     public void findHandlerReturnsRightHandlerForDirectoryListing() {
-        Request request2 = new Request(method1, "/", httpVersion, headers, body);
-        Handler handler = requestRouter.findHandler(request2);
+        Request request = new Request(method1, "/", httpVersion, headers, body);
+        Handler handler = requestRouter.findHandler(request);
 
         assertEquals("directoryListingHandler", handler.getType());
     }
 
     @Test
     public void findHandlerReturnsRightHandlerForHead() {
-        Request request2 = new Request(method4, "/", httpVersion, headers, body);
-        Handler handler = requestRouter.findHandler(request2);
+        Request request = new Request(method4, "/", httpVersion, headers, body);
+        Handler handler = requestRouter.findHandler(request);
 
         assertEquals("headHandler", handler.getType());
     }
 
     @Test
-    public void returnsNullWHenThereIsNoHandler() {
-        Request request3 = new Request(method3, path, httpVersion, headers, body);
-
-        assertEquals(null, requestRouter.findHandler(request3));
+    public void returnsInternalErrorHandlerWjenThereIsNoOtherHandler() {
+        Request request = new Request(method3, path, httpVersion, headers, body);
+        Handler handler = requestRouter.findHandler(request);
+        assertEquals("internalErrorHandler", handler.getType());
     }
 }

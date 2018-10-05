@@ -4,8 +4,6 @@ import httpserver.request.Request;
 import httpserver.response.Response;
 import httpserver.utilities.Method;
 
-import java.io.IOException;
-
 public class DirectoryListingHandler extends Handler {
 
     public DirectoryListingHandler() {
@@ -19,7 +17,7 @@ public class DirectoryListingHandler extends Handler {
     }
 
     @Override
-    public boolean coversPath(Request request) {
+    public boolean coversPathFromRequest(Request request) {
         return request.getPath().equals("/");
     }
 }

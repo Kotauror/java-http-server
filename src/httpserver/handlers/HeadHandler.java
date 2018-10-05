@@ -21,7 +21,7 @@ public class HeadHandler extends Handler {
     }
 
     @Override
-    public boolean coversPath(Request request) {
+    public boolean coversPathFromRequest(Request request) {
         return true;
     }
 

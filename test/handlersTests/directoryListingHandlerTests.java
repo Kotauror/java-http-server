@@ -36,7 +36,7 @@ public class directoryListingHandlerTests {
         String path = "/";
         Request request = new Request(method, path, httpVersion, headers, body);
 
-        assertTrue(directoryListingHandler.coversPath(request));
+        assertTrue(directoryListingHandler.coversPathFromRequest(request));
     }
 
     @Test
@@ -44,6 +44,6 @@ public class directoryListingHandlerTests {
         String path = "/AnyOtherPath";
         Request request = new Request(method, path, httpVersion, headers, body);
 
-        assertFalse(directoryListingHandler.coversPath(request));
+        assertFalse(directoryListingHandler.coversPathFromRequest(request));
     }
 }
