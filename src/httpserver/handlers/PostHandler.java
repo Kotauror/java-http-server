@@ -15,4 +15,9 @@ public class PostHandler extends Handler {
     public Response getResponse(Request request) {
         return null;
     }
+
+    @Override
+    public boolean coversPath(Request request) {
+        return true;
+    }
 }

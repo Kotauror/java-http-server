@@ -21,6 +21,7 @@ public class requestRouterTests {
     private String body;
     private Method method3;
     private String httpVersion;
+    private Method method4;
 
     @Before
     public void setup() {
@@ -29,6 +30,7 @@ public class requestRouterTests {
         method1 = Method.GET;
         method2 = Method.POST;
         method3 = Method.OPTIONS;
+        method4 = Method.HEAD;
         path = "http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1";
         httpVersion = " HTTP/1.1";
         headers = new LinkedHashMap<String, String>() {{
@@ -47,11 +49,27 @@ public class requestRouterTests {
     }
 
     @Test
-    public void findHandlerReturnsRightHandler() {
+    public void findHandlerReturnsRightHandlerForPost() {
         Request request2 = new Request(method2, path, httpVersion, headers, body);
         Handler handler = requestRouter.findHandler(request2);
 
         assertEquals("postHandler", handler.getType());
+    }
+
+    @Test
+    public void findHandlerReturnsRightHandlerForDirectoryListing() {
+        Request request2 = new Request(method1, "/", httpVersion, headers, body);
+        Handler handler = requestRouter.findHandler(request2);
+
+        assertEquals("directoryListingHandler", handler.getType());
+    }
+
+    @Test
+    public void findHandlerReturnsRightHandlerForHead() {
+        Request request2 = new Request(method4, "/", httpVersion, headers, body);
+        Handler handler = requestRouter.findHandler(request2);
+
+        assertEquals("headHandler", handler.getType());
     }
 
     @Test

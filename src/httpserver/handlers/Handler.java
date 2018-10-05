@@ -16,6 +16,10 @@ public abstract class Handler {
     private final ArrayList<Method> handledMethods = new ArrayList<>();
     private String typeOfHandler = "";
 
+    public abstract Response getResponse(Request request) throws IOException;
+
+    public abstract boolean coversPath(Request request);
+
     public String getType() {
         return typeOfHandler;
     }
@@ -37,12 +41,10 @@ public abstract class Handler {
     }
 
     public boolean handles(Request request) {
-        return this.handledMethods.contains(request.getMethod());
+        return (this.handledMethods.contains(request.getMethod()) && this.coversPath(request));
     }
 
-    public boolean pathExists(Request request, String rootPath) {
+    public boolean fileExistsOnPath(Request request, String rootPath) {
         return Files.exists(Paths.get(rootPath + request.getPath()));
     }
-
-    public abstract Response getResponse(Request request) throws IOException;
 }

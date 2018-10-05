@@ -17,7 +17,12 @@ public class HeadHandler extends Handler {
 
     @Override
     public Response getResponse(Request request) {
-        return (pathExists(request, this.rootPath)) ? this.getFullResponse(request) : this.getNotFoundResponse();
+        return (fileExistsOnPath(request, this.rootPath)) ? this.getFullResponse(request) : this.getNotFoundResponse();
+    }
+
+    @Override
+    public boolean coversPath(Request request) {
+        return true;
     }
 
     private Response getFullResponse(Request request) {
