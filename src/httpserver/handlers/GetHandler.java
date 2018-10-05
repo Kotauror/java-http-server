@@ -14,7 +14,7 @@ public class GetHandler extends Handler{
 
     public GetHandler(String rootPath) {
         this.rootPath = rootPath;
-        setType("getHandler");
+        setType(HandlerType.GET_HANDLER);
         addHandledMethod(Method.GET);
     }
 

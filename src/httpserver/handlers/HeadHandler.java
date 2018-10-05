@@ -11,7 +11,7 @@ public class HeadHandler extends Handler {
 
     public HeadHandler(String rootPath) {
         this.rootPath = rootPath;
-        setType("headHandler");
+        setType(HandlerType.HEAD_HANDLER);
         addHandledMethod(Method.HEAD);
     }
 

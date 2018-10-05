@@ -13,7 +13,7 @@ public class DirectoryListingHandler extends Handler {
 
     public DirectoryListingHandler(String rootPath) {
         this.rootPath = rootPath;
-        setType("directoryListingHandler");
+        setType(HandlerType.DIRECTORY_LISTING_HANDLER);
         addHandledMethod(Method.GET);
     }
 

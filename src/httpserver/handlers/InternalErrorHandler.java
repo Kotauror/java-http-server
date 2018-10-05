@@ -7,7 +7,7 @@ import httpserver.response.ResponseStatus;
 public class InternalErrorHandler extends Handler {
 
     public InternalErrorHandler() {
-        setType("internalErrorHandler");
+        setType(HandlerType.INTERNAL_ERROR_HANDLER);
     }
 
     @Override
