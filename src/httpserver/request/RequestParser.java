@@ -64,7 +64,7 @@ public class RequestParser {
         } else {
             int contentLengthAsInt = Integer.parseInt(contentLengthKey);
             StringBuilder body = new StringBuilder();
-            for (int i = 0; i < contentLengthAsInt -1; i++) {
+            for (int i = 0; i < contentLengthAsInt; i++) {
                 body.append((char)bufferedReader.read());
             }
             return body.toString().trim();

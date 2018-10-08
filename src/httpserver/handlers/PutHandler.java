@@ -26,8 +26,8 @@ public class PutHandler extends Handler{
         try {
             File file = new File(this.rootPath + "/" + fileName);
             file.createNewFile();
-            Files.write(Paths.get(file.getPath()), "Some text for a new file".getBytes());
-            return new Response(ResponseStatus.CREATED, request.getBody().getBytes(), null);
+            Files.write(Paths.get(file.getPath()), request.getBody().getBytes());
+            return new Response(ResponseStatus.CREATED, Files.readAllBytes(Paths.get(file.getPath())), null);
         } catch (IOException e) {
             return new Response(ResponseStatus.INTERNAL_SERVER_ERROR, null ,null);
         }

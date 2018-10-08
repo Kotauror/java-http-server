@@ -13,6 +13,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 
+import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -50,13 +52,14 @@ public class putHandlerTests {
     }
 
     @Test
-    public void createsANewFile() throws IOException {
+    public void createsANewFileWithContent() throws IOException {
         String path = "/filetesting";
-        Request request = new Request(Method.GET, path, httpVersion, headers, body);
-
+        Request request = new Request(Method.GET, path, httpVersion, headers, "Some content");
         putHandler.getResponse(request);
+        String contentOfFile = new String(Files.readAllBytes(Paths.get("src/httpserver/utilities/sampleTestFiles/filetesting")));
 
         assertTrue(Files.exists(Paths.get(rootPath + request.getPath())));
+        assertEquals("Some content", contentOfFile);
     }
 
     @After
