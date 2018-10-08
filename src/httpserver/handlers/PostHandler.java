@@ -22,11 +22,11 @@ public class PostHandler extends Handler {
 
     @Override
     public Response processRequest(Request request) throws IOException {
-        File file = this.getRequestedFile(request, this.rootPath);
-        if (this.fileExistsOnPath(request, this.rootPath)) {
+        File file = this.getFileOperator().getRequestedFile(request, this.rootPath);
+        if (this.getFileOperator().fileExistsOnPath(request, this.rootPath)) {
             return this.getResponseForUnalloWedMethod();
         } else {
-            this.writeToFile(file, request);
+            this.getFileOperator().writeToFile(file, request);
             return this.getResponseForCreatingFile(file);
         }
     }
@@ -38,10 +38,6 @@ public class PostHandler extends Handler {
 
     private Response getResponseForUnalloWedMethod() {
         return new Response(ResponseStatus.NOT_ALLOWED, null, null);
-    }
-
-    private void writeToFile(File file, Request request) throws IOException {
-        Files.write(Paths.get(file.getPath()), request.getBody().getBytes());
     }
 
     private Response getResponseForCreatingFile(File file) throws IOException {

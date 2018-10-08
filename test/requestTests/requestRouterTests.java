@@ -98,7 +98,7 @@ public class requestRouterTests {
 
     @Test
     public void findHandlerReturnsRightHandlerForDeleteHandler() {
-        Request request = new Request(Method.DELETE, "/", httpVersion, headers, body);
+        Request request = new Request(methodDelete, "/", httpVersion, headers, body);
         Handler handler = requestRouter.findHandler(request);
 
         assertEquals(HandlerType.DELETE_HANDLER, handler.getType());
