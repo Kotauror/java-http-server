@@ -9,4 +9,5 @@ public enum HandlerType {
     PUT_HANDLER,
     DELETE_HANDLER,
     NOT_ALLOWED_HANDLER,
+    OPTION_HANDLER,
 }

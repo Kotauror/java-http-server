@@ -20,6 +20,7 @@ public class RequestRouter {
                 new PostHandler(rootPath),
                 new MethodNotAllowedHandler(rootPath),
                 new DeleteHandler(rootPath),
+                new OptionHandler(rootPath),
                 new HeadHandler(rootPath)));
     }
 

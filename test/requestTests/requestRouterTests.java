@@ -39,6 +39,7 @@ public class requestRouterTests {
         methodHead = Method.HEAD;
         methodPut = Method.PUT;
         methodDelete = Method.DELETE;
+        methodOption = Method.OPTIONS;
         path = "http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1";
         httpVersion = " HTTP/1.1";
         headers = new LinkedHashMap<String, String>() {{
@@ -105,8 +106,16 @@ public class requestRouterTests {
     }
 
     @Test
+    public void findHandlerReturnsRightHandlerForOptionHandler() {
+        Request request = new Request(methodOption, "/", httpVersion, headers, body);
+        Handler handler = requestRouter.findHandler(request);
+
+        assertEquals(HandlerType.OPTION_HANDLER, handler.getType());
+    }
+
+    @Test
     public void returnsGetWith404StatusWhenThereIsNoAppropriateHandler() throws IOException {
-        Request request = new Request(methodOption, path, httpVersion, headers, body);
+        Request request = new Request(Method.INVALID, path, httpVersion, headers, body);
         Handler handler = requestRouter.findHandler(request);
 
         Response response = handler.processRequest(request);
