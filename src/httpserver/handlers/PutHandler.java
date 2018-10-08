@@ -22,15 +22,21 @@ public class PutHandler extends Handler{
 
     @Override
     public Response processRequest(Request request) {
-        String fileName = request.getPath();
-        try {
-            // check if file with this name exists, if yes, then write... no - create new
-            File file = new File(this.rootPath + "/" + fileName);
-            file.createNewFile();
-            Files.write(Paths.get(file.getPath()), request.getBody().getBytes());
-            return new Response(ResponseStatus.CREATED, Files.readAllBytes(Paths.get(file.getPath())), null);
-        } catch (IOException e) {
-            return new Response(ResponseStatus.INTERNAL_SERVER_ERROR, null ,null);
+        File file = this.getRequestedFile(request);
+        if (this.fileExistsOnPath(request, this.rootPath)) {
+            try {
+                this.writeToFile(file, request);
+                return this.getResponseForUpdatedFile(file);
+            } catch (IOException e) {
+                return this.getResponseForInternalError();
+            }
+        } else {
+            try {
+                this.writeToFile(file, request);
+                return this.getResponseForCreatedFile(file);
+            } catch (IOException e) {
+                return this.getResponseForInternalError();
+            }
         }
     }
 
@@ -45,5 +51,25 @@ public class PutHandler extends Handler{
             }
         }
         return false;
+    }
+
+    private File getRequestedFile(Request request) {
+        return new File(this.rootPath + "/" + request.getPath());
+    }
+
+    private void writeToFile(File file, Request request) throws IOException {
+        Files.write(Paths.get(file.getPath()), request.getBody().getBytes());
+    }
+
+    private Response getResponseForCreatedFile(File file) throws IOException {
+        return new Response(ResponseStatus.CREATED, Files.readAllBytes(Paths.get(file.getPath())), null);
+    }
+
+    private Response getResponseForUpdatedFile(File file) throws IOException {
+        return new Response(ResponseStatus.OK, Files.readAllBytes(Paths.get(file.getPath())), null);
+    }
+
+    private Response getResponseForInternalError() {
+        return new Response(ResponseStatus.INTERNAL_SERVER_ERROR, null ,null);
     }
 }

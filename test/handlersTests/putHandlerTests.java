@@ -2,6 +2,8 @@ package handlersTests;
 
 import httpserver.handlers.PutHandler;
 import httpserver.request.Request;
+import httpserver.response.Response;
+import httpserver.response.ResponseStatus;
 import httpserver.utilities.Method;
 import org.junit.After;
 import org.junit.Before;
@@ -14,7 +16,6 @@ import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 
 import static junit.framework.Assert.assertEquals;
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -55,11 +56,12 @@ public class putHandlerTests {
     public void createsANewFileWithContent() throws IOException {
         String path = "/filetesting";
         Request request = new Request(Method.GET, path, httpVersion, headers, "Some content");
-        putHandler.processRequest(request);
+        Response response = putHandler.processRequest(request);
         String contentOfFile = new String(Files.readAllBytes(Paths.get("src/httpserver/utilities/sampleTestFiles/filetesting")));
 
         assertTrue(Files.exists(Paths.get(rootPath + request.getPath())));
         assertEquals("Some content", contentOfFile);
+        assertEquals(ResponseStatus.CREATED, response.getStatus());;
     }
 
     @Test
@@ -68,11 +70,12 @@ public class putHandlerTests {
         Request request = new Request(Method.GET, path, httpVersion, headers, "Some content");
         putHandler.processRequest(request);
         Request request2 = new Request(Method.GET, path, httpVersion, headers, "Some updated content");
-        String contentOfFile = new String(Files.readAllBytes(Paths.get("src/httpserver/utilities/sampleTestFiles/filetesting")));
-        putHandler.processRequest(request2);
+        Response response = putHandler.processRequest(request2);
+        String contentOfFile = new String(Files.readAllBytes(Paths.get("src/httpserver/utilities/sampleTestFiles/fileToUpdate")));
 
         assertTrue(Files.exists(Paths.get(rootPath + request.getPath())));
         assertEquals("Some updated content", contentOfFile);
+        assertEquals(ResponseStatus.OK, response.getStatus());
     }
 
     @After
