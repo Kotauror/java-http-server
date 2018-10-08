@@ -22,7 +22,7 @@ public class PutHandler extends Handler{
 
     @Override
     public Response processRequest(Request request) {
-        File file = this.getRequestedFile(request);
+        File file = this.getRequestedFile(request, this.rootPath);
         try {
             if (this.fileExistsOnPath(request, this.rootPath)) {
                 this.writeToFile(file, request);
@@ -47,10 +47,6 @@ public class PutHandler extends Handler{
             }
         }
         return false;
-    }
-
-    private File getRequestedFile(Request request) {
-        return new File(this.rootPath + "/" + request.getPath());
     }
 
     private void writeToFile(File file, Request request) throws IOException {

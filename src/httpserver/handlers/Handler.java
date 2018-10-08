@@ -6,6 +6,7 @@ import httpserver.request.Request;
 import httpserver.utilities.FileContentConverter;
 import httpserver.response.Response;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -38,6 +39,10 @@ public abstract class Handler {
 
     public FileTypeDecoder getFileTypeDecoder() {
         return new FileTypeDecoder();
+    }
+
+    public File getRequestedFile(Request request, String rootPath) {
+        return new File(rootPath + "/" + request.getPath());
     }
 
     public boolean handles(Request request) {

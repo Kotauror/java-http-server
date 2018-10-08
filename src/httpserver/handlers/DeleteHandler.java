@@ -19,7 +19,7 @@ public class DeleteHandler extends Handler {
 
     @Override
     public Response processRequest(Request request) {
-        File file = this.getRequestedFile(request);
+        File file = this.getRequestedFile(request, this.rootPath);
         file.delete();
         return this.getResponseForDeletedFile();
     }
@@ -27,10 +27,6 @@ public class DeleteHandler extends Handler {
     @Override
     public boolean coversPathFromRequest(Request request) {
         return true;
-    }
-
-    private File getRequestedFile(Request request) {
-        return new File(this.rootPath + "/" + request.getPath());
     }
 
     private Response getResponseForDeletedFile() {
