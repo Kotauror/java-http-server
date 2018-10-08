@@ -27,7 +27,6 @@ public class RequestParser {
     }
 
     private Method getMethod(String firstLineOfRequest) {
-        System.out.println(firstLineOfRequest);
         String[] methodAndPath = this.getMethodPathAndHttpVersion(firstLineOfRequest);
         try {
             return Method.valueOf(methodAndPath[0]);

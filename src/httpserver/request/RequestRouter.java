@@ -17,7 +17,8 @@ public class RequestRouter {
                 new DirectoryLinksHandler(rootPath),
                 new PutHandler(rootPath),
                 new GetHandler(rootPath),
-                new PostHandler(),
+                new PostHandler(rootPath),
+                new MethodNotAllowedHandler(rootPath),
                 new DeleteHandler(rootPath),
                 new HeadHandler(rootPath)));
     }
