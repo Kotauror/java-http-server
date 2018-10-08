@@ -82,7 +82,7 @@ public class requestRouterTests {
         Handler handler = requestRouter.findHandler(request);
 
         assertEquals(HandlerType.GET_HANDLER, handler.getType());
-        Response response = handler.getResponse(request);
+        Response response = handler.processRequest(request);
         ResponseStatus responseStatus = response.getStatus();
 
         assertEquals(HandlerType.GET_HANDLER, handler.getType());

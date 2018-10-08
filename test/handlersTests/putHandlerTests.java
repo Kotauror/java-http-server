@@ -55,7 +55,7 @@ public class putHandlerTests {
     public void createsANewFileWithContent() throws IOException {
         String path = "/filetesting";
         Request request = new Request(Method.GET, path, httpVersion, headers, "Some content");
-        putHandler.getResponse(request);
+        putHandler.processRequest(request);
         String contentOfFile = new String(Files.readAllBytes(Paths.get("src/httpserver/utilities/sampleTestFiles/filetesting")));
 
         assertTrue(Files.exists(Paths.get(rootPath + request.getPath())));

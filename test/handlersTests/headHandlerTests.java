@@ -36,19 +36,19 @@ public class headHandlerTests {
 
     @Test
     public void returnsResponseWithStatus200() throws IOException {
-        Response response = headHandler.getResponse(request);
+        Response response = headHandler.processRequest(request);
         assertEquals(ResponseStatus.OK, response.getStatus());
     }
 
     @Test
     public void returnsResponseWithEmptyBody() throws IOException {
-        Response response = headHandler.getResponse(request);
+        Response response = headHandler.processRequest(request);
         assertEquals(null, response.getBodyContent());
     }
 
     @Test
     public void returnsResponseWithEmptyHeaders() throws IOException {
-        Response response = headHandler.getResponse(request);
+        Response response = headHandler.processRequest(request);
         assertTrue(response.getHeaders().isEmpty());
     }
 }

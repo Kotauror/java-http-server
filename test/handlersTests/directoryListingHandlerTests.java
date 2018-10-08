@@ -59,7 +59,7 @@ public class directoryListingHandlerTests {
                 "<a href='/testFile.txt'>testFile.txt</a><br>" +
                 "</body></html>").getBytes();
 
-        Response response = directoryLinksHandler.getResponse(request);
+        Response response = directoryLinksHandler.processRequest(request);
 
         assertArrayEquals(expectedBody, response.getBodyContent());
     }

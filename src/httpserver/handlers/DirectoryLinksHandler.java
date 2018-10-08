@@ -19,7 +19,7 @@ public class DirectoryLinksHandler extends Handler {
     }
 
     @Override
-    public Response getResponse(Request request) {
+    public Response processRequest(Request request) {
         File[] files = new File(this.rootPath).listFiles();
         StringBuilder body = new StringBuilder();
         body.append("<html><head></head><body>");

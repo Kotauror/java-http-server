@@ -40,7 +40,7 @@ public class getHandlerTests {
 
     @Test
     public void createsAResponseWithStatus200WhenFileIsFound() throws IOException {
-        Response response = getHandler.getResponse(request);
+        Response response = getHandler.processRequest(request);
         assertEquals(ResponseStatus.OK, response.getStatus());
     }
 
@@ -49,7 +49,7 @@ public class getHandlerTests {
         String pathToTestFile = "src/httpserver/utilities/sampleTestFiles/testFile";
         byte[] expected = fileContentConverter.getFileContent(new File(pathToTestFile));
 
-        Response response = getHandler.getResponse(request);
+        Response response = getHandler.processRequest(request);
 
         assertArrayEquals(expected, response.getBodyContent());
     }

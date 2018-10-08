@@ -40,7 +40,7 @@ public class ConnectionManager extends Thread {
 //        System.out.println(request.getHeaders());
 //        System.out.println(request.getBody());
         Handler handler = this.requestRouter.findHandler(request);
-        Response response = handler.getResponse(request);
+        Response response = handler.processRequest(request);
         this.responseWriter.write(response);
         this.clientSocket.close();
     }

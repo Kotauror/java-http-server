@@ -21,9 +21,10 @@ public class PutHandler extends Handler{
     }
 
     @Override
-    public Response getResponse(Request request) {
+    public Response processRequest(Request request) {
         String fileName = request.getPath();
         try {
+            // check if file with this name exists, if yes, then write... no - create new
             File file = new File(this.rootPath + "/" + fileName);
             file.createNewFile();
             Files.write(Paths.get(file.getPath()), request.getBody().getBytes());

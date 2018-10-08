@@ -16,7 +16,7 @@ public abstract class Handler {
     private final ArrayList<Method> handledMethods = new ArrayList<>();
     private HandlerType typeOfHandler = null;
 
-    public abstract Response getResponse(Request request) throws IOException;
+    public abstract Response processRequest(Request request) throws IOException;
 
     public abstract boolean coversPathFromRequest(Request request);
 
