@@ -3,9 +3,11 @@ package handlersTests;
 import httpserver.handlers.PutHandler;
 import httpserver.request.Request;
 import httpserver.utilities.Method;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -55,5 +57,17 @@ public class putHandlerTests {
         putHandler.getResponse(request);
 
         assertTrue(Files.exists(Paths.get(rootPath + request.getPath())));
+    }
+
+    @After
+    public void deleteOutputFile() {
+        File folder = new File("src/httpserver/utilities/sampleTestFiles");
+        File[] listOfFiles = folder.listFiles();
+        for(int i = 0; i < listOfFiles.length; i++){
+            File file = listOfFiles[i];
+            if (file.getName().equals("filetesting")){
+                file.delete();
+            }
+        }
     }
 }
