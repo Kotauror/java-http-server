@@ -31,7 +31,7 @@ public class PutHandler extends Handler{
                 this.writeToFile(file, request);
                 return this.getResponseForCreatedFile(file);
             }
-        } catch  (IOException e) {
+        } catch (IOException e) {
             return this.getResponseForInternalError();
         }
     }

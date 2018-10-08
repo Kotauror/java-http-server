@@ -18,6 +18,7 @@ public class RequestRouter {
                 new PutHandler(rootPath),
                 new GetHandler(rootPath),
                 new PostHandler(),
+                new DeleteHandler(rootPath),
                 new HeadHandler(rootPath)));
     }
 
