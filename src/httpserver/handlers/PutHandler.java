@@ -23,20 +23,16 @@ public class PutHandler extends Handler{
     @Override
     public Response processRequest(Request request) {
         File file = this.getRequestedFile(request);
-        if (this.fileExistsOnPath(request, this.rootPath)) {
-            try {
+        try {
+            if (this.fileExistsOnPath(request, this.rootPath)) {
                 this.writeToFile(file, request);
                 return this.getResponseForUpdatedFile(file);
-            } catch (IOException e) {
-                return this.getResponseForInternalError();
-            }
-        } else {
-            try {
+            } else {
                 this.writeToFile(file, request);
                 return this.getResponseForCreatedFile(file);
-            } catch (IOException e) {
-                return this.getResponseForInternalError();
             }
+        } catch  (IOException e) {
+            return this.getResponseForInternalError();
         }
     }
 
