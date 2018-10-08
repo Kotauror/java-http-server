@@ -8,11 +8,11 @@ import httpserver.utilities.Method;
 
 import java.io.File;
 
-public class DirectoryListingHandler extends Handler {
+public class DirectoryLinksHandler extends Handler {
 
     private final String rootPath;
 
-    public DirectoryListingHandler(String rootPath) {
+    public DirectoryLinksHandler(String rootPath) {
         this.rootPath = rootPath;
         setType(HandlerType.DIRECTORY_LISTING_HANDLER);
         addHandledMethod(Method.GET);

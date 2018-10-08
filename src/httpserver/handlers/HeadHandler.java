@@ -26,8 +26,7 @@ public class HeadHandler extends Handler {
     }
 
     private Response getFullResponse(Request request) {
-        Response response = new Response(ResponseStatus.OK, null, null);
-        return response;
+        return new Response(ResponseStatus.OK, null, null);
     }
 
     private Response getNotFoundResponse() {

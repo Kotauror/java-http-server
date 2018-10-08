@@ -1,6 +1,6 @@
 package handlersTests;
 
-import httpserver.handlers.DirectoryListingHandler;
+import httpserver.handlers.DirectoryLinksHandler;
 import httpserver.request.Request;
 import httpserver.response.Response;
 import httpserver.utilities.Method;
@@ -15,7 +15,7 @@ import static org.junit.Assert.assertTrue;
 
 public class directoryListingHandlerTests {
 
-    private DirectoryListingHandler directoryListingHandler;
+    private DirectoryLinksHandler directoryLinksHandler;
     private Method method;
     private String httpVersion;
     private LinkedHashMap<String, String> headers;
@@ -31,7 +31,7 @@ public class directoryListingHandlerTests {
         body = "example body";
         method = Method.GET;
         String rootPath = "src/httpserver/utilities/sampleTestFiles";
-        directoryListingHandler = new DirectoryListingHandler(rootPath);
+        directoryLinksHandler = new DirectoryLinksHandler(rootPath);
     }
 
     @Test
@@ -39,7 +39,7 @@ public class directoryListingHandlerTests {
         String path = "/";
         Request request = new Request(method, path, httpVersion, headers, body);
 
-        assertTrue(directoryListingHandler.coversPathFromRequest(request));
+        assertTrue(directoryLinksHandler.coversPathFromRequest(request));
     }
 
     @Test
@@ -47,7 +47,7 @@ public class directoryListingHandlerTests {
         String path = "/AnyOtherPath";
         Request request = new Request(method, path, httpVersion, headers, body);
 
-        assertFalse(directoryListingHandler.coversPathFromRequest(request));
+        assertFalse(directoryLinksHandler.coversPathFromRequest(request));
     }
 
     @Test
@@ -59,7 +59,7 @@ public class directoryListingHandlerTests {
                 "<a href='/testFile.txt'>testFile.txt</a><br>" +
                 "</body></html>").getBytes();
 
-        Response response = directoryListingHandler.getResponse(request);
+        Response response = directoryLinksHandler.getResponse(request);
 
         assertArrayEquals(expectedBody, response.getBodyContent());
     }

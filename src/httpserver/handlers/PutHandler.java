@@ -19,11 +19,15 @@ public class PutHandler extends Handler{
     }
 
     @Override
-    public Response getResponse(Request request) throws IOException {
+    public Response getResponse(Request request) {
         String fileName = request.getPath();
-        File file = new File(this.rootPath + "/" + fileName);
-        return file.createNewFile() ? new Response(ResponseStatus.CREATED, null, null) :
-                new Response(ResponseStatus.INTERNAL_SERVER_ERROR, null ,null);
+        try {
+            File file = new File(this.rootPath + "/" + fileName);
+            file.createNewFile();
+            return new Response(ResponseStatus.CREATED, null, null);
+        } catch (IOException e) {
+            return new Response(ResponseStatus.INTERNAL_SERVER_ERROR, null ,null);
+        }
     }
 
     @Override
