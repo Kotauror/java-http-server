@@ -81,11 +81,10 @@ public class requestRouterTests {
         Request request = new Request(method3, path, httpVersion, headers, body);
         Handler handler = requestRouter.findHandler(request);
 
-        assertEquals(HandlerType.GET_HANDLER, handler.getType());
         Response response = handler.processRequest(request);
         ResponseStatus responseStatus = response.getStatus();
 
-        assertEquals(HandlerType.GET_HANDLER, handler.getType());
-        assertEquals(ResponseStatus.NOT_FOUND, responseStatus);
+        assertEquals(HandlerType.NOT_ALLOWED_HANDLER, handler.getType());
+        assertEquals(ResponseStatus.NOT_ALLOWED, responseStatus);
     }
 }

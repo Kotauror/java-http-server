@@ -29,7 +29,7 @@ public class RequestRouter {
                 return handler;
             }
         }
-        return new GetHandler(this.rootPath);
+        return new MethodNotAllowedHandler(this.rootPath);
     }
 
     private void addHandlers(List<Handler> handlersToAdd) {
