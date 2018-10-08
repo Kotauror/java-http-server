@@ -62,13 +62,26 @@ public class putHandlerTests {
         assertEquals("Some content", contentOfFile);
     }
 
+    @Test
+    public void updatesAContentOfExistingFile() throws IOException {
+        String path = "/fileToUpdate";
+        Request request = new Request(Method.GET, path, httpVersion, headers, "Some content");
+        putHandler.processRequest(request);
+        Request request2 = new Request(Method.GET, path, httpVersion, headers, "Some updated content");
+        String contentOfFile = new String(Files.readAllBytes(Paths.get("src/httpserver/utilities/sampleTestFiles/filetesting")));
+        putHandler.processRequest(request2);
+
+        assertTrue(Files.exists(Paths.get(rootPath + request.getPath())));
+        assertEquals("Some updated content", contentOfFile);
+    }
+
     @After
     public void deleteOutputFile() {
         File folder = new File("src/httpserver/utilities/sampleTestFiles");
         File[] listOfFiles = folder.listFiles();
         for(int i = 0; i < listOfFiles.length; i++){
             File file = listOfFiles[i];
-            if (file.getName().equals("filetesting")){
+            if (file.getName().equals("filetesting") || file.getName().equals("fileToUpdate")){
                 file.delete();
             }
         }
