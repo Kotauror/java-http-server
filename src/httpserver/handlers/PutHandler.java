@@ -7,6 +7,8 @@ import httpserver.utilities.Method;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class PutHandler extends Handler{
 
@@ -24,7 +26,8 @@ public class PutHandler extends Handler{
         try {
             File file = new File(this.rootPath + "/" + fileName);
             file.createNewFile();
-            return new Response(ResponseStatus.CREATED, null, null);
+            Files.write(Paths.get(file.getPath()), "Some text for a new file".getBytes());
+            return new Response(ResponseStatus.CREATED, request.getBody().getBytes(), null);
         } catch (IOException e) {
             return new Response(ResponseStatus.INTERNAL_SERVER_ERROR, null ,null);
         }

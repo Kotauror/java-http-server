@@ -35,6 +35,10 @@ public class ConnectionManager extends Thread {
 
     private void handleConnection() throws IOException {
         Request request = this.requestParser.parse(this.clientSocket.getInputStream());
+//        System.out.println(request.getMethod());
+//        System.out.println(request.getPath());
+//        System.out.println(request.getHeaders());
+//        System.out.println(request.getBody());
         Handler handler = this.requestRouter.findHandler(request);
         Response response = handler.getResponse(request);
         this.responseWriter.write(response);
