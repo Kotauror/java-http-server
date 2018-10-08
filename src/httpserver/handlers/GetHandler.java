@@ -19,7 +19,7 @@ public class GetHandler extends Handler{
     }
 
     @Override
-    public Response getResponse(Request request) throws IOException {
+    public Response processRequest(Request request) throws IOException {
         return (fileExistsOnPath(request, this.rootPath)) ? this.getFullResponse(request) : this.getNotFoundResponse();
     }
 

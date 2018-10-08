@@ -8,18 +8,18 @@ import httpserver.utilities.Method;
 
 import java.io.File;
 
-public class DirectoryListingHandler extends Handler {
+public class DirectoryLinksHandler extends Handler {
 
     private final String rootPath;
 
-    public DirectoryListingHandler(String rootPath) {
+    public DirectoryLinksHandler(String rootPath) {
         this.rootPath = rootPath;
         setType(HandlerType.DIRECTORY_LISTING_HANDLER);
         addHandledMethod(Method.GET);
     }
 
     @Override
-    public Response getResponse(Request request) {
+    public Response processRequest(Request request) {
         File[] files = new File(this.rootPath).listFiles();
         StringBuilder body = new StringBuilder();
         body.append("<html><head></head><body>");

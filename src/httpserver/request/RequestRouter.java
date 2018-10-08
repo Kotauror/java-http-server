@@ -14,9 +14,11 @@ public class RequestRouter {
     public RequestRouter(String rootPath) {
         this.rootPath = rootPath;
         addHandlers(Arrays.asList(
-                new DirectoryListingHandler(rootPath),
+                new DirectoryLinksHandler(rootPath),
+                new PutHandler(rootPath),
                 new GetHandler(rootPath),
                 new PostHandler(),
+                new DeleteHandler(rootPath),
                 new HeadHandler(rootPath)));
     }
 

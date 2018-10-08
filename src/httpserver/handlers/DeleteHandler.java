@@ -5,19 +5,23 @@ import httpserver.response.Response;
 import httpserver.response.ResponseStatus;
 import httpserver.utilities.Method;
 
-public class HeadHandler extends Handler {
+import java.io.File;
+
+public class DeleteHandler extends Handler {
 
     private final String rootPath;
 
-    public HeadHandler(String rootPath) {
+    public DeleteHandler(String rootPath) {
         this.rootPath = rootPath;
-        setType(HandlerType.HEAD_HANDLER);
-        addHandledMethod(Method.HEAD);
+        setType(HandlerType.DELETE_HANDLER);
+        addHandledMethod(Method.DELETE);
     }
 
     @Override
     public Response processRequest(Request request) {
-        return (fileExistsOnPath(request, this.rootPath)) ? this.getFullResponse(request) : this.getNotFoundResponse();
+        File file = this.getRequestedFile(request, this.rootPath);
+        file.delete();
+        return this.getResponseForDeletedFile();
     }
 
     @Override
@@ -25,11 +29,7 @@ public class HeadHandler extends Handler {
         return true;
     }
 
-    private Response getFullResponse(Request request) {
+    private Response getResponseForDeletedFile() {
         return new Response(ResponseStatus.OK, null, null);
-    }
-
-    private Response getNotFoundResponse() {
-        return new Response(ResponseStatus.NOT_FOUND, null, null);
     }
 }

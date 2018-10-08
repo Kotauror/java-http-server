@@ -11,7 +11,7 @@ public class InternalErrorHandler extends Handler {
     }
 
     @Override
-    public Response getResponse(Request request) {
+    public Response processRequest(Request request) {
         return new Response(ResponseStatus.INTERNAL_SERVER_ERROR, null, null);
     }
 

@@ -12,7 +12,7 @@ public class PostHandler extends Handler {
     }
 
     @Override
-    public Response getResponse(Request request) {
+    public Response processRequest(Request request) {
         return null;
     }
 
