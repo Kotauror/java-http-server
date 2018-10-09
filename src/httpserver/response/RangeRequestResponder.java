@@ -24,29 +24,65 @@ public class RangeRequestResponder {
     }
 
     public Response getRangeResponse(Request request) throws IOException {
+        System.out.println("in get range response");
         HashMap<String, Integer> rangeLimits = this.getRangeLimits(request);
         File file = this.fileOperator.getRequestedFile(request, this.rootPath);
         byte[] body = this.getPartOfFileContent(rangeLimits, file);
         String fileType = this.fileTypeDecoder.getFileType(request.getPath());
-
-        return new Response(ResponseStatus.RANGE_REQUEST, body, fileType);
+        Response response = new Response(ResponseStatus.RANGE_REQUEST, body, fileType);
+        return response;
     }
 
-    private HashMap<String, Integer> getRangeLimits(Request request) {
+    public HashMap<String, Integer> getRangeLimits(Request request) throws IOException {
         HashMap startEndMap = new HashMap<String, Integer>();
         String rangeString = request.getHeaders().get("Range").toString();
         String[] partsOfRangeString = this.getPartsOfRangeString(rangeString);
-        startEndMap.put("start", Integer.parseInt(partsOfRangeString[0]));
-        startEndMap.put("end", Integer.parseInt(partsOfRangeString[1]));
+
+        Integer startValue = this.getStartValue(partsOfRangeString, request);
+        Integer endValue = this.getEndValue(partsOfRangeString, request);
+
+        startEndMap.put("start", startValue);
+        startEndMap.put("end", endValue);
         return startEndMap;
     }
 
     private String[] getPartsOfRangeString(String rangeString) {
         String numbers = rangeString.substring(6, rangeString.length());
-        return numbers.split("-");
+        if (numbers.split("-").length == 2) {
+            return numbers.split("-");
+        } else {
+            return new String[]{numbers.split("-")[0], ""};
+        }
     }
 
     private byte[] getPartOfFileContent(HashMap startAndEnd, File file) throws IOException {
         return this.fileContentConverter.getPartOfFile(file, startAndEnd);
+    }
+
+    private Integer getStartValue(String[] partsOfRangeString, Request request) throws IOException {
+        if (!this.valueIsEmptyString(partsOfRangeString[0])) {
+            return Integer.parseInt(partsOfRangeString[0]);
+        } else {
+            Integer lengthOfFileContent = this.fileOperator.findLengthOfFileContent(request, this.rootPath);
+            return lengthOfFileContent - Integer.parseInt(partsOfRangeString[1]);
+        }
+    }
+
+    private Integer getEndValue(String[] partsOfRangeString, Request request) throws IOException {
+        if (this.valueIsEmptyString(partsOfRangeString[1])) {
+            Integer lengthOfFileContent = this.fileOperator.findLengthOfFileContent(request, this.rootPath);
+            return lengthOfFileContent -1;
+        } else {
+            if (this.valueIsEmptyString(partsOfRangeString[0])) {
+                Integer lengthOfFileContent = this.fileOperator.findLengthOfFileContent(request, this.rootPath);
+                return lengthOfFileContent -1;
+            } else {
+                return Integer.parseInt(partsOfRangeString[1]);
+            }
+        }
+    }
+
+    private boolean valueIsEmptyString(String string) {
+        return string.equals("");
     }
 }

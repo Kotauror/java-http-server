@@ -49,7 +49,7 @@ public class FileContentConverterTests {
     @After
     public void bringBackLongerVersionOfFile() throws IOException {
         String filePath = "src/httpserver/utilities/sampleTestFiles/partial_content.txt";
-        byte[] fileContent = "This is a file that contains text to read part of in order to fulfill a 206.".getBytes();
+        byte[] fileContent = "This is a file that contains text to read part of in order to fulfill a 206.\n".getBytes();
         Files.write(Paths.get(filePath), fileContent);
     }
 }
