@@ -10,6 +10,11 @@ public class Response {
     private ResponseStatus responseStatus;
     private String httpVersion;
 
+    public Response(ResponseStatus responseStatus) {
+        this.httpVersion = "HTTP/1.1";
+        this.responseStatus = responseStatus;
+    }
+
     public Response(ResponseStatus responseStatus, byte[] fileContentInBytes, String fileType) {
         this.httpVersion = "HTTP/1.1";
         this.responseStatus = responseStatus;

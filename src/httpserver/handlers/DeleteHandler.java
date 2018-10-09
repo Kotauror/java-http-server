@@ -30,6 +30,6 @@ public class DeleteHandler extends Handler {
     }
 
     private Response getResponseForDeletedFile() {
-        return new Response(ResponseStatus.OK, null, null);
+        return new Response(ResponseStatus.OK);
     }
 }

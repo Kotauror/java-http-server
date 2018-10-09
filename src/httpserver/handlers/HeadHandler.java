@@ -26,10 +26,10 @@ public class HeadHandler extends Handler {
     }
 
     private Response getFullResponse(Request request) {
-        return new Response(ResponseStatus.OK, null, null);
+        return new Response(ResponseStatus.OK);
     }
 
     private Response getNotFoundResponse() {
-        return new Response(ResponseStatus.NOT_FOUND, null, null);
+        return new Response(ResponseStatus.NOT_FOUND);
     }
 }

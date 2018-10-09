@@ -58,6 +58,6 @@ public class PutHandler extends Handler{
     }
 
     private Response getResponseForInternalError() {
-        return new Response(ResponseStatus.INTERNAL_SERVER_ERROR, null ,null);
+        return new Response(ResponseStatus.INTERNAL_SERVER_ERROR);
     }
 }
