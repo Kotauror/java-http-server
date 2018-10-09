@@ -25,13 +25,11 @@ public class ResponseWriter {
     }
 
     private void writeHeaders() throws IOException {
-        if (this.hasHeader("Content-Type")) {
-            String contentType = "Content-Type" + ": " + this.response.getHeaders().get("Content-Type") + "\n";
-            write(contentType.getBytes());
-        }
-        if (this.hasHeader("Allow")) {
-            String allowedMethods = "Allow" + ": " + this.response.getHeaders().get("Allow") + "\r\n";
-            write(allowedMethods.getBytes());
+        for (Header header : Header.getHeaders()) {
+            if(this.hasHeader(header.toString())) {
+                String contentType = header.toString() + ": " + this.response.getHeaders().get(header.toString()) + "\n";
+                write(contentType.getBytes());
+            }
         }
     }
 
