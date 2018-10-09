@@ -34,14 +34,14 @@ public class GetHandler extends Handler{
 
     private Response getResponse(Request request) throws IOException {
         if (isRangeRequest(request)) {
-            return null;
+            return this.getNotFoundResponse();
         } else {
             return getFullResponse(request);
         }
     }
 
     private Response getFullResponse(Request request) throws IOException {
-        File file = new File(rootPath + request.getPath());
+        File file = this.getFileOperator().getRequestedFile(request, this.rootPath);
         byte[] fileContentInBytes = this.getFileContentConverter().getFileContent(file);
         String fileType = this.getFileTypeDecoder().getFileType(file.getName());
 

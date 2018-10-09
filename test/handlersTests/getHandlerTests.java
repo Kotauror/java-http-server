@@ -16,6 +16,7 @@ import java.util.LinkedHashMap;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertTrue;
 
 public class getHandlerTests {
 
@@ -76,7 +77,7 @@ public class getHandlerTests {
     }
 
     @Test
-    public void goesToPartialResponseAndReturnsNull() throws IOException {
+    public void goesToPartialResponseAndReturnsResponseNotFound() throws IOException {
         String path = "/partial_content.txt";
         LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
             put("Host", "localhost");
@@ -87,6 +88,6 @@ public class getHandlerTests {
 
         Response response = getHandler.processRequest(request);
 
-        assertNull(response);
+        assertTrue(response.getStatus().equals(ResponseStatus.NOT_FOUND));
     }
 }
