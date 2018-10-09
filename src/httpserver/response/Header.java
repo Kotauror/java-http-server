@@ -17,6 +17,6 @@ public enum Header {
     }
 
     public static Header[] getHeaders() {
-        return new Header[]{CONTENT_TYPE, ALLOW};
+        return Header.class.getEnumConstants();
     }
 }
