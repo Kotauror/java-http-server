@@ -34,7 +34,7 @@ public class GetHandler extends Handler{
 
     private Response getResponse(Request request) throws IOException {
         if (isRangeRequest(request)) {
-            return this.getNotFoundResponse();
+            return new Response(ResponseStatus.RANGE_REQUEST);
         } else {
             return getFullResponse(request);
         }

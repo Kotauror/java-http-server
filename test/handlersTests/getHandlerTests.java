@@ -6,6 +6,7 @@ import httpserver.request.Request;
 import httpserver.utilities.FileContentConverter;
 import httpserver.response.Response;
 import httpserver.response.ResponseStatus;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -77,7 +78,7 @@ public class getHandlerTests {
     }
 
     @Test
-    public void goesToPartialResponseAndReturnsResponseNotFound() throws IOException {
+    public void goesToPartialResponseAndReturnsResponseWithRangeRequestStatus() throws IOException {
         String path = "/partial_content.txt";
         LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
             put("Host", "localhost");
@@ -88,6 +89,6 @@ public class getHandlerTests {
 
         Response response = getHandler.processRequest(request);
 
-        assertTrue(response.getStatus().equals(ResponseStatus.NOT_FOUND));
+        Assert.assertEquals(response.getStatus(), ResponseStatus.RANGE_REQUEST);
     }
 }
