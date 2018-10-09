@@ -5,6 +5,7 @@ import java.util.HashMap;
 public class Response {
 
     private HashMap<String, String> headers = new HashMap<>();
+    private String[] allowedMethods = new String[]{};
     private byte[] bodyContent;
     private ResponseStatus responseStatus;
     private String httpVersion;
@@ -14,6 +15,12 @@ public class Response {
         this.responseStatus = responseStatus;
         addBodyContent(fileContentInBytes);
         setContentTypeHeader(fileType);
+    }
+
+    public Response(ResponseStatus responseStatus, String[] allowedMethods) {
+        this.httpVersion = "HTTP/1.1";
+        this.responseStatus = responseStatus;
+        setAllowedMethodsHeader(allowedMethods);
     }
 
     public ResponseStatus getStatus() {
@@ -35,6 +42,17 @@ public class Response {
     private void setContentTypeHeader(String fileType) {
         if (fileType != null) {
             this.headers.put("Content-Type", fileType);
+        }
+    }
+
+    private void setAllowedMethodsHeader(String[] allowedMethods) {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (allowedMethods.length > 0) {
+            for (int i = 0; i < allowedMethods.length -1; i++) {
+                stringBuilder.append(allowedMethods[i] + ",");
+            }
+            stringBuilder.append(allowedMethods[allowedMethods.length-1]);
+            this.headers.put("Allow", stringBuilder.toString());
         }
     }
 

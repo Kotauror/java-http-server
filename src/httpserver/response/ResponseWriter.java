@@ -25,9 +25,13 @@ public class ResponseWriter {
     }
 
     private void writeHeaders() throws IOException {
-        if (this.headersAreNotEmpty()) {
-            String contentType = "Content-Type" + ": " + this.response.getHeaders().get("Content-Type") + "\r\n";
+        if (this.hasHeader("Content-Type")) {
+            String contentType = "Content-Type" + ": " + this.response.getHeaders().get("Content-Type") + "\n";
             write(contentType.getBytes());
+        }
+        if (this.hasHeader("Allow")) {
+            String allowedMethods = "Allow" + ": " + this.response.getHeaders().get("Allow") + "\r\n";
+            write(allowedMethods.getBytes());
         }
     }
 
@@ -46,11 +50,12 @@ public class ResponseWriter {
         this.outputStream.write(bytes);
     }
 
-    private boolean headersAreNotEmpty() {
-        return !(response.getHeaders().isEmpty());
+    private boolean bodyIsNotEmpty()
+    {
+        return response.getBodyContent() != null;
     }
 
-    private boolean bodyIsNotEmpty() {
-        return response.getBodyContent() != null;
+    private boolean hasHeader(String header) {
+        return (this.response.getHeaders().get(header) != null);
     }
 }
