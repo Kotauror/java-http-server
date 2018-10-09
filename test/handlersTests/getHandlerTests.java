@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNull;
 import static org.junit.Assert.assertArrayEquals;
 
 public class getHandlerTests {
@@ -21,6 +22,8 @@ public class getHandlerTests {
     private GetHandler getHandler;
     private Request request;
     private FileContentConverter fileContentConverter;
+    private String httpVersion;
+    private String body;
 
     @Before
     public void setup() {
@@ -28,12 +31,12 @@ public class getHandlerTests {
         String rootPath = "src/httpserver/utilities/sampleTestFiles";
         getHandler = new GetHandler(rootPath);
         String path = "/testFile.txt";
-        String httpVersion = "HTTP/1.1";
+        httpVersion = "HTTP/1.1";
         LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
             put("Host", "localhost");
             put("Accept-Language", "en-US");
         }};
-        String body = "example body";
+        body = "example body";
 
         request = new Request(Method.GET, path, httpVersion, headers, body);
     }
@@ -70,5 +73,20 @@ public class getHandlerTests {
         boolean actual = getHandler.getFileOperator().fileExistsOnPath(request, pathToTestFile);
 
         assertEquals(false, actual);
+    }
+
+    @Test
+    public void goesToPartialResponseAndReturnsNull() throws IOException {
+        String path = "/partial_content.txt";
+        LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
+            put("Host", "localhost");
+            put("Accept-Language", "en-US");
+            put("Range", "bytes=0-4");
+        }};
+        Request request = new Request(Method.GET, path, httpVersion, headers, body);
+
+        Response response = getHandler.processRequest(request);
+
+        assertNull(response);
     }
 }

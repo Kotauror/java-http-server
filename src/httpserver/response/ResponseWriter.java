@@ -26,7 +26,7 @@ public class ResponseWriter {
 
     private void writeHeaders() throws IOException {
         for (Header header : Header.getHeaders()) {
-            if(this.hasHeader(header.toString())) {
+            if (this.hasHeader(header.toString())) {
                 String contentType = header.toString() + ": " + this.response.getHeaders().get(header.toString()) + "\n";
                 write(contentType.getBytes());
             }
@@ -55,6 +55,6 @@ public class ResponseWriter {
     }
 
     private boolean hasHeader(String header) {
-        return (this.response.getHeaders().get(header) != null);
+        return (this.response.getHeaders().containsKey(header));
     }
 }
