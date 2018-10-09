@@ -15,8 +15,7 @@ public class methodNotAllowedHandlerTests {
 
     @Test
     public void returnsStatusNotAllowed() {
-        String rootPath = "src/httpserver/utilities/sampleTestFiles";
-        MethodNotAllowedHandler methodNotAllowedHandler = new MethodNotAllowedHandler(rootPath);
+        MethodNotAllowedHandler methodNotAllowedHandler = new MethodNotAllowedHandler();
         String path = "/testFile.txt";
         String httpVersion = "HTTP/1.1";
         LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{

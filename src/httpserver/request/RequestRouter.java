@@ -18,9 +18,9 @@ public class RequestRouter {
                 new PutHandler(rootPath),
                 new GetHandler(rootPath),
                 new PostHandler(rootPath),
-                new MethodNotAllowedHandler(rootPath),
+                new MethodNotAllowedHandler(),
                 new DeleteHandler(rootPath),
-                new OptionHandler(rootPath),
+                new OptionHandler(),
                 new HeadHandler(rootPath)));
     }
 
@@ -30,7 +30,7 @@ public class RequestRouter {
                 return handler;
             }
         }
-        return new MethodNotAllowedHandler(this.rootPath);
+        return new MethodNotAllowedHandler();
     }
 
     private void addHandlers(List<Handler> handlersToAdd) {

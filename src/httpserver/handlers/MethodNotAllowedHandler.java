@@ -8,10 +8,7 @@ import httpserver.utilities.Method;
 
 public class MethodNotAllowedHandler extends Handler{
 
-    private final String rootPath;
-
-    public MethodNotAllowedHandler(String rootPath) {
-        this.rootPath = rootPath;
+    public MethodNotAllowedHandler() {
         setType(HandlerType.NOT_ALLOWED_HANDLER);
         addHandledMethod(Method.INVALID);
     }

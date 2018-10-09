@@ -10,10 +10,8 @@ import java.util.Arrays;
 
 public class OptionHandler extends Handler{
 
-    private final String rootPath;
 
-    public OptionHandler(String rootPath) {
-        this.rootPath = rootPath;
+    public OptionHandler() {
         setType(HandlerType.OPTION_HANDLER);
         addHandledMethod(Method.OPTIONS);
     }

@@ -8,14 +8,12 @@ import httpserver.utilities.Method;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.LinkedHashMap;
 
 import static org.junit.Assert.assertEquals;
 
 public class optionHandlerTests {
 
-    private String rootPath;
     private OptionHandler optionHandler;
     private String httpVersion;
     private LinkedHashMap<String, String> headers;
@@ -23,15 +21,14 @@ public class optionHandlerTests {
 
     @Before
     public void setup() {
-        rootPath = "src/httpserver/utilities/sampleTestFiles";
-        optionHandler = new OptionHandler(rootPath);
+        optionHandler = new OptionHandler();
         httpVersion = "HTTP/1.1";
         headers = new LinkedHashMap<>();
         body = "example body";
     }
 
     @Test
-    public void returnsResponseWithMethodsAllowedWhenFileExists() throws IOException {
+    public void returnsResponseWithMethodsAllowedWhenFileExists() {
         String path = "/testFile.txt";
         Request request = new Request(Method.OPTIONS, path, httpVersion, headers, body);
 
@@ -42,7 +39,7 @@ public class optionHandlerTests {
     }
 
     @Test
-    public void returnsResponseWithMethodsAllowedWhenFileDoesNotExist() throws IOException {
+    public void returnsResponseWithMethodsAllowedWhenFileDoesNotExist() {
         String path = "/testFileNotExist.txt";
         Request request = new Request(Method.OPTIONS, path, httpVersion, headers, body);
 
@@ -53,7 +50,7 @@ public class optionHandlerTests {
     }
 
     @Test
-    public void returnsResponseWithMethodsAllowedWhenRequestedLogs() throws IOException {
+    public void returnsResponseWithMethodsAllowedWhenRequestedLogs() {
         String path = "/logs";
         Request request = new Request(Method.OPTIONS, path, httpVersion, headers, body);
 
