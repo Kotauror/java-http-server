@@ -3,6 +3,7 @@ package httpserver.response;
 import httpserver.request.Request;
 import httpserver.utilities.FileContentConverter;
 import httpserver.utilities.FileOperator;
+import httpserver.utilities.FileTypeDecoder;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,18 +14,22 @@ public class RangeRequestResponder {
     private final String rootPath;
     private final FileOperator fileOperator;
     private final FileContentConverter fileContentConverter;
+    private final FileTypeDecoder fileTypeDecoder;
 
-    public RangeRequestResponder(String rootPath, FileOperator fileOperator, FileContentConverter fileContentConverter) {
+    public RangeRequestResponder(String rootPath, FileOperator fileOperator, FileContentConverter fileContentConverter, FileTypeDecoder fileTypeDecoder) {
         this.rootPath = rootPath;
         this.fileOperator = fileOperator;
         this.fileContentConverter = fileContentConverter;
+        this.fileTypeDecoder = fileTypeDecoder;
     }
 
     public Response getRangeResponse(Request request) throws IOException {
         HashMap<String, Integer> rangeLimits = this.getRangeLimits(request);
-        byte[] body = this.getPartOfFileContent(rangeLimits, request);
+        File file = this.fileOperator.getRequestedFile(request, this.rootPath);
+        byte[] body = this.getPartOfFileContent(rangeLimits, file);
+        String fileType = this.fileTypeDecoder.getFileType(request.getPath());
 
-        return new Response(ResponseStatus.RANGE_REQUEST, body, null);
+        return new Response(ResponseStatus.RANGE_REQUEST, body, fileType);
     }
 
     private HashMap<String, Integer> getRangeLimits(Request request) {
@@ -41,8 +46,7 @@ public class RangeRequestResponder {
         return numbers.split("-");
     }
 
-    private byte[] getPartOfFileContent(HashMap startAndEnd, Request request) throws IOException {
-        File file = this.fileOperator.getRequestedFile(request, this.rootPath);
+    private byte[] getPartOfFileContent(HashMap startAndEnd, File file) throws IOException {
         return this.fileContentConverter.getPartOfFile(file, startAndEnd);
     }
 }

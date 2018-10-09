@@ -1,5 +1,6 @@
 package handlersTests;
 
+import httpserver.utilities.FileType;
 import httpserver.utilities.Method;
 import httpserver.handlers.GetHandler;
 import httpserver.request.Request;
@@ -90,5 +91,6 @@ public class getHandlerTests {
 
         Assert.assertEquals(response.getStatus(), ResponseStatus.RANGE_REQUEST);
         Assert.assertArrayEquals(partOfFile, response.getBodyContent());
+        Assert.assertEquals("text/plain", response.getHeaders().get("Content-Type"));
     }
 }
