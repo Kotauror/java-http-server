@@ -1,5 +1,6 @@
 package httpserver.handlers;
 
+import httpserver.response.RangeRequestResponder;
 import httpserver.utilities.Method;
 import httpserver.request.Request;
 import httpserver.response.Response;
@@ -11,9 +12,11 @@ import java.io.IOException;
 public class GetHandler extends Handler{
 
     private final String rootPath;
+    private final RangeRequestResponder rangeRequestResponder;
 
     public GetHandler(String rootPath) {
         this.rootPath = rootPath;
+        this.rangeRequestResponder = new RangeRequestResponder();
         setType(HandlerType.GET_HANDLER);
         addHandledMethod(Method.GET);
     }
@@ -34,7 +37,7 @@ public class GetHandler extends Handler{
 
     private Response getResponse(Request request) throws IOException {
         if (isRangeRequest(request)) {
-            return new Response(ResponseStatus.RANGE_REQUEST);
+            return this.rangeRequestResponder.getRangeResponse(request);
         } else {
             return getFullResponse(request);
         }
