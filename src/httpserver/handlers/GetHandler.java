@@ -16,7 +16,7 @@ public class GetHandler extends Handler{
 
     public GetHandler(String rootPath) {
         this.rootPath = rootPath;
-        this.rangeRequestResponder = new RangeRequestResponder();
+        this.rangeRequestResponder = new RangeRequestResponder(this.rootPath, this.getFileOperator(), this.getFileContentConverter());
         setType(HandlerType.GET_HANDLER);
         addHandledMethod(Method.GET);
     }

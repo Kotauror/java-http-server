@@ -15,9 +15,7 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNull;
 import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertTrue;
 
 public class getHandlerTests {
 
@@ -78,17 +76,19 @@ public class getHandlerTests {
     }
 
     @Test
-    public void goesToPartialResponseAndReturnsResponseWithRangeRequestStatus() throws IOException {
+    public void goesToPartialResponseAndReturnsResponseWithRangeRequestStatusAndPartOfFileInBody() throws IOException {
         String path = "/partial_content.txt";
         LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
             put("Host", "localhost");
             put("Accept-Language", "en-US");
-            put("Range", "bytes=0-4");
+            put("Range", "bytes=0-6");
         }};
+        byte[] partOfFile = "This is".getBytes();
         Request request = new Request(Method.GET, path, httpVersion, headers, body);
 
         Response response = getHandler.processRequest(request);
 
         Assert.assertEquals(response.getStatus(), ResponseStatus.RANGE_REQUEST);
+        Assert.assertArrayEquals(partOfFile, response.getBodyContent());
     }
 }

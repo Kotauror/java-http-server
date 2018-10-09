@@ -1,6 +1,7 @@
 package utilitiesTests;
 
 import httpserver.utilities.FileContentConverter;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,13 +36,20 @@ public class FileContentConverterTests {
     @Test
     public void transformsRangeOfFileIntoArrayOfBytes() throws IOException {
         String filePath = "src/httpserver/utilities/sampleTestFiles/partial_content.txt";
-        byte[] fileContent = "This is a file".getBytes();
+        byte[] fileContent = "This".getBytes();
         Files.write(Paths.get(filePath), fileContent);
         HashMap startEndMap = new HashMap<String, Integer>(){};
         startEndMap.put("start", 0);
-        startEndMap.put("end", 13);
+        startEndMap.put("end", 3);
         byte[] actual = fileContentConverter.getPartOfFile(new File(filePath), startEndMap);
 
         assertArrayEquals(fileContent, actual);
+    }
+
+    @After
+    public void bringBackLongerVersionOfFile() throws IOException {
+        String filePath = "src/httpserver/utilities/sampleTestFiles/partial_content.txt";
+        byte[] fileContent = "This is a file that contains text to read part of in order to fulfill a 206.".getBytes();
+        Files.write(Paths.get(filePath), fileContent);
     }
 }
