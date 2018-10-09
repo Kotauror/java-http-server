@@ -27,7 +27,7 @@ public class getHandlerTests {
         fileContentConverter = new FileContentConverter();
         String rootPath = "src/httpserver/utilities/sampleTestFiles";
         getHandler = new GetHandler(rootPath);
-        String path = "/testFile";
+        String path = "/testFile.txt";
         String httpVersion = "HTTP/1.1";
         LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
             put("Host", "localhost");
@@ -46,7 +46,7 @@ public class getHandlerTests {
 
     @Test
     public void createsResponseWithBody() throws IOException {
-        String pathToTestFile = "src/httpserver/utilities/sampleTestFiles/testFile";
+        String pathToTestFile = "src/httpserver/utilities/sampleTestFiles/testFile.txt";
         byte[] expected = fileContentConverter.getFileContent(new File(pathToTestFile));
 
         Response response = getHandler.processRequest(request);
@@ -58,7 +58,7 @@ public class getHandlerTests {
     public void pathExistsReturnsTrueWHenExists() {
         String pathToTestFile = "src/httpserver/utilities/sampleTestFiles/";
 
-        boolean actual = getHandler.fileExistsOnPath(request, pathToTestFile);
+        boolean actual = getHandler.getFileOperator().fileExistsOnPath(request, pathToTestFile);
 
         assertEquals(true, actual);
     }
@@ -67,7 +67,7 @@ public class getHandlerTests {
     public void pathExistsReturnsFalseeWHenExists() {
         String pathToTestFile = "src/httpserver/utilities/sampleTestFiles/testFolder";
 
-        boolean actual = getHandler.fileExistsOnPath(request, pathToTestFile);
+        boolean actual = getHandler.getFileOperator().fileExistsOnPath(request, pathToTestFile);
 
         assertEquals(false, actual);
     }

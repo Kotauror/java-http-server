@@ -25,14 +25,12 @@ public class ResponseWriter {
     }
 
     private void writeHeaders() throws IOException {
-        if (this.headersAreNotEmpty()) {
-            String contentType = "Content-Type" + ": " + this.response.getHeaders().get("Content-Type") + "\r\n";
-            write(contentType.getBytes());
+        for (Header header : Header.getHeaders()) {
+            if(this.hasHeader(header.toString())) {
+                String contentType = header.toString() + ": " + this.response.getHeaders().get(header.toString()) + "\n";
+                write(contentType.getBytes());
+            }
         }
-    }
-
-    private void writeEmptyLine() throws IOException {
-        write(("\r\n").getBytes());
     }
 
     private void writeBody() throws IOException {
@@ -46,11 +44,17 @@ public class ResponseWriter {
         this.outputStream.write(bytes);
     }
 
-    private boolean headersAreNotEmpty() {
-        return !(response.getHeaders().isEmpty());
+    private boolean bodyIsNotEmpty()
+    {
+        return response.getBodyContent() != null;
     }
 
-    private boolean bodyIsNotEmpty() {
-        return response.getBodyContent() != null;
+
+    private void writeEmptyLine() throws IOException {
+        write(("\r\n").getBytes());
+    }
+
+    private boolean hasHeader(String header) {
+        return (this.response.getHeaders().get(header) != null);
     }
 }

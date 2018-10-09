@@ -28,7 +28,11 @@ public class RequestParser {
 
     private Method getMethod(String firstLineOfRequest) {
         String[] methodAndPath = this.getMethodPathAndHttpVersion(firstLineOfRequest);
-        return Method.valueOf(methodAndPath[0]);
+        try {
+            return Method.valueOf(methodAndPath[0]);
+        } catch (IllegalArgumentException e) {
+            return Method.INVALID;
+        }
     }
 
     private String getPath(String firstLineOfRequest) {

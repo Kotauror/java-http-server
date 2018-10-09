@@ -22,13 +22,13 @@ public class PutHandler extends Handler{
 
     @Override
     public Response processRequest(Request request) {
-        File file = this.getRequestedFile(request, this.rootPath);
+        File file = this.getFileOperator().getRequestedFile(request, this.rootPath);
         try {
-            if (this.fileExistsOnPath(request, this.rootPath)) {
-                this.writeToFile(file, request);
+            if (this.getFileOperator().fileExistsOnPath(request, this.rootPath)) {
+                this.getFileOperator().writeToFile(file, request);
                 return this.getResponseForUpdatedFile(file);
             } else {
-                this.writeToFile(file, request);
+                this.getFileOperator().writeToFile(file, request);
                 return this.getResponseForCreatedFile(file);
             }
         } catch (IOException e) {
@@ -49,10 +49,6 @@ public class PutHandler extends Handler{
         return false;
     }
 
-    private void writeToFile(File file, Request request) throws IOException {
-        Files.write(Paths.get(file.getPath()), request.getBody().getBytes());
-    }
-
     private Response getResponseForCreatedFile(File file) throws IOException {
         return new Response(ResponseStatus.CREATED, Files.readAllBytes(Paths.get(file.getPath())), null);
     }
@@ -62,6 +58,6 @@ public class PutHandler extends Handler{
     }
 
     private Response getResponseForInternalError() {
-        return new Response(ResponseStatus.INTERNAL_SERVER_ERROR, null ,null);
+        return new Response(ResponseStatus.INTERNAL_SERVER_ERROR);
     }
 }
