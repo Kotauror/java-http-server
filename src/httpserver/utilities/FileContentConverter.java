@@ -1,8 +1,10 @@
 package httpserver.utilities;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.HashMap;
 
 public class FileContentConverter {
 
@@ -12,5 +14,14 @@ public class FileContentConverter {
         fileInputStream.read(encodedFile);
         fileInputStream.close();
         return encodedFile;
+    }
+
+    public byte[] getPartOfFile(File file, HashMap startAndEnd) throws IOException {
+        byte[] fullFileContent = this.getFileContent(file);
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        for (int i = (int) startAndEnd.get("start"); i <= (int) startAndEnd.get("end"); i++) {
+            output.write(fullFileContent[i]);
+        }
+        return output.toByteArray();
     }
 }
