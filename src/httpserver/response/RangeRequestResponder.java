@@ -85,7 +85,11 @@ public class RangeRequestResponder {
         byte[] body = this.getPartOfFileContent(rangeLimits, file);
         String fileType = this.fileTypeDecoder.getFileType(request.getPath());
         String contentRangeHeader = this.getContentRangeHeader(lengthOfRequestedFile, rangeLimits);
-        return new Response(ResponseStatus.RANGE_REQUEST, body, fileType, contentRangeHeader);
+        HashMap<Header, String> headers = new HashMap<Header, String>() {{
+            put(Header.CONTENT_TYPE, fileType);
+            put(Header.CONTENT_RANGE, contentRangeHeader);
+        }};
+        return new Response(ResponseStatus.RANGE_REQUEST, body, headers);
     }
 
     private byte[] getPartOfFileContent(HashMap startAndEnd, File file) throws IOException {
@@ -98,7 +102,10 @@ public class RangeRequestResponder {
 
     private Response getUnsuccessfulRangeResponse(int lengthOfRequestedFile) {
         String contentRangeHeader = "bytes */" + Integer.toString(lengthOfRequestedFile);
-        return new Response(ResponseStatus.RANGE_NOT_SATISFIABLE, null, null, contentRangeHeader);
+        HashMap<Header, String> headers = new HashMap<Header, String>() {{
+            put(Header.CONTENT_RANGE, contentRangeHeader);
+        }};
+        return new Response(ResponseStatus.RANGE_NOT_SATISFIABLE, null, headers);
     }
 }
 

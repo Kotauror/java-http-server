@@ -5,6 +5,8 @@ import httpserver.response.Response;
 import httpserver.response.ResponseStatus;
 import httpserver.utilities.Method;
 
+import java.util.HashMap;
+
 
 public class MethodNotAllowedHandler extends Handler{
 
@@ -15,7 +17,7 @@ public class MethodNotAllowedHandler extends Handler{
 
     @Override
     public Response processRequest(Request request) {
-        return new Response(ResponseStatus.NOT_ALLOWED);
+        return new Response(ResponseStatus.NOT_ALLOWED, null, new HashMap<>());
     }
 
     @Override
