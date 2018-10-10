@@ -5,7 +5,6 @@ import httpserver.response.Response;
 import httpserver.response.ResponseStatus;
 import httpserver.utilities.Method;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 public class BasicAuthHandler extends Handler {
@@ -16,8 +15,12 @@ public class BasicAuthHandler extends Handler {
     }
 
     @Override
-    public Response processRequest(Request request) throws IOException {
-        return new Response(ResponseStatus.OK, null, new HashMap<>());
+    public Response processRequest(Request request) {
+        if (request.getMethod().equals(Method.GET)) {
+            return new Response(ResponseStatus.OK, null, new HashMap<>());
+        } else {
+            return new Response(ResponseStatus.NOT_ALLOWED, null, new HashMap<>());
+        }
     }
 
     @Override
