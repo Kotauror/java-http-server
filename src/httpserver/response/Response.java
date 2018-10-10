@@ -1,6 +1,7 @@
 package httpserver.response;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class Response {
 
@@ -19,6 +20,13 @@ public class Response {
         this.responseStatus = responseStatus;
         addBodyContent(fileContentInBytes);
         setContentTypeHeader(fileType);
+    }
+
+    public Response(ResponseStatus responseStatus, byte[] body, HashMap<Header, String> headers) {
+        this.httpVersion = "HTTP/1.1";
+        this.responseStatus = responseStatus;
+        addBodyContent(body);
+        setHeaders(headers);
     }
 
     public Response(ResponseStatus responseStatus, byte[] fileContentInBytes, String fileType, String contentRangeHeader) {
@@ -68,6 +76,12 @@ public class Response {
     private void addBodyContent(byte[] fileContentInBytes) {
         if (fileContentInBytes != null) {
             this.bodyContent = fileContentInBytes;
+        }
+    }
+
+    private void setHeaders(HashMap<Header, String> headers) {
+        for (Map.Entry<Header, String> entry : headers.entrySet()) {
+            this.headers.put(entry.getKey().toString(), entry.getValue());
         }
     }
 }

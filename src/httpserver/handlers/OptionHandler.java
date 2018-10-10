@@ -1,12 +1,14 @@
 package httpserver.handlers;
 
 import httpserver.request.Request;
+import httpserver.response.Header;
 import httpserver.response.Response;
 import httpserver.response.ResponseStatus;
 import httpserver.utilities.Method;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class OptionHandler extends Handler{
 
@@ -24,7 +26,11 @@ public class OptionHandler extends Handler{
             allowedMethods.add(Method.DELETE.toString());
         }
         String allowedMethodsString = this.turnArrayListIntoString(allowedMethods);
-        return new Response(ResponseStatus.OK, allowedMethodsString);
+        HashMap<Header, String> headers = new HashMap<Header, String>() {{
+            put(Header.ALLOW, allowedMethodsString);
+        }};
+
+        return new Response(ResponseStatus.OK, null, headers);
     }
 
     @Override
