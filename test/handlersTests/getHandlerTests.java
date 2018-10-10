@@ -1,6 +1,5 @@
 package handlersTests;
 
-import httpserver.utilities.FileType;
 import httpserver.utilities.Method;
 import httpserver.handlers.GetHandler;
 import httpserver.request.Request;
@@ -77,7 +76,7 @@ public class getHandlerTests {
     }
 
     @Test
-    public void goesToPartialResponseAndReturnsResponseWithRangeRequestStatusAndPartOfFileInBody() throws IOException {
+    public void goesToPartialResponseAndReturnsResponseWithRangeRequestStatusAndPartOfFileInBodyFullRange() throws IOException {
         String path = "/partial_content.txt";
         LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
             put("Host", "localhost");
@@ -92,5 +91,20 @@ public class getHandlerTests {
         Assert.assertEquals(response.getStatus(), ResponseStatus.RANGE_REQUEST);
         Assert.assertArrayEquals(partOfFile, response.getBodyContent());
         Assert.assertEquals("text/plain", response.getHeaders().get("Content-Type"));
+    }
+
+    @Test
+    public void returnsResponseWithStatus416IfRangeTooWide() throws IOException {
+        String path = "/partial_content.txt";
+        LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
+            put("Host", "localhost");
+            put("Accept-Language", "en-US");
+            put("Range", "bytes=0-900");
+        }};
+        Request request = new Request(Method.GET, path, httpVersion, headers, body);
+
+        Response response = getHandler.processRequest(request);
+
+        Assert.assertEquals(response.getStatus(), ResponseStatus.RANGE_NOT_SATISFIABLE);
     }
 }

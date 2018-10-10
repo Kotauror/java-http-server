@@ -24,13 +24,16 @@ public class RangeRequestResponder {
     }
 
     public Response getRangeResponse(Request request) throws IOException {
-        System.out.println("in get range response");
         HashMap<String, Integer> rangeLimits = this.getRangeLimits(request);
         File file = this.fileOperator.getRequestedFile(request, this.rootPath);
-        byte[] body = this.getPartOfFileContent(rangeLimits, file);
-        String fileType = this.fileTypeDecoder.getFileType(request.getPath());
-        Response response = new Response(ResponseStatus.RANGE_REQUEST, body, fileType);
-        return response;
+        try {
+            byte[] body = this.getPartOfFileContent(rangeLimits, file);
+            String fileType = this.fileTypeDecoder.getFileType(request.getPath());
+            return new Response(ResponseStatus.RANGE_REQUEST, body, fileType);
+        }
+        catch(ArrayIndexOutOfBoundsException exception) {
+            return new Response(ResponseStatus.RANGE_NOT_SATISFIABLE);
+        }
     }
 
     public HashMap<String, Integer> getRangeLimits(Request request) throws IOException {

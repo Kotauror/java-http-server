@@ -7,6 +7,7 @@ public enum ResponseStatus {
     CREATED("201"),
     RANGE_REQUEST("206"),
     NOT_ALLOWED("405"),
+    RANGE_NOT_SATISFIABLE("416"),
     NOT_FOUND("404");
 
     private String status;
