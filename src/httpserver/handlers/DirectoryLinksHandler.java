@@ -23,18 +23,9 @@ public class DirectoryLinksHandler extends Handler {
     @Override
     public Response processRequest(Request request) {
         File[] files = new File(this.rootPath).listFiles();
-        StringBuilder body = new StringBuilder();
-        body.append("<html><head></head><body>");
-        for (File file : files) {
-            String link = this.generateLink(file);
-            body.append(link);
-        }
-        body.append("</body></html>");
-        byte [] bodyContent = body.toString().getBytes();
-        HashMap<Header, String> headers = new HashMap<Header, String>() {{
-            put(Header.CONTENT_TYPE, FileType.HTML.value());
-        }};
-        return new Response(ResponseStatus.OK, bodyContent, headers);
+        byte[] body = this.getBodyContent(files);
+        HashMap<Header, String> headers = this.getHeaders();
+        return new Response(ResponseStatus.OK, body, headers);
     }
 
     @Override
@@ -42,7 +33,24 @@ public class DirectoryLinksHandler extends Handler {
         return request.getPath().equals("/");
     }
 
+    private byte[] getBodyContent(File[] files) {
+        StringBuilder body = new StringBuilder();
+        body.append("<html><head></head><body>");
+        for (File file : files) {
+            String link = this.generateLink(file);
+            body.append(link);
+        }
+        body.append("</body></html>");
+        return body.toString().getBytes();
+    }
+
     private String generateLink(File file) {
         return "<a href='/" + file.getName() + "'>" + file.getName() + "</a><br>";
+    }
+
+    private HashMap<Header, String> getHeaders(){
+        return new HashMap<Header, String>() {{
+            put(Header.CONTENT_TYPE, FileType.HTML.value());
+        }};
     }
 }

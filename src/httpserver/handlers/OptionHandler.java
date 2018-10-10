@@ -20,22 +20,26 @@ public class OptionHandler extends Handler{
 
     @Override
     public Response processRequest(Request request) {
-        ArrayList<String> allowedMethods = new ArrayList<>(Arrays.asList(Method.GET.toString(), Method.HEAD.toString(), Method.OPTIONS.toString()));
-        if (!(this.requestLogs(request))) {
-            allowedMethods.add(Method.PUT.toString());
-            allowedMethods.add(Method.DELETE.toString());
-        }
+        ArrayList<String> allowedMethods = this.getAllowedMethods(request);
         String allowedMethodsString = this.turnArrayListIntoString(allowedMethods);
         HashMap<Header, String> headers = new HashMap<Header, String>() {{
             put(Header.ALLOW, allowedMethodsString);
         }};
-
         return new Response(ResponseStatus.OK, null, headers);
     }
 
     @Override
     public boolean coversPathFromRequest(Request request) {
         return true;
+    }
+
+    private ArrayList<String> getAllowedMethods(Request request) {
+        ArrayList<String> allowedMethods = new ArrayList<>(Arrays.asList(Method.GET.toString(), Method.HEAD.toString(), Method.OPTIONS.toString()));
+        if (!(this.requestLogs(request))) {
+            allowedMethods.add(Method.PUT.toString());
+            allowedMethods.add(Method.DELETE.toString());
+        }
+        return allowedMethods;
     }
 
     private boolean requestLogs(Request request) {
