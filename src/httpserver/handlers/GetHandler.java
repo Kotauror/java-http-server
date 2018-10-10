@@ -2,6 +2,7 @@ package httpserver.handlers;
 
 import httpserver.response.Header;
 import httpserver.response.RangeRequestResponder;
+import httpserver.utilities.FileType;
 import httpserver.utilities.Method;
 import httpserver.request.Request;
 import httpserver.response.Response;
@@ -48,9 +49,9 @@ public class GetHandler extends Handler{
     private Response getFullResponse(Request request) throws IOException {
         File file = this.getFileOperator().getRequestedFile(request, this.rootPath);
         byte[] body = this.getFileContentConverter().getFileContent(file);
-        String fileType = this.getFileTypeDecoder().getFileType(file.getName());
+        FileType fileType = this.getFileTypeDecoder().getFileType(file.getName());
         HashMap<Header, String> headers = new HashMap<Header, String>() {{
-            put(Header.CONTENT_TYPE, fileType);
+            put(Header.CONTENT_TYPE, fileType.value());
         }};
         return new Response(ResponseStatus.OK, body, headers);
     }

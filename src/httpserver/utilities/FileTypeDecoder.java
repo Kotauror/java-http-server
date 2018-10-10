@@ -17,7 +17,7 @@ public class FileTypeDecoder {
         }};
     }
 
-    public String getFileType(String fileName) {
+    public FileType getFileType(String fileName) {
         return (hasExtension(fileName)) ? this.getFileTypeWhenOneExists(fileName) : this.getDefaultFileType();
     }
 
@@ -29,16 +29,16 @@ public class FileTypeDecoder {
         return fileName.split("\\.")[1];
     }
 
-    private String getDefaultFileType() {
-        return FileType.TXT.value();
+    private FileType getDefaultFileType() {
+        return FileType.TXT;
     }
 
-    private String getFileTypeWhenOneExists(String fileName) {
+    private FileType getFileTypeWhenOneExists(String fileName) {
         String clientFileExtension = getFileExtension(fileName);
         for (Map.Entry<String, FileType> fileExtensionWithType : this.fileExtensionsWithTypes.entrySet()) {
             String currentExtension = fileExtensionWithType.getKey();
             if (currentExtension.equals(clientFileExtension)) {
-                return fileExtensionWithType.getValue().value();
+                return fileExtensionWithType.getValue();
             }
         }
         return this.getDefaultFileType();

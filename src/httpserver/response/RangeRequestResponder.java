@@ -3,6 +3,7 @@ package httpserver.response;
 import httpserver.request.Request;
 import httpserver.utilities.FileContentConverter;
 import httpserver.utilities.FileOperator;
+import httpserver.utilities.FileType;
 import httpserver.utilities.FileTypeDecoder;
 
 import java.io.File;
@@ -83,12 +84,9 @@ public class RangeRequestResponder {
     private Response getSuccessfulRangeResponse(Request request, HashMap<String, String> rangeLimits, int lengthOfRequestedFile) throws IOException {
         File file = this.fileOperator.getRequestedFile(request, this.rootPath);
         byte[] body = this.getPartOfFileContent(rangeLimits, file);
-        String fileType = this.fileTypeDecoder.getFileType(request.getPath());
+        FileType fileType = this.fileTypeDecoder.getFileType(request.getPath());
         String contentRangeHeader = this.getContentRangeHeader(lengthOfRequestedFile, rangeLimits);
-        HashMap<Header, String> headers = new HashMap<Header, String>() {{
-            put(Header.CONTENT_TYPE, fileType);
-            put(Header.CONTENT_RANGE, contentRangeHeader);
-        }};
+        HashMap<Header, String> headers = this.getHeaders(fileType, contentRangeHeader);
         return new Response(ResponseStatus.RANGE_REQUEST, body, headers);
     }
 
@@ -98,6 +96,13 @@ public class RangeRequestResponder {
 
     private String getContentRangeHeader(int fileLength, HashMap rangeLimits) {
         return "bytes " + rangeLimits.get("start") + "-" + rangeLimits.get("end") + "/" + Integer.toString(fileLength);
+    }
+
+    private HashMap<Header, String> getHeaders(FileType fileType, String contentRangeHeader) {
+        return new HashMap<Header, String>() {{
+            put(Header.CONTENT_TYPE, fileType.value());
+            put(Header.CONTENT_RANGE, contentRangeHeader);
+        }};
     }
 
     private Response getUnsuccessfulRangeResponse(int lengthOfRequestedFile) {
