@@ -90,7 +90,6 @@ public class RangeRequestResponder {
     }
 
     private String getContentRangeHeader(int fileLength, HashMap rangeLimits) {
-//        return "bytes 0-4/77";
         return "bytes " + Integer.toString((int) rangeLimits.get("start")) + "-" + Integer.toString((int) rangeLimits.get("end")) + "/" + Integer.toString(fileLength);
     }
 

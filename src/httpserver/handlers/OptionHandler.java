@@ -18,10 +18,10 @@ public class OptionHandler extends Handler{
 
     @Override
     public Response processRequest(Request request) {
-        ArrayList<String> allowedMethods = new ArrayList<>(Arrays.asList("GET", "HEAD", "OPTIONS"));
+        ArrayList<String> allowedMethods = new ArrayList<>(Arrays.asList(Method.GET.toString(), Method.HEAD.toString(), Method.OPTIONS.toString()));
         if (!(this.requestLogs(request))) {
-            allowedMethods.add("PUT");
-            allowedMethods.add("DELETE");
+            allowedMethods.add(Method.PUT.toString());
+            allowedMethods.add(Method.DELETE.toString());
         }
         return new Response(ResponseStatus.OK, allowedMethods.toArray(new String[0]));
     }

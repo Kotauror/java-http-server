@@ -54,7 +54,7 @@ public class Response {
 
     private void setContentTypeHeader(String fileType) {
         if (fileType != null) {
-            this.headers.put("Content-Type", fileType);
+            this.headers.put(Header.CONTENT_TYPE.toString(), fileType);
         }
     }
 
@@ -65,12 +65,12 @@ public class Response {
                 stringBuilder.append(allowedMethods[i] + ",");
             }
             stringBuilder.append(allowedMethods[allowedMethods.length-1]);
-            this.headers.put("Allow", stringBuilder.toString());
+            this.headers.put(Header.ALLOW.toString(), stringBuilder.toString());
         }
     }
 
     private void setContentRangeHeader(String contentRangeHeader) {
-        this.headers.put("Content-Range", contentRangeHeader);
+        this.headers.put(Header.CONTENT_RANGE.toString(), contentRangeHeader);
     }
 
     private void addBodyContent(byte[] fileContentInBytes) {
