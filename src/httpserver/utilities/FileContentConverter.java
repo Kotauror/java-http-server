@@ -16,10 +16,12 @@ public class FileContentConverter {
         return encodedFile;
     }
 
-    public byte[] getPartOfFile(File file, HashMap startAndEnd) throws IOException {
+    public byte[] getPartOfFile(File file, HashMap<String, String> startAndEnd) throws IOException {
         byte[] fullFileContent = this.getFileContent(file);
         ByteArrayOutputStream output = new ByteArrayOutputStream();
-        for (int i = (int) startAndEnd.get("start"); i <= (int) startAndEnd.get("end"); i++) {
+        int startIndex = Integer.parseInt(startAndEnd.get("start"));
+        int endIndex = Integer.parseInt(startAndEnd.get("end"));
+        for (int i = startIndex; i <= endIndex; i++) {
             output.write(fullFileContent[i]);
         }
         return output.toByteArray();

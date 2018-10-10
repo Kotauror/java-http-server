@@ -39,8 +39,8 @@ public class FileContentConverterTests {
         byte[] fileContent = "This".getBytes();
         Files.write(Paths.get(filePath), fileContent);
         HashMap startEndMap = new HashMap<String, Integer>(){};
-        startEndMap.put("start", 0);
-        startEndMap.put("end", 3);
+        startEndMap.put("start", "0");
+        startEndMap.put("end", "3");
         byte[] actual = fileContentConverter.getPartOfFile(new File(filePath), startEndMap);
 
         assertArrayEquals(fileContent, actual);

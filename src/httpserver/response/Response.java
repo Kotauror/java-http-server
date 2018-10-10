@@ -5,7 +5,6 @@ import java.util.HashMap;
 public class Response {
 
     private HashMap<String, String> headers = new HashMap<>();
-    private String[] allowedMethods = new String[]{};
     private byte[] bodyContent;
     private ResponseStatus responseStatus;
     private String httpVersion;

@@ -21,7 +21,7 @@ public class FileOperator {
         Files.write(Paths.get(file.getPath()), request.getBody().getBytes());
     }
 
-    public int findLengthOfFileContent(Request request, String rootPath) throws IOException {
+    public int getLengthOfFileContent(Request request, String rootPath) throws IOException {
         File file = new File(rootPath + "/" + request.getPath());
         byte[] fileContent = Files.readAllBytes(file.toPath());
         return fileContent.length;

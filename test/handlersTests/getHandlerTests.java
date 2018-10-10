@@ -77,7 +77,7 @@ public class getHandlerTests {
     }
 
     @Test
-    public void goesToPartialResponseAndReturnsResponseWithRangeRequestStatusAndPartOfFileInBodyFullRange() throws IOException {
+    public void returnsRangeResponseWhenBothLimitsPresent() throws IOException {
         String path = "/partial_content.txt";
         LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
             put("Host", "localhost");
@@ -97,7 +97,7 @@ public class getHandlerTests {
     }
 
     @Test
-    public void goesToPartialResponseAndReturnsResponseWithRangeRequestStatusAndPartOfFileInFirstBodyRange() throws IOException {
+    public void returnsRangeResponseWhenOnlyEndLimitPresent() throws IOException {
         String path = "/partial_content.txt";
         LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
             put("Host", "localhost");
@@ -115,7 +115,7 @@ public class getHandlerTests {
     }
 
     @Test
-    public void goesToPartialResponseAndReturnsResponseWithRangeRequestStatusAndPartOfFileInSecondBodyRange() throws IOException {
+    public void returnsRangeResponseWhenOnlyStartLimitPresent() throws IOException {
         String path = "/partial_content.txt";
         LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
             put("Host", "localhost");

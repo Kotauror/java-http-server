@@ -16,7 +16,8 @@ public class RangeRequestResponder {
     private final FileContentConverter fileContentConverter;
     private final FileTypeDecoder fileTypeDecoder;
 
-    public RangeRequestResponder(String rootPath, FileOperator fileOperator, FileContentConverter fileContentConverter, FileTypeDecoder fileTypeDecoder) {
+    public RangeRequestResponder(String rootPath, FileOperator fileOperator, FileContentConverter fileContentConverter,
+                                 FileTypeDecoder fileTypeDecoder) {
         this.rootPath = rootPath;
         this.fileOperator = fileOperator;
         this.fileContentConverter = fileContentConverter;
@@ -24,76 +25,81 @@ public class RangeRequestResponder {
     }
 
     public Response getRangeResponse(Request request) throws IOException {
-        HashMap<String, Integer> rangeLimits = this.getRangeLimits(request);
-        File file = this.fileOperator.getRequestedFile(request, this.rootPath);
-        try {
-            byte[] body = this.getPartOfFileContent(rangeLimits, file);
-            String fileType = this.fileTypeDecoder.getFileType(request.getPath());
-            int fileLength = this.fileOperator.findLengthOfFileContent(request, this.rootPath);
-            String contentRangeHeader = this.getContentRangeHeader(fileLength, rangeLimits);
-            return new Response(ResponseStatus.RANGE_REQUEST, body, fileType, contentRangeHeader);
-        }
-        catch(ArrayIndexOutOfBoundsException exception) {
-            int fileLength = this.fileOperator.findLengthOfFileContent(request, this.rootPath);
-            String contentRangeHeader = "bytes */" + Integer.toString(fileLength);
-            return new Response(ResponseStatus.RANGE_NOT_SATISFIABLE, null, null, contentRangeHeader);
+        int lengthOfRequestedFile = this.fileOperator.getLengthOfFileContent(request, this.rootPath);
+        String requestedRangeString = request.getHeaders().get("Range").toString();
+        HashMap<String, String> rangeLimits = this.getRangeLimits(requestedRangeString, lengthOfRequestedFile);
+
+        if (this.isRangeWithinFileLength(rangeLimits, lengthOfRequestedFile)) {
+            return this.getSuccessfulRangeResponse(request, rangeLimits, lengthOfRequestedFile);
+        } else {
+            return this.getUnsuccessfulRangeResponse(lengthOfRequestedFile);
         }
     }
 
-    public HashMap<String, Integer> getRangeLimits(Request request) throws IOException {
-        HashMap startEndMap = new HashMap<String, Integer>();
-        String rangeString = request.getHeaders().get("Range").toString();
+    private HashMap<String, String> getRangeLimits(String rangeString, int lengthOfRequestedFile) {
         String[] partsOfRangeString = this.getPartsOfRangeString(rangeString);
 
-        Integer startValue = this.getStartValue(partsOfRangeString, request);
-        Integer endValue = this.getEndValue(partsOfRangeString, request);
-
-        startEndMap.put("start", startValue);
-        startEndMap.put("end", endValue);
-        return startEndMap;
+        String startValue = this.getStartValue(partsOfRangeString, lengthOfRequestedFile);
+        String endValue = this.getEndValue(partsOfRangeString, lengthOfRequestedFile);
+        return getRangeLimitsMap(startValue, endValue);
     }
 
     private String[] getPartsOfRangeString(String rangeString) {
-        String numbers = rangeString.substring(6, rangeString.length());
-        if (numbers.split("-").length == 2) {
-            return numbers.split("-");
+        String limits = rangeString.substring(6, rangeString.length());
+        return (this.hasBothValues(limits)) ? limits.split("-") : new String[]{limits.split("-")[0], ""};
+    }
+
+    private boolean hasBothValues(String limits) {
+        return limits.split("-").length == 2;
+    }
+
+    private String getStartValue(String[] partsOfRangeString, Integer lengthOfFileContent) {
+        String startValue = partsOfRangeString[0];
+        String endValue = partsOfRangeString[1];
+        return (!startValue.equals("")) ? startValue : Integer.toString(lengthOfFileContent - Integer.parseInt(endValue));
+    }
+
+    private String getEndValue(String[] partsOfRangeString, Integer lengthOfFileContent) {
+        String startValue = partsOfRangeString[0];
+        String endValue = partsOfRangeString[1];
+        if (!endValue.equals("")) {
+            return (!startValue.equals("")) ? endValue : Integer.toString(lengthOfFileContent - 1);
         } else {
-            return new String[]{numbers.split("-")[0], ""};
+            return Integer.toString(lengthOfFileContent - 1);
         }
+    }
+
+    private HashMap<String, String> getRangeLimitsMap(String startValue, String endValue) {
+        return new HashMap<String, String>(){{
+            put("start", startValue);
+            put("end", endValue);
+        }};
+    }
+
+    private boolean isRangeWithinFileLength(HashMap<String, String> rangeLimits, int fileLength) {
+        return Integer.parseInt(rangeLimits.get("end")) <= fileLength;
+    }
+
+    private Response getSuccessfulRangeResponse(Request request, HashMap<String, String> rangeLimits, int lengthOfRequestedFile) throws IOException {
+        File file = this.fileOperator.getRequestedFile(request, this.rootPath);
+        byte[] body = this.getPartOfFileContent(rangeLimits, file);
+        String fileType = this.fileTypeDecoder.getFileType(request.getPath());
+        String contentRangeHeader = this.getContentRangeHeader(lengthOfRequestedFile, rangeLimits);
+        return new Response(ResponseStatus.RANGE_REQUEST, body, fileType, contentRangeHeader);
     }
 
     private byte[] getPartOfFileContent(HashMap startAndEnd, File file) throws IOException {
         return this.fileContentConverter.getPartOfFile(file, startAndEnd);
     }
 
-    private Integer getStartValue(String[] partsOfRangeString, Request request) throws IOException {
-        if (!this.valueIsEmptyString(partsOfRangeString[0])) {
-            return Integer.parseInt(partsOfRangeString[0]);
-        } else {
-            Integer lengthOfFileContent = this.fileOperator.findLengthOfFileContent(request, this.rootPath);
-            return lengthOfFileContent - Integer.parseInt(partsOfRangeString[1]);
-        }
-    }
-
-    private Integer getEndValue(String[] partsOfRangeString, Request request) throws IOException {
-        if (this.valueIsEmptyString(partsOfRangeString[1])) {
-            Integer lengthOfFileContent = this.fileOperator.findLengthOfFileContent(request, this.rootPath);
-            return lengthOfFileContent -1;
-        } else {
-            if (this.valueIsEmptyString(partsOfRangeString[0])) {
-                Integer lengthOfFileContent = this.fileOperator.findLengthOfFileContent(request, this.rootPath);
-                return lengthOfFileContent -1;
-            } else {
-                return Integer.parseInt(partsOfRangeString[1]);
-            }
-        }
-    }
-
     private String getContentRangeHeader(int fileLength, HashMap rangeLimits) {
-        return "bytes " + Integer.toString((int) rangeLimits.get("start")) + "-" + Integer.toString((int) rangeLimits.get("end")) + "/" + Integer.toString(fileLength);
+        return "bytes " + rangeLimits.get("start") + "-" + rangeLimits.get("end") + "/" + Integer.toString(fileLength);
     }
 
-    private boolean valueIsEmptyString(String string) {
-        return string.equals("");
+    private Response getUnsuccessfulRangeResponse(int lengthOfRequestedFile) {
+        String contentRangeHeader = "bytes */" + Integer.toString(lengthOfRequestedFile);
+        return new Response(ResponseStatus.RANGE_NOT_SATISFIABLE, null, null, contentRangeHeader);
     }
 }
+
+

@@ -33,7 +33,7 @@ public class FileOperatorTests {
 
     @Test
     public void returnsLengthOfFileContent() throws IOException {
-        int actual = fileOperator.findLengthOfFileContent(request, rootPath);
+        int actual = fileOperator.getLengthOfFileContent(request, rootPath);
         int expected = 20;
         assertEquals(actual, expected);
     }
