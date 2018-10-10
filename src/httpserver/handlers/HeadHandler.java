@@ -5,6 +5,8 @@ import httpserver.response.Response;
 import httpserver.response.ResponseStatus;
 import httpserver.utilities.Method;
 
+import java.util.HashMap;
+
 public class HeadHandler extends Handler {
 
     private final String rootPath;
@@ -26,10 +28,10 @@ public class HeadHandler extends Handler {
     }
 
     private Response getFullResponse() {
-        return new Response(ResponseStatus.OK);
+        return new Response(ResponseStatus.OK, null, new HashMap<>());
     }
 
     private Response getNotFoundResponse() {
-        return new Response(ResponseStatus.NOT_FOUND);
+        return new Response(ResponseStatus.NOT_FOUND, null, new HashMap<>());
     }
 }
