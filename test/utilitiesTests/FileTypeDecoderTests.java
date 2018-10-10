@@ -1,5 +1,6 @@
 package utilitiesTests;
 
+import httpserver.utilities.FileType;
 import httpserver.utilities.FileTypeDecoder;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,39 +18,39 @@ public class FileTypeDecoderTests {
 
     @Test
     public void decodesFileTypeForTxt() {
-        String expected = fileTypeDecoder.getFileType("file.txt");
-        assertEquals("text/plain", expected);
+        FileType expected = fileTypeDecoder.getFileType("file.txt");
+        assertEquals("text/plain", expected.value());
     }
 
     @Test
     public void decodesFileTypeForJpeg() {
-        String expected = fileTypeDecoder.getFileType("file.jpeg");
-        assertEquals("image/jpeg", expected);
+        FileType expected = fileTypeDecoder.getFileType("file.jpeg");
+        assertEquals("image/jpeg", expected.value());
     }
 
     @Test
     public void decodesFileTypeForGif() {
-        String expected = fileTypeDecoder.getFileType("file.gif");
-        assertEquals("image/gif", expected);
+        FileType expected = fileTypeDecoder.getFileType("file.gif");
+        assertEquals("image/gif", expected.value());
     }
 
 
     @Test
     public void decodesFileTypeForPng() {
-        String expected = fileTypeDecoder.getFileType("file.png");
-        assertEquals("image/png", expected);
+        FileType expected = fileTypeDecoder.getFileType("file.png");
+        assertEquals("image/png", expected.value());
     }
 
     @Test
     public void decodesFileTypeForhtml() {
-        String expected = fileTypeDecoder.getFileType("file.html");
-        assertEquals("text/html", expected);
+        FileType expected = fileTypeDecoder.getFileType("file.html");
+        assertEquals("text/html", expected.value());
     }
 
     @Test
     public void decodesFileWithoutExtension() {
-        String expected = fileTypeDecoder.getFileType("file");
-        assertEquals("text/plain", expected);
+        FileType expected = fileTypeDecoder.getFileType("file");
+        assertEquals("text/plain", expected.value());
     }
 
 }

@@ -1,12 +1,14 @@
 package httpserver.handlers;
 
 import httpserver.request.Request;
+import httpserver.response.Header;
 import httpserver.response.Response;
 import httpserver.response.ResponseStatus;
 import httpserver.utilities.Method;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class OptionHandler extends Handler{
 
@@ -18,12 +20,12 @@ public class OptionHandler extends Handler{
 
     @Override
     public Response processRequest(Request request) {
-        ArrayList<String> allowedMethods = new ArrayList<>(Arrays.asList(Method.GET.toString(), Method.HEAD.toString(), Method.OPTIONS.toString()));
-        if (!(this.requestLogs(request))) {
-            allowedMethods.add(Method.PUT.toString());
-            allowedMethods.add(Method.DELETE.toString());
-        }
-        return new Response(ResponseStatus.OK, allowedMethods.toArray(new String[0]));
+        ArrayList<String> allowedMethods = this.getAllowedMethods(request);
+        String allowedMethodsString = this.turnArrayListIntoString(allowedMethods);
+        HashMap<Header, String> headers = new HashMap<Header, String>() {{
+            put(Header.ALLOW, allowedMethodsString);
+        }};
+        return new Response(ResponseStatus.OK, null, headers);
     }
 
     @Override
@@ -31,7 +33,25 @@ public class OptionHandler extends Handler{
         return true;
     }
 
+    private ArrayList<String> getAllowedMethods(Request request) {
+        ArrayList<String> allowedMethods = new ArrayList<>(Arrays.asList(Method.GET.toString(), Method.HEAD.toString(), Method.OPTIONS.toString()));
+        if (!(this.requestLogs(request))) {
+            allowedMethods.add(Method.PUT.toString());
+            allowedMethods.add(Method.DELETE.toString());
+        }
+        return allowedMethods;
+    }
+
     private boolean requestLogs(Request request) {
         return (request.getPath().equals("/logs"));
+    }
+
+    private String turnArrayListIntoString(ArrayList<String> allowedMethods) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < allowedMethods.size() -1; i++) {
+            stringBuilder.append(allowedMethods.get(i) + ",");
+        }
+        stringBuilder.append(allowedMethods.get(allowedMethods.size()-1));
+        return stringBuilder.toString();
     }
 }

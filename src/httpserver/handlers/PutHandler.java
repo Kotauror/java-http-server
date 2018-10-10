@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
 
 public class PutHandler extends Handler{
 
@@ -50,14 +51,16 @@ public class PutHandler extends Handler{
     }
 
     private Response getResponseForCreatedFile(File file) throws IOException {
-        return new Response(ResponseStatus.CREATED, Files.readAllBytes(Paths.get(file.getPath())), null);
+        byte[] body =  Files.readAllBytes(Paths.get(file.getPath()));
+        return new Response(ResponseStatus.CREATED, body, new HashMap<>());
     }
 
     private Response getResponseForUpdatedFile(File file) throws IOException {
-        return new Response(ResponseStatus.OK, Files.readAllBytes(Paths.get(file.getPath())), null);
+        byte[] body =  Files.readAllBytes(Paths.get(file.getPath()));
+        return new Response(ResponseStatus.OK, body, new HashMap<>());
     }
 
     private Response getResponseForInternalError() {
-        return new Response(ResponseStatus.INTERNAL_SERVER_ERROR);
+        return new Response(ResponseStatus.INTERNAL_SERVER_ERROR, null, new HashMap<>());
     }
 }

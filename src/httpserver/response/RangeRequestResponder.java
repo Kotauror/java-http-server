@@ -3,6 +3,7 @@ package httpserver.response;
 import httpserver.request.Request;
 import httpserver.utilities.FileContentConverter;
 import httpserver.utilities.FileOperator;
+import httpserver.utilities.FileType;
 import httpserver.utilities.FileTypeDecoder;
 
 import java.io.File;
@@ -83,9 +84,10 @@ public class RangeRequestResponder {
     private Response getSuccessfulRangeResponse(Request request, HashMap<String, String> rangeLimits, int lengthOfRequestedFile) throws IOException {
         File file = this.fileOperator.getRequestedFile(request, this.rootPath);
         byte[] body = this.getPartOfFileContent(rangeLimits, file);
-        String fileType = this.fileTypeDecoder.getFileType(request.getPath());
+        FileType fileType = this.fileTypeDecoder.getFileType(request.getPath());
         String contentRangeHeader = this.getContentRangeHeader(lengthOfRequestedFile, rangeLimits);
-        return new Response(ResponseStatus.RANGE_REQUEST, body, fileType, contentRangeHeader);
+        HashMap<Header, String> headers = this.getHeaders(fileType, contentRangeHeader);
+        return new Response(ResponseStatus.RANGE_REQUEST, body, headers);
     }
 
     private byte[] getPartOfFileContent(HashMap startAndEnd, File file) throws IOException {
@@ -96,9 +98,19 @@ public class RangeRequestResponder {
         return "bytes " + rangeLimits.get("start") + "-" + rangeLimits.get("end") + "/" + Integer.toString(fileLength);
     }
 
+    private HashMap<Header, String> getHeaders(FileType fileType, String contentRangeHeader) {
+        return new HashMap<Header, String>() {{
+            put(Header.CONTENT_TYPE, fileType.value());
+            put(Header.CONTENT_RANGE, contentRangeHeader);
+        }};
+    }
+
     private Response getUnsuccessfulRangeResponse(int lengthOfRequestedFile) {
         String contentRangeHeader = "bytes */" + Integer.toString(lengthOfRequestedFile);
-        return new Response(ResponseStatus.RANGE_NOT_SATISFIABLE, null, null, contentRangeHeader);
+        HashMap<Header, String> headers = new HashMap<Header, String>() {{
+            put(Header.CONTENT_RANGE, contentRangeHeader);
+        }};
+        return new Response(ResponseStatus.RANGE_NOT_SATISFIABLE, null, headers);
     }
 }
 

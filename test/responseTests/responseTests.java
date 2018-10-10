@@ -1,5 +1,6 @@
 package responseTests;
 
+import httpserver.response.Header;
 import httpserver.response.Response;
 import httpserver.response.ResponseStatus;
 import org.junit.Before;
@@ -22,8 +23,11 @@ public class responseTests {
         ResponseStatus responseStatus = ResponseStatus.OK;
         fileContent = "Kocia test".getBytes();
         String fileType = "text/plain";
-        fullResponse = new Response(responseStatus, fileContent, fileType);
-        emptyResponse = new Response(ResponseStatus.NOT_FOUND, null, null);
+        HashMap<Header, String> headers = new HashMap<Header, String>() {{
+            put(Header.CONTENT_TYPE, fileType);
+        }};
+        fullResponse = new Response(responseStatus, fileContent, headers);
+        emptyResponse = new Response(ResponseStatus.NOT_FOUND, null, new HashMap<>());
     }
 
     @Test

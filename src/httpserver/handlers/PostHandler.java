@@ -1,6 +1,8 @@
 package httpserver.handlers;
 
+import httpserver.response.Header;
 import httpserver.response.ResponseStatus;
+import httpserver.utilities.FileType;
 import httpserver.utilities.Method;
 import httpserver.request.Request;
 import httpserver.response.Response;
@@ -9,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
 
 public class PostHandler extends Handler {
 
@@ -37,11 +40,15 @@ public class PostHandler extends Handler {
     }
 
     private Response getResponseForNotAllowedMethod() {
-        return new Response(ResponseStatus.NOT_ALLOWED);
+        return new Response(ResponseStatus.NOT_ALLOWED, null, new HashMap<>());
     }
 
     private Response getResponseForCreatingFile(File file) throws IOException {
-        String fileType = this.getFileTypeDecoder().getFileType(file.getName());
-        return new Response(ResponseStatus.CREATED, Files.readAllBytes(Paths.get(file.getPath())), fileType);
+        FileType fileType = this.getFileTypeDecoder().getFileType(file.getName());
+        byte[] body = Files.readAllBytes(Paths.get(file.getPath()));
+        HashMap<Header, String> headers = new HashMap<Header, String>() {{
+            put(Header.CONTENT_TYPE, fileType.value());
+        }};
+        return new Response(ResponseStatus.CREATED, body, headers);
     }
 }
