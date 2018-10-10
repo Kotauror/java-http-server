@@ -3,6 +3,7 @@ package httpserver.response;
 public enum Header {
 
     CONTENT_TYPE("Content-Type"),
+    CONTENT_RANGE("Content-Range"),
     ALLOW("Allow");
 
     private final String text;

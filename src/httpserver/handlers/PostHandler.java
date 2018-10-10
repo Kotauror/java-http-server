@@ -24,7 +24,7 @@ public class PostHandler extends Handler {
     public Response processRequest(Request request) throws IOException {
         File file = this.getFileOperator().getRequestedFile(request, this.rootPath);
         if (this.getFileOperator().fileExistsOnPath(request, this.rootPath)) {
-            return this.getResponseForUnallowedMethod();
+            return this.getResponseForNotAllowedMethod();
         } else {
             this.getFileOperator().writeToFile(file, request);
             return this.getResponseForCreatingFile(file);
@@ -36,11 +36,12 @@ public class PostHandler extends Handler {
         return true;
     }
 
-    private Response getResponseForUnallowedMethod() {
+    private Response getResponseForNotAllowedMethod() {
         return new Response(ResponseStatus.NOT_ALLOWED);
     }
 
     private Response getResponseForCreatingFile(File file) throws IOException {
-        return new Response(ResponseStatus.CREATED, Files.readAllBytes(Paths.get(file.getPath())), null);
+        String fileType = this.getFileTypeDecoder().getFileType(file.getName());
+        return new Response(ResponseStatus.CREATED, Files.readAllBytes(Paths.get(file.getPath())), fileType);
     }
 }

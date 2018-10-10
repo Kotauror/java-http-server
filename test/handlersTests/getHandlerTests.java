@@ -1,11 +1,13 @@
 package handlersTests;
 
+import httpserver.response.Header;
 import httpserver.utilities.Method;
 import httpserver.handlers.GetHandler;
 import httpserver.request.Request;
 import httpserver.utilities.FileContentConverter;
 import httpserver.response.Response;
 import httpserver.response.ResponseStatus;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,6 +23,8 @@ public class getHandlerTests {
     private GetHandler getHandler;
     private Request request;
     private FileContentConverter fileContentConverter;
+    private String httpVersion;
+    private String body;
 
     @Before
     public void setup() {
@@ -28,12 +32,12 @@ public class getHandlerTests {
         String rootPath = "src/httpserver/utilities/sampleTestFiles";
         getHandler = new GetHandler(rootPath);
         String path = "/testFile.txt";
-        String httpVersion = "HTTP/1.1";
+        httpVersion = "HTTP/1.1";
         LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
             put("Host", "localhost");
             put("Accept-Language", "en-US");
         }};
-        String body = "example body";
+        body = "example body";
 
         request = new Request(Method.GET, path, httpVersion, headers, body);
     }
@@ -70,5 +74,76 @@ public class getHandlerTests {
         boolean actual = getHandler.getFileOperator().fileExistsOnPath(request, pathToTestFile);
 
         assertEquals(false, actual);
+    }
+
+    @Test
+    public void returnsRangeResponseWhenBothLimitsPresent() throws IOException {
+        String path = "/partial_content.txt";
+        LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
+            put("Host", "localhost");
+            put("Accept-Language", "en-US");
+            put("Range", "bytes=0-6");
+        }};
+        byte[] partOfFile = "This is".getBytes();
+        String expectedContentRange = "bytes 0-6/77";
+        Request request = new Request(Method.GET, path, httpVersion, headers, body);
+
+        Response response = getHandler.processRequest(request);
+
+        Assert.assertEquals(response.getStatus(), ResponseStatus.RANGE_REQUEST);
+        Assert.assertArrayEquals(partOfFile, response.getBodyContent());
+        Assert.assertEquals("text/plain", response.getHeaders().get(Header.CONTENT_TYPE.toString()));
+        Assert.assertEquals(expectedContentRange, response.getHeaders().get(Header.CONTENT_RANGE.toString()));
+    }
+
+    @Test
+    public void returnsRangeResponseWhenOnlyEndLimitPresent() throws IOException {
+        String path = "/partial_content.txt";
+        LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
+            put("Host", "localhost");
+            put("Accept-Language", "en-US");
+            put("Range", "bytes=-6");
+        }};
+        String expectedContentRange = "bytes 71-76/77";
+        Request request = new Request(Method.GET, path, httpVersion, headers, body);
+
+        Response response = getHandler.processRequest(request);
+
+        Assert.assertEquals(response.getStatus(), ResponseStatus.RANGE_REQUEST);
+        Assert.assertEquals("text/plain", response.getHeaders().get(Header.CONTENT_TYPE.toString()));
+        Assert.assertEquals(expectedContentRange, response.getHeaders().get(Header.CONTENT_RANGE.toString()));
+    }
+
+    @Test
+    public void returnsRangeResponseWhenOnlyStartLimitPresent() throws IOException {
+        String path = "/partial_content.txt";
+        LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
+            put("Host", "localhost");
+            put("Accept-Language", "en-US");
+            put("Range", "bytes=60-");
+        }};
+        String expectedContentRange = "bytes 60-76/77";
+        Request request = new Request(Method.GET, path, httpVersion, headers, body);
+
+        Response response = getHandler.processRequest(request);
+
+        Assert.assertEquals(response.getStatus(), ResponseStatus.RANGE_REQUEST);
+        Assert.assertEquals("text/plain", response.getHeaders().get(Header.CONTENT_TYPE.toString()));
+        Assert.assertEquals(expectedContentRange, response.getHeaders().get(Header.CONTENT_RANGE.toString()));
+    }
+
+    @Test
+    public void returnsResponseWithStatus416IfRangeTooWide() throws IOException {
+        String path = "/partial_content.txt";
+        LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
+            put("Host", "localhost");
+            put("Accept-Language", "en-US");
+            put("Range", "bytes=0-900");
+        }};
+        Request request = new Request(Method.GET, path, httpVersion, headers, body);
+
+        Response response = getHandler.processRequest(request);
+
+        Assert.assertEquals(response.getStatus(), ResponseStatus.RANGE_NOT_SATISFIABLE);
     }
 }

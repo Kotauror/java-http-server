@@ -55,7 +55,8 @@ public class directoryListingHandlerTests {
         String path = "/";
         Request request = new Request(method, path, httpVersion, headers, body);
         byte[] expectedBody = ("<html><head></head><body>" +
-                "<a href='/testFile.txt'>testFile.txt</a><br>"  +
+                "<a href='/partial_content.txt'>partial_content.txt</a><br>"  +
+                "<a href='/testFile.txt'>testFile.txt</a><br>" +
                 "</body></html>").getBytes();
 
         Response response = directoryLinksHandler.processRequest(request);
