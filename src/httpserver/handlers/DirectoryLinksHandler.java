@@ -1,12 +1,14 @@
 package httpserver.handlers;
 
 import httpserver.request.Request;
+import httpserver.response.Header;
 import httpserver.response.Response;
 import httpserver.response.ResponseStatus;
 import httpserver.utilities.FileType;
 import httpserver.utilities.Method;
 
 import java.io.File;
+import java.util.HashMap;
 
 public class DirectoryLinksHandler extends Handler {
 
@@ -29,7 +31,10 @@ public class DirectoryLinksHandler extends Handler {
         }
         body.append("</body></html>");
         byte [] bodyContent = body.toString().getBytes();
-        return new Response(ResponseStatus.OK, bodyContent, FileType.HTML.value());
+        HashMap<Header, String> headers = new HashMap<Header, String>() {{
+            put(Header.CONTENT_TYPE, FileType.HTML.value());
+        }};
+        return new Response(ResponseStatus.OK, bodyContent, headers);
     }
 
     @Override
