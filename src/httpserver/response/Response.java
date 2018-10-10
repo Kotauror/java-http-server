@@ -22,6 +22,14 @@ public class Response {
         setContentTypeHeader(fileType);
     }
 
+    public Response(ResponseStatus responseStatus, byte[] fileContentInBytes, String fileType, String contentRangeHeader) {
+        this.httpVersion = "HTTP/1.1";
+        this.responseStatus = responseStatus;
+        addBodyContent(fileContentInBytes);
+        setContentTypeHeader(fileType);
+        setContentRangeHeader(contentRangeHeader);
+    }
+
     public Response(ResponseStatus responseStatus, String[] allowedMethods) {
         this.httpVersion = "HTTP/1.1";
         this.responseStatus = responseStatus;
@@ -59,6 +67,10 @@ public class Response {
             stringBuilder.append(allowedMethods[allowedMethods.length-1]);
             this.headers.put("Allow", stringBuilder.toString());
         }
+    }
+
+    private void setContentRangeHeader(String contentRangeHeader) {
+        this.headers.put("Content-Range", contentRangeHeader);
     }
 
     private void addBodyContent(byte[] fileContentInBytes) {

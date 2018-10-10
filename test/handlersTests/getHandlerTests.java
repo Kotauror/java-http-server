@@ -84,6 +84,7 @@ public class getHandlerTests {
             put("Range", "bytes=0-6");
         }};
         byte[] partOfFile = "This is".getBytes();
+        String expectedContentRange = "bytes 0-6/77";
         Request request = new Request(Method.GET, path, httpVersion, headers, body);
 
         Response response = getHandler.processRequest(request);
@@ -91,6 +92,43 @@ public class getHandlerTests {
         Assert.assertEquals(response.getStatus(), ResponseStatus.RANGE_REQUEST);
         Assert.assertArrayEquals(partOfFile, response.getBodyContent());
         Assert.assertEquals("text/plain", response.getHeaders().get("Content-Type"));
+        Assert.assertEquals(expectedContentRange, response.getHeaders().get("Content-Range"));
+    }
+
+    @Test
+    public void goesToPartialResponseAndReturnsResponseWithRangeRequestStatusAndPartOfFileInFirstBodyRange() throws IOException {
+        String path = "/partial_content.txt";
+        LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
+            put("Host", "localhost");
+            put("Accept-Language", "en-US");
+            put("Range", "bytes=-6");
+        }};
+        String expectedContentRange = "bytes 71-76/77";
+        Request request = new Request(Method.GET, path, httpVersion, headers, body);
+
+        Response response = getHandler.processRequest(request);
+
+        Assert.assertEquals(response.getStatus(), ResponseStatus.RANGE_REQUEST);
+        Assert.assertEquals("text/plain", response.getHeaders().get("Content-Type"));
+        Assert.assertEquals(expectedContentRange, response.getHeaders().get("Content-Range"));
+    }
+
+    @Test
+    public void goesToPartialResponseAndReturnsResponseWithRangeRequestStatusAndPartOfFileInSecondBodyRange() throws IOException {
+        String path = "/partial_content.txt";
+        LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
+            put("Host", "localhost");
+            put("Accept-Language", "en-US");
+            put("Range", "bytes=60-");
+        }};
+        String expectedContentRange = "bytes 60-76/77";
+        Request request = new Request(Method.GET, path, httpVersion, headers, body);
+
+        Response response = getHandler.processRequest(request);
+
+        Assert.assertEquals(response.getStatus(), ResponseStatus.RANGE_REQUEST);
+        Assert.assertEquals("text/plain", response.getHeaders().get("Content-Type"));
+        Assert.assertEquals(expectedContentRange, response.getHeaders().get("Content-Range"));
     }
 
     @Test

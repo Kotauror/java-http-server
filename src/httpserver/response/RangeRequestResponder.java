@@ -29,10 +29,14 @@ public class RangeRequestResponder {
         try {
             byte[] body = this.getPartOfFileContent(rangeLimits, file);
             String fileType = this.fileTypeDecoder.getFileType(request.getPath());
-            return new Response(ResponseStatus.RANGE_REQUEST, body, fileType);
+            int fileLength = this.fileOperator.findLengthOfFileContent(request, this.rootPath);
+            String contentRangeHeader = this.getContentRangeHeader(fileLength, rangeLimits);
+            return new Response(ResponseStatus.RANGE_REQUEST, body, fileType, contentRangeHeader);
         }
         catch(ArrayIndexOutOfBoundsException exception) {
-            return new Response(ResponseStatus.RANGE_NOT_SATISFIABLE);
+            int fileLength = this.fileOperator.findLengthOfFileContent(request, this.rootPath);
+            String contentRangeHeader = "bytes */" + Integer.toString(fileLength);
+            return new Response(ResponseStatus.RANGE_NOT_SATISFIABLE, null, null, contentRangeHeader);
         }
     }
 
@@ -83,6 +87,11 @@ public class RangeRequestResponder {
                 return Integer.parseInt(partsOfRangeString[1]);
             }
         }
+    }
+
+    private String getContentRangeHeader(int fileLength, HashMap rangeLimits) {
+//        return "bytes 0-4/77";
+        return "bytes " + Integer.toString((int) rangeLimits.get("start")) + "-" + Integer.toString((int) rangeLimits.get("end")) + "/" + Integer.toString(fileLength);
     }
 
     private boolean valueIsEmptyString(String string) {
