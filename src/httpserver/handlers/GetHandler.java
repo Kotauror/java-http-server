@@ -1,6 +1,8 @@
 package httpserver.handlers;
 
+import httpserver.response.Header;
 import httpserver.response.RangeRequestResponder;
+import httpserver.utilities.FileType;
 import httpserver.utilities.Method;
 import httpserver.request.Request;
 import httpserver.response.Response;
@@ -8,6 +10,7 @@ import httpserver.response.ResponseStatus;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 public class GetHandler extends Handler{
 
@@ -32,7 +35,7 @@ public class GetHandler extends Handler{
     }
 
     private Response getNotFoundResponse() {
-        return new Response(ResponseStatus.NOT_FOUND);
+        return new Response(ResponseStatus.NOT_FOUND, null, new HashMap<>());
     }
 
     private Response getResponse(Request request) throws IOException {
@@ -47,8 +50,10 @@ public class GetHandler extends Handler{
         File file = this.getFileOperator().getRequestedFile(request, this.rootPath);
         byte[] fileContentInBytes = this.getFileContentConverter().getFileContent(file);
         String fileType = this.getFileTypeDecoder().getFileType(file.getName());
-
-        return new Response(ResponseStatus.OK, fileContentInBytes, fileType);
+        HashMap<Header, String> headers = new HashMap<Header, String>() {{
+            put(Header.CONTENT_TYPE, fileType);
+        }};
+        return new Response(ResponseStatus.OK, fileContentInBytes, headers);
     }
 
     private boolean isRangeRequest(Request request) {
