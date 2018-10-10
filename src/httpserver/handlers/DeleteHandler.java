@@ -6,6 +6,7 @@ import httpserver.response.ResponseStatus;
 import httpserver.utilities.Method;
 
 import java.io.File;
+import java.util.HashMap;
 
 public class DeleteHandler extends Handler {
 
@@ -30,6 +31,6 @@ public class DeleteHandler extends Handler {
     }
 
     private Response getResponseForDeletedFile() {
-        return new Response(ResponseStatus.OK);
+        return new Response(ResponseStatus.OK, null, new HashMap<>());
     }
 }

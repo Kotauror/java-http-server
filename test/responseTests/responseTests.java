@@ -23,7 +23,7 @@ public class responseTests {
         fileContent = "Kocia test".getBytes();
         String fileType = "text/plain";
         fullResponse = new Response(responseStatus, fileContent, fileType);
-        emptyResponse = new Response(ResponseStatus.NOT_FOUND, null, null);
+        emptyResponse = new Response(ResponseStatus.NOT_FOUND, null, new HashMap<>());
     }
 
     @Test
