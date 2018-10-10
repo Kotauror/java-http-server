@@ -29,7 +29,7 @@ public class Response {
         setContentRangeHeader(contentRangeHeader);
     }
 
-    public Response(ResponseStatus responseStatus, String[] allowedMethods) {
+    public Response(ResponseStatus responseStatus, String allowedMethods) {
         this.httpVersion = "HTTP/1.1";
         this.responseStatus = responseStatus;
         setAllowedMethodsHeader(allowedMethods);
@@ -57,15 +57,8 @@ public class Response {
         }
     }
 
-    private void setAllowedMethodsHeader(String[] allowedMethods) {
-        StringBuilder stringBuilder = new StringBuilder();
-        if (allowedMethods.length > 0) {
-            for (int i = 0; i < allowedMethods.length -1; i++) {
-                stringBuilder.append(allowedMethods[i] + ",");
-            }
-            stringBuilder.append(allowedMethods[allowedMethods.length-1]);
-            this.headers.put(Header.ALLOW.toString(), stringBuilder.toString());
-        }
+    private void setAllowedMethodsHeader(String allowedMethods) {
+        this.headers.put(Header.ALLOW.toString(), allowedMethods);
     }
 
     private void setContentRangeHeader(String contentRangeHeader) {

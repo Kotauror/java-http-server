@@ -23,7 +23,8 @@ public class OptionHandler extends Handler{
             allowedMethods.add(Method.PUT.toString());
             allowedMethods.add(Method.DELETE.toString());
         }
-        return new Response(ResponseStatus.OK, allowedMethods.toArray(new String[0]));
+        String allowedMethodsString = this.turnArrayListIntoString(allowedMethods);
+        return new Response(ResponseStatus.OK, allowedMethodsString);
     }
 
     @Override
@@ -33,5 +34,14 @@ public class OptionHandler extends Handler{
 
     private boolean requestLogs(Request request) {
         return (request.getPath().equals("/logs"));
+    }
+
+    private String turnArrayListIntoString(ArrayList<String> allowedMethods) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < allowedMethods.size() -1; i++) {
+            stringBuilder.append(allowedMethods.get(i) + ",");
+        }
+        stringBuilder.append(allowedMethods.get(allowedMethods.size()-1));
+        return stringBuilder.toString();
     }
 }
