@@ -16,15 +16,24 @@ public class BasicAuthHandler extends Handler {
 
     @Override
     public Response processRequest(Request request) {
-        if (request.getMethod().equals(Method.GET)) {
-            return new Response(ResponseStatus.OK, null, new HashMap<>());
+        if (this.isAuthorisedRequest(request)) {
+            if (request.getMethod().equals(Method.GET)) {
+                return new Response(ResponseStatus.OK, null, new HashMap<>());
+            } else {
+                return new Response(ResponseStatus.NOT_ALLOWED, null, new HashMap<>());
+            }
         } else {
-            return new Response(ResponseStatus.NOT_ALLOWED, null, new HashMap<>());
+            return new Response(ResponseStatus.UNAUTHORIZED, null, new HashMap<>());
         }
     }
 
     @Override
     public boolean coversPathFromRequest(Request request) {
         return (request.getPath().equals("/logs"));
+    }
+
+    private boolean isAuthorisedRequest(Request request) {
+        String value = (String) request.getHeaders().get("Authorization");
+        return (value != null);
     }
 }
