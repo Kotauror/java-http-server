@@ -26,7 +26,7 @@ public class BasicAuthHandler extends Handler {
     public Response processRequest(Request request) {
         if (this.isAuthorisedRequest(request)) {
             if (this.requestHasAllowedMethod(request)) {
-                return new Response(ResponseStatus.OK, null, new HashMap<>());
+                return this.getResponseForSuccessfulBasicAuth();
             } else {
                 return this.getResponseForUnallowedMethod();
             }
@@ -60,6 +60,11 @@ public class BasicAuthHandler extends Handler {
         byte[] credDecoded = Base64.getDecoder().decode(base64Credentials);
         String credentials = new String(credDecoded, StandardCharsets.UTF_8);
         return credentials.split(":", 2);
+    }
+
+    private Response getResponseForSuccessfulBasicAuth() {
+        byte [] body = "GET /logs HTTP/1.1 PUT /these HTTP/1.1 HEAD /requests HTTP/1.1".getBytes();
+        return new Response(ResponseStatus.OK, body, new HashMap<>());
     }
 
     private Response getResponseForUnallowedMethod() {

@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import java.util.LinkedHashMap;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 public class basicAuthTests {
@@ -34,9 +35,12 @@ public class basicAuthTests {
             put("Authorization", "Basic YWRtaW46aHVudGVyMg==");
         }};
         Request request = new Request(Method.GET, path, httpVersion, headers, null);
+        byte [] expectedBody = "GET /logs HTTP/1.1 PUT /these HTTP/1.1 HEAD /requests HTTP/1.1".getBytes();
+
         Response response = basicAuthHandler.processRequest(request);
 
         assertEquals(response.getStatus(), ResponseStatus.OK);
+        assertArrayEquals(expectedBody, response.getBodyContent());
     }
 
     @Test
@@ -47,6 +51,7 @@ public class basicAuthTests {
             put("Authorization", "Basic YWRtaW46aHVudTestTestGVyMg==");
         }};
         Request request = new Request(Method.GET, path, httpVersion, headers, null);
+
         Response response = basicAuthHandler.processRequest(request);
 
         assertEquals(response.getStatus(), ResponseStatus.UNAUTHORIZED);
@@ -60,6 +65,7 @@ public class basicAuthTests {
             put("Accept-Language", "en-US");
         }};
         Request request = new Request(Method.GET, path, httpVersion, headers, null);
+
         Response response = basicAuthHandler.processRequest(request);
 
         assertEquals(response.getStatus(), ResponseStatus.UNAUTHORIZED);
@@ -74,6 +80,7 @@ public class basicAuthTests {
             put("Authorization", "Basic YWRtaW46aHVudGVyMg==");
         }};
         Request request = new Request(Method.PUT, path, httpVersion, headers, null);
+
         Response response = basicAuthHandler.processRequest(request);
 
         assertEquals(response.getStatus(), ResponseStatus.NOT_ALLOWED);
