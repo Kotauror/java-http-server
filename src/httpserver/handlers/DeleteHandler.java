@@ -5,7 +5,6 @@ import httpserver.response.Response;
 import httpserver.response.ResponseStatus;
 import httpserver.utilities.Method;
 
-import java.io.File;
 import java.util.HashMap;
 
 public class DeleteHandler extends Handler {
@@ -20,8 +19,7 @@ public class DeleteHandler extends Handler {
 
     @Override
     public Response processRequest(Request request) {
-        File file = this.getFileOperator().getRequestedFile(request, this.rootPath);
-        file.delete();
+        this.getFileOperator().deleteFile(request, this.rootPath);
         return this.getResponseForDeletedFile();
     }
 

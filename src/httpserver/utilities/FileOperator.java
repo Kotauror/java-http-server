@@ -26,4 +26,8 @@ public class FileOperator {
         byte[] fileContent = Files.readAllBytes(file.toPath());
         return fileContent.length;
     }
+
+    public void deleteFile(Request request, String rootPath) {
+        this.getRequestedFile(request, rootPath).delete();
+    }
 }
