@@ -27,11 +27,11 @@ public class basicAuthTests {
     }
 
     @Test
-    public void returnsResponseWithStatusOKWhenReqHasGetMethod() {
+    public void returnsResponseWithStatusOKWhenReqHasGetMethodAndIsAuthorised() {
         LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
             put("Host", "localhost");
             put("Accept-Language", "en-US");
-            put("Authorization", "test");
+            put("Authorization", "Basic YWRtaW46aHVudGVyMg==");
         }};
         Request request = new Request(Method.GET, path, httpVersion, headers, null);
         Response response = basicAuthHandler.processRequest(request);
@@ -40,11 +40,24 @@ public class basicAuthTests {
     }
 
     @Test
-    public void returnsResponseWithStatusUnauthorizedWhenNotAuthorized() {
+    public void returnsResponseWithStatusNotAllowedWhenHasWrongCredentials() {
         LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
             put("Host", "localhost");
             put("Accept-Language", "en-US");
-            put("WWW-Authenticate", "Basic realm=\"Access to staging site\"");
+            put("Authorization", "Basic YWRtaW46aHVudTestTestGVyMg==");
+        }};
+        Request request = new Request(Method.GET, path, httpVersion, headers, null);
+        Response response = basicAuthHandler.processRequest(request);
+
+        assertEquals(response.getStatus(), ResponseStatus.UNAUTHORIZED);
+        assertEquals("Basic realm=\"Access to staging site\"", response.getHeaders().get(Header.AUTHENTICATE.toString()));
+    }
+
+    @Test
+    public void returnsResponseWithStatusUnauthorizedWhenNoAuthorizationHeader() {
+        LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
+            put("Host", "localhost");
+            put("Accept-Language", "en-US");
         }};
         Request request = new Request(Method.GET, path, httpVersion, headers, null);
         Response response = basicAuthHandler.processRequest(request);
@@ -58,7 +71,7 @@ public class basicAuthTests {
         LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
             put("Host", "localhost");
             put("Accept-Language", "en-US");
-            put("Authorization", "test");
+            put("Authorization", "Basic YWRtaW46aHVudGVyMg==");
         }};
         Request request = new Request(Method.PUT, path, httpVersion, headers, null);
         Response response = basicAuthHandler.processRequest(request);
