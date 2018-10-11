@@ -2,6 +2,7 @@ package handlersTests;
 
 import httpserver.handlers.BasicAuthHandler;
 import httpserver.request.Request;
+import httpserver.response.Header;
 import httpserver.response.Response;
 import httpserver.response.ResponseStatus;
 import httpserver.utilities.Method;
@@ -43,11 +44,13 @@ public class basicAuthTests {
         LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
             put("Host", "localhost");
             put("Accept-Language", "en-US");
+            put("WWW-Authenticate", "Basic realm=\"Access to staging site\"");
         }};
         Request request = new Request(Method.GET, path, httpVersion, headers, null);
         Response response = basicAuthHandler.processRequest(request);
 
         assertEquals(response.getStatus(), ResponseStatus.UNAUTHORIZED);
+        assertEquals("Basic realm=\"Access to staging site\"", response.getHeaders().get(Header.AUTHENTICATE.toString()));
     }
 
     @Test

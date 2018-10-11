@@ -1,6 +1,7 @@
 package httpserver.handlers;
 
 import httpserver.request.Request;
+import httpserver.response.Header;
 import httpserver.response.Response;
 import httpserver.response.ResponseStatus;
 import httpserver.utilities.Method;
@@ -17,13 +18,13 @@ public class BasicAuthHandler extends Handler {
     @Override
     public Response processRequest(Request request) {
         if (this.isAuthorisedRequest(request)) {
-            if (request.getMethod().equals(Method.GET)) {
+            if (this.requestHasAllowedMethod(request)) {
                 return new Response(ResponseStatus.OK, null, new HashMap<>());
             } else {
-                return new Response(ResponseStatus.NOT_ALLOWED, null, new HashMap<>());
+                return this.getResponseForUnallowedMethod();
             }
         } else {
-            return new Response(ResponseStatus.UNAUTHORIZED, null, new HashMap<>());
+            return this.getResponseForUnauthorizedRequest();
         }
     }
 
@@ -35,5 +36,20 @@ public class BasicAuthHandler extends Handler {
     private boolean isAuthorisedRequest(Request request) {
         String value = (String) request.getHeaders().get("Authorization");
         return (value != null);
+    }
+
+    private Response getResponseForUnallowedMethod() {
+        return new Response(ResponseStatus.NOT_ALLOWED, null, new HashMap<>());
+    }
+
+    private Response getResponseForUnauthorizedRequest() {
+        HashMap<Header, String> header = this.getHeaderForUnauthorizedRequest();
+        return new Response(ResponseStatus.UNAUTHORIZED, null, header);
+    }
+
+    private HashMap<Header, String> getHeaderForUnauthorizedRequest() {
+        return new HashMap<Header, String>() {{
+            put(Header.AUTHENTICATE, "Basic realm=\"Access to staging site\"");
+        }};
     }
 }

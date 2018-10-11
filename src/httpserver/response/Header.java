@@ -4,6 +4,7 @@ public enum Header {
 
     CONTENT_TYPE("Content-Type"),
     CONTENT_RANGE("Content-Range"),
+    AUTHENTICATE("WWW-Authenticate"),
     ALLOW("Allow");
 
     private final String text;
