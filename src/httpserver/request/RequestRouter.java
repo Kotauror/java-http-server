@@ -15,6 +15,7 @@ public class RequestRouter {
         this.rootPath = rootPath;
         addHandlers(Arrays.asList(
                 new CookieHandler(),
+                new TeapotHandler(),
                 new BasicAuthHandler(),
                 new DirectoryLinksHandler(rootPath),
                 new PutHandler(rootPath),
