@@ -9,6 +9,7 @@ public enum ResponseStatus {
     UNAUTHORIZED("401"),
     NOT_ALLOWED("405"),
     RANGE_NOT_SATISFIABLE("416"),
+    TEAPOT("418"),
     NOT_FOUND("404");
 
     private String status;

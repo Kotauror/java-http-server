@@ -12,4 +12,5 @@ public enum HandlerType {
     NOT_ALLOWED_HANDLER,
     OPTION_HANDLER,
     COOKIE_HANDLER,
+    TEAPOT_HANDLER,
 }
