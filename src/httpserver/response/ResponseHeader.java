@@ -6,6 +6,7 @@ public enum ResponseHeader {
     CONTENT_RANGE("Content-Range"),
     AUTHENTICATE("WWW-Authenticate"),
     SET_COOKIE("Set-Cookie"),
+    LOCATION("Location"),
     ALLOW("Allow");
 
     private final String text;

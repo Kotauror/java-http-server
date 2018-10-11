@@ -6,6 +6,7 @@ public enum ResponseStatus {
     OK("200"),
     CREATED("201"),
     RANGE_REQUEST("206"),
+    FOUND("302"),
     UNAUTHORIZED("401"),
     NOT_ALLOWED("405"),
     RANGE_NOT_SATISFIABLE("416"),

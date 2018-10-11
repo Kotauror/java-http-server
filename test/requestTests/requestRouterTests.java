@@ -138,11 +138,19 @@ public class requestRouterTests {
     }
 
     @Test
-    public void findHandlerReturnsRightHandlerForTeapotHandlerWhenTee() {
+    public void findHandlerReturnsRightHandlerForTeapotHandlerWhenTea() {
         Request request = new Request(methodGet, "/tea", httpVersion, headers, body);
         Handler handler = requestRouter.findHandler(request);
 
         assertEquals(HandlerType.TEAPOT_HANDLER, handler.getType());
+    }
+
+    @Test
+    public void findHandlerReturnsRightHandlerForReditectHandler() {
+        Request request = new Request(methodGet, "/redirect", httpVersion, headers, body);
+        Handler handler = requestRouter.findHandler(request);
+
+        assertEquals(HandlerType.REDIRECT_HANDLER, handler.getType());
     }
 
     @Test

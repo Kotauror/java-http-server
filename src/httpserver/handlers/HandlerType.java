@@ -13,4 +13,5 @@ public enum HandlerType {
     OPTION_HANDLER,
     COOKIE_HANDLER,
     TEAPOT_HANDLER,
+    REDIRECT_HANDLER,
 }
