@@ -55,14 +55,13 @@ public class CookieHandler extends Handler {
         return (request.getPath().toLowerCase().contains("cookie?type="));
     }
 
-
     private String getCookieTaste(Request request) {
         return request.getPath().split("=")[1];
     }
 
     private HashMap<ResponseHeader, String> getHeadersForCookieSettingRequest(String cookieTaste) {
         return new HashMap<ResponseHeader, String>() {{
-            put(ResponseHeader.COOKIE, cookieTaste);
+            put(ResponseHeader.SET_COOKIE, cookieTaste);
         }};
     }
 }
