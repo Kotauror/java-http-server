@@ -49,4 +49,8 @@ public abstract class Handler {
     public boolean handles(Request request) {
         return (this.handledMethods.contains(request.getMethod()) && this.coversPathFromRequest(request));
     }
+
+    public boolean requestHasAllowedMethod(Request request) {
+        return this.handledMethods.contains(request.getMethod());
+    }
 }

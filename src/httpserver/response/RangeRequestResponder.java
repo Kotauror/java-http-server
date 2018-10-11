@@ -86,7 +86,7 @@ public class RangeRequestResponder {
         byte[] body = this.getPartOfFileContent(rangeLimits, file);
         FileType fileType = this.fileTypeDecoder.getFileType(request.getPath());
         String contentRangeHeader = this.getContentRangeHeader(lengthOfRequestedFile, rangeLimits);
-        HashMap<Header, String> headers = this.getHeaders(fileType, contentRangeHeader);
+        HashMap<ResponseHeader, String> headers = this.getHeaders(fileType, contentRangeHeader);
         return new Response(ResponseStatus.RANGE_REQUEST, body, headers);
     }
 
@@ -98,17 +98,17 @@ public class RangeRequestResponder {
         return "bytes " + rangeLimits.get("start") + "-" + rangeLimits.get("end") + "/" + Integer.toString(fileLength);
     }
 
-    private HashMap<Header, String> getHeaders(FileType fileType, String contentRangeHeader) {
-        return new HashMap<Header, String>() {{
-            put(Header.CONTENT_TYPE, fileType.value());
-            put(Header.CONTENT_RANGE, contentRangeHeader);
+    private HashMap<ResponseHeader, String> getHeaders(FileType fileType, String contentRangeHeader) {
+        return new HashMap<ResponseHeader, String>() {{
+            put(ResponseHeader.CONTENT_TYPE, fileType.value());
+            put(ResponseHeader.CONTENT_RANGE, contentRangeHeader);
         }};
     }
 
     private Response getUnsuccessfulRangeResponse(int lengthOfRequestedFile) {
         String contentRangeHeader = "bytes */" + Integer.toString(lengthOfRequestedFile);
-        HashMap<Header, String> headers = new HashMap<Header, String>() {{
-            put(Header.CONTENT_RANGE, contentRangeHeader);
+        HashMap<ResponseHeader, String> headers = new HashMap<ResponseHeader, String>() {{
+            put(ResponseHeader.CONTENT_RANGE, contentRangeHeader);
         }};
         return new Response(ResponseStatus.RANGE_NOT_SATISFIABLE, null, headers);
     }

@@ -1,6 +1,7 @@
 package httpserver.handlers;
 
 public enum HandlerType {
+    BASIC_AUTH_HANDLER,
     GET_HANDLER,
     HEAD_HANDLER,
     POST_HANDLER,

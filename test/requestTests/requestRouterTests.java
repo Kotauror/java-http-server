@@ -114,6 +114,14 @@ public class requestRouterTests {
     }
 
     @Test
+    public void findHandlerReturnsRightHandlerForBasicAuthHandler() {
+        Request request = new Request(methodGet, "/logs", httpVersion, headers, body);
+        Handler handler = requestRouter.findHandler(request);
+
+        assertEquals(HandlerType.BASIC_AUTH_HANDLER, handler.getType());
+    }
+
+    @Test
     public void returnsGetWith404StatusWhenThereIsNoAppropriateHandler() throws IOException {
         Request request = new Request(Method.INVALID, path, httpVersion, headers, body);
         Handler handler = requestRouter.findHandler(request);

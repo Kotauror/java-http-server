@@ -1,14 +1,15 @@
 package httpserver.response;
 
-public enum Header {
+public enum ResponseHeader {
 
     CONTENT_TYPE("Content-Type"),
     CONTENT_RANGE("Content-Range"),
+    AUTHENTICATE("WWW-Authenticate"),
     ALLOW("Allow");
 
     private final String text;
 
-    Header(final String text) {
+    ResponseHeader(final String text) {
         this.text = text;
     }
 
@@ -17,7 +18,7 @@ public enum Header {
         return text;
     }
 
-    public static Header[] getHeaders() {
-        return Header.class.getEnumConstants();
+    public static ResponseHeader[] getHeaders() {
+        return ResponseHeader.class.getEnumConstants();
     }
 }
