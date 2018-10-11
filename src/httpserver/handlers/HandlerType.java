@@ -11,4 +11,5 @@ public enum HandlerType {
     DELETE_HANDLER,
     NOT_ALLOWED_HANDLER,
     OPTION_HANDLER,
+    COOKIE_HANDLER,
 }

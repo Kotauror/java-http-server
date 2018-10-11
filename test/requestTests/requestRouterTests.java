@@ -122,6 +122,14 @@ public class requestRouterTests {
     }
 
     @Test
+    public void findHandlerReturnsRightHandlerForCookieHandler() {
+        Request request = new Request(methodGet, "/cookie?type=chocolate", httpVersion, headers, body);
+        Handler handler = requestRouter.findHandler(request);
+
+        assertEquals(HandlerType.COOKIE_HANDLER, handler.getType());
+    }
+
+    @Test
     public void returnsGetWith404StatusWhenThereIsNoAppropriateHandler() throws IOException {
         Request request = new Request(Method.INVALID, path, httpVersion, headers, body);
         Handler handler = requestRouter.findHandler(request);
