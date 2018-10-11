@@ -28,7 +28,6 @@ public class FileOperator {
     }
 
     public void deleteFile(Request request, String rootPath) {
-        File file = this.getRequestedFile(request, rootPath);
-        file.delete();
+        this.getRequestedFile(request, rootPath).delete();
     }
 }
