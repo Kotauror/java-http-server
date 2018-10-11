@@ -1,7 +1,7 @@
 package httpserver.handlers;
 
 import httpserver.request.Request;
-import httpserver.response.Header;
+import httpserver.response.ResponseHeader;
 import httpserver.response.Response;
 import httpserver.response.ResponseStatus;
 import httpserver.utilities.Method;
@@ -67,13 +67,13 @@ public class BasicAuthHandler extends Handler {
     }
 
     private Response getResponseForUnauthorizedRequest() {
-        HashMap<Header, String> header = this.getHeaderForUnauthorizedRequest();
+        HashMap<ResponseHeader, String> header = this.getHeaderForUnauthorizedRequest();
         return new Response(ResponseStatus.UNAUTHORIZED, null, header);
     }
 
-    private HashMap<Header, String> getHeaderForUnauthorizedRequest() {
-        return new HashMap<Header, String>() {{
-            put(Header.AUTHENTICATE, "Basic realm=\"Access to staging site\"");
+    private HashMap<ResponseHeader, String> getHeaderForUnauthorizedRequest() {
+        return new HashMap<ResponseHeader, String>() {{
+            put(ResponseHeader.AUTHENTICATE, "Basic realm=\"Access to staging site\"");
         }};
     }
 }

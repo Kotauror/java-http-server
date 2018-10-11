@@ -1,7 +1,7 @@
 package httpserver.handlers;
 
 import httpserver.request.Request;
-import httpserver.response.Header;
+import httpserver.response.ResponseHeader;
 import httpserver.response.Response;
 import httpserver.response.ResponseStatus;
 import httpserver.utilities.FileType;
@@ -24,7 +24,7 @@ public class DirectoryLinksHandler extends Handler {
     public Response processRequest(Request request) {
         File[] files = new File(this.rootPath).listFiles();
         byte[] body = this.getBodyContent(files);
-        HashMap<Header, String> headers = this.getHeaders();
+        HashMap<ResponseHeader, String> headers = this.getHeaders();
         return new Response(ResponseStatus.OK, body, headers);
     }
 
@@ -48,9 +48,9 @@ public class DirectoryLinksHandler extends Handler {
         return "<a href='/" + file.getName() + "'>" + file.getName() + "</a><br>";
     }
 
-    private HashMap<Header, String> getHeaders(){
-        return new HashMap<Header, String>() {{
-            put(Header.CONTENT_TYPE, FileType.HTML.value());
+    private HashMap<ResponseHeader, String> getHeaders(){
+        return new HashMap<ResponseHeader, String>() {{
+            put(ResponseHeader.CONTENT_TYPE, FileType.HTML.value());
         }};
     }
 }

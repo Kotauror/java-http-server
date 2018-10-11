@@ -1,6 +1,6 @@
 package httpserver.handlers;
 
-import httpserver.response.Header;
+import httpserver.response.ResponseHeader;
 import httpserver.response.ResponseStatus;
 import httpserver.utilities.FileType;
 import httpserver.utilities.Method;
@@ -46,8 +46,8 @@ public class PostHandler extends Handler {
     private Response getResponseForCreatingFile(File file) throws IOException {
         FileType fileType = this.getFileTypeDecoder().getFileType(file.getName());
         byte[] body = Files.readAllBytes(Paths.get(file.getPath()));
-        HashMap<Header, String> headers = new HashMap<Header, String>() {{
-            put(Header.CONTENT_TYPE, fileType.value());
+        HashMap<ResponseHeader, String> headers = new HashMap<ResponseHeader, String>() {{
+            put(ResponseHeader.CONTENT_TYPE, fileType.value());
         }};
         return new Response(ResponseStatus.CREATED, body, headers);
     }

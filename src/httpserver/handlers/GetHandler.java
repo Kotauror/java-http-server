@@ -1,6 +1,6 @@
 package httpserver.handlers;
 
-import httpserver.response.Header;
+import httpserver.response.ResponseHeader;
 import httpserver.response.RangeRequestResponder;
 import httpserver.utilities.FileType;
 import httpserver.utilities.Method;
@@ -50,8 +50,8 @@ public class GetHandler extends Handler{
         File file = this.getFileOperator().getRequestedFile(request, this.rootPath);
         byte[] body = this.getFileContentConverter().getFileContent(file);
         FileType fileType = this.getFileTypeDecoder().getFileType(file.getName());
-        HashMap<Header, String> headers = new HashMap<Header, String>() {{
-            put(Header.CONTENT_TYPE, fileType.value());
+        HashMap<ResponseHeader, String> headers = new HashMap<ResponseHeader, String>() {{
+            put(ResponseHeader.CONTENT_TYPE, fileType.value());
         }};
         return new Response(ResponseStatus.OK, body, headers);
     }

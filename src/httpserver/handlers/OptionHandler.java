@@ -1,7 +1,7 @@
 package httpserver.handlers;
 
 import httpserver.request.Request;
-import httpserver.response.Header;
+import httpserver.response.ResponseHeader;
 import httpserver.response.Response;
 import httpserver.response.ResponseStatus;
 import httpserver.utilities.Method;
@@ -22,8 +22,8 @@ public class OptionHandler extends Handler{
     public Response processRequest(Request request) {
         ArrayList<String> allowedMethods = this.getAllowedMethods(request);
         String allowedMethodsString = this.turnArrayListIntoString(allowedMethods);
-        HashMap<Header, String> headers = new HashMap<Header, String>() {{
-            put(Header.ALLOW, allowedMethodsString);
+        HashMap<ResponseHeader, String> headers = new HashMap<ResponseHeader, String>() {{
+            put(ResponseHeader.ALLOW, allowedMethodsString);
         }};
         return new Response(ResponseStatus.OK, null, headers);
     }

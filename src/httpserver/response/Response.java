@@ -10,7 +10,7 @@ public class Response {
     private ResponseStatus responseStatus;
     private String httpVersion;
 
-    public Response(ResponseStatus responseStatus, byte[] body, HashMap<Header, String> headers) {
+    public Response(ResponseStatus responseStatus, byte[] body, HashMap<ResponseHeader, String> headers) {
         this.httpVersion = "HTTP/1.1";
         this.responseStatus = responseStatus;
         addBodyContent(body);
@@ -39,8 +39,8 @@ public class Response {
         }
     }
 
-    private void setHeaders(HashMap<Header, String> headers) {
-        for (Map.Entry<Header, String> entry : headers.entrySet()) {
+    private void setHeaders(HashMap<ResponseHeader, String> headers) {
+        for (Map.Entry<ResponseHeader, String> entry : headers.entrySet()) {
             this.headers.put(entry.getKey().toString(), entry.getValue());
         }
     }

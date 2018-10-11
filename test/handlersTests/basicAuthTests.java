@@ -2,7 +2,7 @@ package handlersTests;
 
 import httpserver.handlers.BasicAuthHandler;
 import httpserver.request.Request;
-import httpserver.response.Header;
+import httpserver.response.ResponseHeader;
 import httpserver.response.Response;
 import httpserver.response.ResponseStatus;
 import httpserver.utilities.Method;
@@ -50,7 +50,7 @@ public class basicAuthTests {
         Response response = basicAuthHandler.processRequest(request);
 
         assertEquals(response.getStatus(), ResponseStatus.UNAUTHORIZED);
-        assertEquals("Basic realm=\"Access to staging site\"", response.getHeaders().get(Header.AUTHENTICATE.toString()));
+        assertEquals("Basic realm=\"Access to staging site\"", response.getHeaders().get(ResponseHeader.AUTHENTICATE.toString()));
     }
 
     @Test
@@ -63,7 +63,7 @@ public class basicAuthTests {
         Response response = basicAuthHandler.processRequest(request);
 
         assertEquals(response.getStatus(), ResponseStatus.UNAUTHORIZED);
-        assertEquals("Basic realm=\"Access to staging site\"", response.getHeaders().get(Header.AUTHENTICATE.toString()));
+        assertEquals("Basic realm=\"Access to staging site\"", response.getHeaders().get(ResponseHeader.AUTHENTICATE.toString()));
     }
 
     @Test

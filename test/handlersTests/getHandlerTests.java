@@ -1,6 +1,6 @@
 package handlersTests;
 
-import httpserver.response.Header;
+import httpserver.response.ResponseHeader;
 import httpserver.utilities.Method;
 import httpserver.handlers.GetHandler;
 import httpserver.request.Request;
@@ -92,8 +92,8 @@ public class getHandlerTests {
 
         Assert.assertEquals(response.getStatus(), ResponseStatus.RANGE_REQUEST);
         Assert.assertArrayEquals(partOfFile, response.getBodyContent());
-        Assert.assertEquals("text/plain", response.getHeaders().get(Header.CONTENT_TYPE.toString()));
-        Assert.assertEquals(expectedContentRange, response.getHeaders().get(Header.CONTENT_RANGE.toString()));
+        Assert.assertEquals("text/plain", response.getHeaders().get(ResponseHeader.CONTENT_TYPE.toString()));
+        Assert.assertEquals(expectedContentRange, response.getHeaders().get(ResponseHeader.CONTENT_RANGE.toString()));
     }
 
     @Test
@@ -110,8 +110,8 @@ public class getHandlerTests {
         Response response = getHandler.processRequest(request);
 
         Assert.assertEquals(response.getStatus(), ResponseStatus.RANGE_REQUEST);
-        Assert.assertEquals("text/plain", response.getHeaders().get(Header.CONTENT_TYPE.toString()));
-        Assert.assertEquals(expectedContentRange, response.getHeaders().get(Header.CONTENT_RANGE.toString()));
+        Assert.assertEquals("text/plain", response.getHeaders().get(ResponseHeader.CONTENT_TYPE.toString()));
+        Assert.assertEquals(expectedContentRange, response.getHeaders().get(ResponseHeader.CONTENT_RANGE.toString()));
     }
 
     @Test
@@ -128,8 +128,8 @@ public class getHandlerTests {
         Response response = getHandler.processRequest(request);
 
         Assert.assertEquals(response.getStatus(), ResponseStatus.RANGE_REQUEST);
-        Assert.assertEquals("text/plain", response.getHeaders().get(Header.CONTENT_TYPE.toString()));
-        Assert.assertEquals(expectedContentRange, response.getHeaders().get(Header.CONTENT_RANGE.toString()));
+        Assert.assertEquals("text/plain", response.getHeaders().get(ResponseHeader.CONTENT_TYPE.toString()));
+        Assert.assertEquals(expectedContentRange, response.getHeaders().get(ResponseHeader.CONTENT_RANGE.toString()));
     }
 
     @Test
