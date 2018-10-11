@@ -139,7 +139,7 @@ public class requestRouterTests {
 
     @Test
     public void findHandlerReturnsRightHandlerForTeapotHandlerWhenTee() {
-        Request request = new Request(methodGet, "/tee", httpVersion, headers, body);
+        Request request = new Request(methodGet, "/tea", httpVersion, headers, body);
         Handler handler = requestRouter.findHandler(request);
 
         assertEquals(HandlerType.TEAPOT_HANDLER, handler.getType());
