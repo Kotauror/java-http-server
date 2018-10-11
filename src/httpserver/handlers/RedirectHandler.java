@@ -2,6 +2,7 @@ package httpserver.handlers;
 
 import httpserver.request.Request;
 import httpserver.response.Response;
+import httpserver.response.ResponseHeader;
 import httpserver.response.ResponseStatus;
 import httpserver.utilities.Method;
 
@@ -16,7 +17,10 @@ public class RedirectHandler extends Handler {
 
     @Override
     public Response processRequest(Request request) {
-        return new Response(ResponseStatus.FOUND, null, new HashMap<>());
+        HashMap<ResponseHeader, String> Location = new HashMap<ResponseHeader, String>() {{
+            put(ResponseHeader.LOCATION, "/");
+        }};
+        return new Response(ResponseStatus.FOUND, null, Location);
     }
 
     @Override

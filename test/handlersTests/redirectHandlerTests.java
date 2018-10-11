@@ -31,5 +31,6 @@ public class redirectHandlerTests {
         Response response = redirectHandler.processRequest(request);
 
         assertEquals(ResponseStatus.FOUND, response.getStatus());
+        assertEquals("/", response.getHeaders().get("Location"));
     }
 }
