@@ -7,6 +7,7 @@ import httpserver.response.ResponseStatus;
 import httpserver.utilities.Method;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -29,11 +30,10 @@ public class FormHandler extends Handler {
             return this.getResponseForPostRequest(request);
         }
         if (isPutRequest(request)) {
-            System.out.println(request.getMethod());
-            System.out.println(request.getPath());
-            System.out.println(request.getHeaders());
-            System.out.println(request.getBody());
             return this.getResponseForPutRequest(request);
+        }
+        if (isDeleteRequest(request)) {
+            return this.getResponseForDeleteRequest(request);
         }
         return new Response(ResponseStatus.OK, null, new HashMap<>());
     }
@@ -55,6 +55,10 @@ public class FormHandler extends Handler {
         return request.getMethod().equals(Method.PUT);
     }
 
+    private boolean isDeleteRequest(Request request) {
+        return request.getMethod().equals(Method.DELETE);
+    }
+
     private Response getResponseForGetRequest(Request request) throws IOException {
         String fileName = this.removeKeyFromPath(request.getPath());
         String fullFilePath = this.rootPath + fileName;
@@ -72,18 +76,15 @@ public class FormHandler extends Handler {
     }
 
     private Response getResponseForPostRequest(Request request) {
-        if (this.getFileOperator().fileExistsOnPath(request, this.rootPath)) {
-            try {
-                String fullFilePath = this.rootPath + request.getPath();
-                File file = this.getFileOperator().getRequestedFileByPath(fullFilePath);
-                this.getFileOperator().writeToFile(file, request);
-                HashMap<ResponseHeader, String> locationHeader = this.getLocationHeader(request.getPath(), request.getBody());
-                return new Response(ResponseStatus.CREATED, null, locationHeader);
-            } catch (IOException e) {
-                return this.getInternalErrorResponse();
-            }
+        File file = this.getFileOperator().getRequestedFileByName(request, this.rootPath);
+        try {
+            this.getFileOperator().writeToFile(file, request);
+            this.getFileOperator().writeToFile(file, request);
+            HashMap<ResponseHeader, String> locationHeader = this.getLocationHeader(request.getPath(), request.getBody());
+            return new Response(ResponseStatus.CREATED, null, locationHeader);
+        } catch (IOException e) {
+            return this.getInternalErrorResponse();
         }
-        return this.getNotFoundResponse();
     }
 
     private Response getResponseForPutRequest(Request request) {
@@ -95,6 +96,22 @@ public class FormHandler extends Handler {
                 this.getFileOperator().writeToFile(file, request);
                 return new Response(ResponseStatus.OK, null, new HashMap<>());
             } catch (IOException e) {
+                return this.getInternalErrorResponse();
+            }
+        } else {
+            return this.getNotFoundResponse();
+        }
+    }
+
+    private Response getResponseForDeleteRequest(Request request) throws FileNotFoundException {
+        String fileName = this.removeKeyFromPath(request.getPath());
+        String fullFilePath = this.rootPath + fileName;
+        if (this.requestedFileExists(fullFilePath)) {
+            try {
+                File file = this.getFileOperator().getRequestedFileByPath(fullFilePath);
+                file.delete();
+                return new Response(ResponseStatus.OK, null, new HashMap<>());
+            } catch (Error e) {
                 return this.getInternalErrorResponse();
             }
         } else {

@@ -1,6 +1,7 @@
 package handlersTests;
 
 import httpserver.handlers.FormHandler;
+import httpserver.handlers.PutHandler;
 import httpserver.request.Request;
 import httpserver.response.Response;
 import httpserver.response.ResponseHeader;
@@ -19,6 +20,7 @@ import java.nio.file.Paths;
 
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertFalse;
 
 public class formHandlerTests {
 
@@ -96,10 +98,34 @@ public class formHandlerTests {
         assertEquals("data=tabbycat", contentOfFile);
     }
 
+    @Test
+    public void onDeleteRequestDeletesContentOfFileANdReturnsStatus200() throws IOException {
+        // Create file to be deleted
+        String path = "/anotherTestFile";
+        Request request = new Request(Method.GET, path, "", null, "data=hihiihih");
+        PutHandler putHandler = new PutHandler(rootPath);
+        putHandler.processRequest(request);
+
+        // request to delete the file
+        String httpVersion = "HTTP/1.1";
+        Request requestToDelete = new Request(Method.DELETE, "/anotherTestFile", httpVersion, null,null);
+        Response response = formHandler.processRequest(requestToDelete);
+
+        assertFalse(Files.exists(Paths.get(rootPath + "anotherTestFile")));
+        assertEquals(ResponseStatus.OK, response.getStatus());
+    }
+
     @After
     public void emptyOverwrittenFile() throws FileNotFoundException {
         File file = formHandler.getFileOperator().getRequestedFileByPath("src/httpserver/utilities/sampleTestFiles" + catFormFilePath);
         PrintWriter writer = new PrintWriter(file);
+        writer.print("");
         writer.close();
+    }
+
+    @After
+    public void deleteCreatedFile() {
+        File file = formHandler.getFileOperator().getRequestedFileByPath("src/httpserver/utilities/sampleTestFiles/anotherTestFile");
+        file.delete();
     }
 }
