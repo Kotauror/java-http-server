@@ -36,7 +36,7 @@ public class formHandlerTests {
 
     @Test
     public void whenFileDoesntExistReturn404() throws IOException {
-        String path = "src/httpserver/utilities/sampleTestFiles/testtes/datat";
+        String path = "/testtes/datat";
         String httpVersion = "HTTP/1.1";
         Request request = new Request(Method.GET, path, httpVersion, null,null);
 
@@ -47,7 +47,7 @@ public class formHandlerTests {
 
     @Test
     public void whenFileHasNoRequestedContentReturn404() throws IOException {
-        String path = "src/httpserver/utilities/sampleTestFiles/empty-form/data";
+        String path = "/empty-form/data";
         String httpVersion = "HTTP/1.1";
         Request request = new Request(Method.GET, path, httpVersion, null,null);
 
@@ -58,7 +58,7 @@ public class formHandlerTests {
 
     @Test
     public void whenFileHasContentReturnStatusOK() throws IOException {
-        String path = "src/httpserver/utilities/sampleTestFiles/form-with-data/data";
+        String path = "/form-with-data/data";
         String httpVersion = "HTTP/1.1";
         byte[] expectedBody = "data=koteczek".getBytes();
         Request request = new Request(Method.GET, path, httpVersion, null,null);
@@ -81,6 +81,19 @@ public class formHandlerTests {
         assertEquals(ResponseStatus.CREATED, response.getStatus());
         assertEquals("data=fatcat", contentOfFile);
         assertEquals(catFormFilePath + "/data", response.getHeaders().get(ResponseHeader.LOCATION.toString()));
+    }
+
+    @Test
+    public void onPutRequestReturnsStatus200WhenFileExists() throws IOException {
+        String httpVersion = "HTTP/1.1";
+        String body = "data=tabbycat";
+        Request request = new Request(Method.POST, catFormFilePath, httpVersion, null,body);
+
+        Response response = formHandler.processRequest(request);
+
+        String contentOfFile = new String(Files.readAllBytes(Paths.get("src/httpserver/utilities/sampleTestFiles" + catFormFilePath)));
+        assertEquals(ResponseStatus.CREATED, response.getStatus());
+        assertEquals("data=tabbycat", contentOfFile);
     }
 
     @After

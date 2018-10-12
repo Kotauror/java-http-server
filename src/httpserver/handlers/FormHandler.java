@@ -28,6 +28,13 @@ public class FormHandler extends Handler {
         if (isPostRequest(request)) {
             return this.getResponseForPostRequest(request);
         }
+        if (isPutRequest(request)) {
+            System.out.println(request.getMethod());
+            System.out.println(request.getPath());
+            System.out.println(request.getHeaders());
+            System.out.println(request.getBody());
+            return this.getResponseForPutRequest(request);
+        }
         return new Response(ResponseStatus.OK, null, new HashMap<>());
     }
 
@@ -44,11 +51,16 @@ public class FormHandler extends Handler {
         return request.getMethod().equals(Method.POST);
     }
 
+    private boolean isPutRequest(Request request) {
+        return request.getMethod().equals(Method.PUT);
+    }
+
     private Response getResponseForGetRequest(Request request) throws IOException {
-        String pathWithoutKey = this.removeKeyFromPath(request.getPath());
-        if (this.requestedFileExists(pathWithoutKey)) {
+        String fileName = this.removeKeyFromPath(request.getPath());
+        String fullFilePath = this.rootPath + fileName;
+        if (this.requestedFileExists(fullFilePath)) {
             String keyFromPath = this.getKeyFromFilePath(request.getPath());
-            String contentOfFile = this.getFileContentConverter().getFileContentAsString(pathWithoutKey);
+            String contentOfFile = this.getFileContentConverter().getFileContentAsString(fullFilePath);
             if (contentOfFile.contains(keyFromPath)) {
                 return new Response(ResponseStatus.OK, contentOfFile.getBytes(), new HashMap<>());
             } else {
@@ -74,11 +86,27 @@ public class FormHandler extends Handler {
         return this.getNotFoundResponse();
     }
 
+    private Response getResponseForPutRequest(Request request) {
+        String fileName = this.removeKeyFromPath(request.getPath());
+        String fullFilePath = this.rootPath + fileName;
+        if (this.requestedFileExists(fullFilePath)) {
+            try {
+                File file = this.getFileOperator().getRequestedFileByPath(fullFilePath);
+                this.getFileOperator().writeToFile(file, request);
+                return new Response(ResponseStatus.OK, null, new HashMap<>());
+            } catch (IOException e) {
+                return this.getInternalErrorResponse();
+            }
+        } else {
+            return this.getNotFoundResponse();
+        }
+    }
+
     private String removeKeyFromPath(String fullPath) {
         String[] pathsOfPath = fullPath.split("/");
-        int lengthOfContentReference = pathsOfPath[pathsOfPath.length-1].length();
-        int lengthOfPathWithoutContentReference = fullPath.length() - lengthOfContentReference;
-        return fullPath.substring(0, lengthOfPathWithoutContentReference-1);
+        int lengthOfKeyInPath = pathsOfPath[pathsOfPath.length-1].length();
+        int lengthOfPathWithoutKey = fullPath.length() - lengthOfKeyInPath;
+        return fullPath.substring(0, lengthOfPathWithoutKey-1);
     }
 
     private String getKeyFromFilePath(String path) {
@@ -86,8 +114,8 @@ public class FormHandler extends Handler {
         return pathsOfPath[pathsOfPath.length -1];
     }
 
-    private boolean requestedFileExists(String filePathWithoutContentReference) {
-        return this.getFileOperator().fileExists(filePathWithoutContentReference);
+    private boolean requestedFileExists(String fullFilePath) {
+        return this.getFileOperator().fileExists(fullFilePath);
     }
 
     private Response getNotFoundResponse() {
@@ -96,7 +124,7 @@ public class FormHandler extends Handler {
 
     private HashMap<ResponseHeader, String> getLocationHeader(String path, String bodyOfRequest) {
         String[] partsOfFile = bodyOfRequest.split("=");
-        String locationString =  path + "/" + partsOfFile[0];;
+        String locationString =  path + "/" + partsOfFile[0];
         return new HashMap<ResponseHeader, String>() {{
             put(ResponseHeader.LOCATION, locationString);
         }};
