@@ -146,11 +146,27 @@ public class requestRouterTests {
     }
 
     @Test
-    public void findHandlerReturnsRightHandlerForReditectHandler() {
+    public void findHandlerReturnsRightHandlerForRedirectHandler() {
         Request request = new Request(methodGet, "/redirect", httpVersion, headers, body);
         Handler handler = requestRouter.findHandler(request);
 
         assertEquals(HandlerType.REDIRECT_HANDLER, handler.getType());
+    }
+
+    @Test
+    public void findHandlerReturnsRightHandlerForFormHandlerWithGet() {
+        Request request = new Request(methodGet, "/cat-form/data", httpVersion, headers, body);
+        Handler handler = requestRouter.findHandler(request);
+
+        assertEquals(HandlerType.FORM_HANDLER, handler.getType());
+    }
+
+    @Test
+    public void findHandlerReturnsRightHandlerForFormHandlerWithDelete() {
+        Request request = new Request(methodDelete, "/cat-form/data", httpVersion, headers, body);
+        Handler handler = requestRouter.findHandler(request);
+
+        assertEquals(HandlerType.FORM_HANDLER, handler.getType());
     }
 
     @Test
