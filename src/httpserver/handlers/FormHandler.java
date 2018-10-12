@@ -41,7 +41,7 @@ public class FormHandler extends Handler {
             String keyFromPath = this.getKeyFromFilePath(request.getPath());
             String contentOfFile = this.getFileContentConverter().getFileContentAsString(pathWithoutKey);
             if (contentOfFile.contains(keyFromPath)) {
-                return new Response(ResponseStatus.OK, null, new HashMap<>());
+                return new Response(ResponseStatus.OK, contentOfFile.getBytes(), new HashMap<>());
             } else {
                 return this.getNotFoundResponse();
             }

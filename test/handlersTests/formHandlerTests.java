@@ -11,6 +11,7 @@ import org.junit.Test;
 import java.io.IOException;
 
 import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertArrayEquals;
 
 public class formHandlerTests {
 
@@ -50,10 +51,12 @@ public class formHandlerTests {
     public void WhenFileHasContentReturnStatusOK() throws IOException {
         String path = "src/httpserver/utilities/sampleTestFiles/form-with-data/data";
         String httpVersion = "HTTP/1.1";
+        byte[] expectedBody = "data=koteczek".getBytes();
         Request request = new Request(Method.GET, path, httpVersion, null,null);
 
         Response response = formHandler.processRequest(request);
 
         assertEquals(ResponseStatus.OK, response.getStatus());
+        assertArrayEquals(expectedBody, response.getBodyContent());
     }
 }
