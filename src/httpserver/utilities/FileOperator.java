@@ -17,6 +17,10 @@ public class FileOperator {
         return Files.exists(Paths.get(rootPath + request.getPath()));
     }
 
+    public boolean fileExists(String path) {
+        return Files.exists(Paths.get(path));
+    }
+
     public void writeToFile(File file, Request request) throws IOException {
         Files.write(Paths.get(file.getPath()), request.getBody().getBytes());
     }
