@@ -4,11 +4,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 
 public class FileContentConverter {
 
-    public byte[] getFileContent(File file) throws IOException {
+    public byte[] getFileContentFromFile(File file) throws IOException {
         byte[] encodedFile = new byte[(int) file.length()];
         FileInputStream fileInputStream = new FileInputStream(file);
         fileInputStream.read(encodedFile);
@@ -17,7 +19,7 @@ public class FileContentConverter {
     }
 
     public byte[] getPartOfFile(File file, HashMap<String, String> startAndEnd) throws IOException {
-        byte[] fullFileContent = this.getFileContent(file);
+        byte[] fullFileContent = this.getFileContentFromFile(file);
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         int startIndex = Integer.parseInt(startAndEnd.get("start"));
         int endIndex = Integer.parseInt(startAndEnd.get("end"));
@@ -25,5 +27,9 @@ public class FileContentConverter {
             output.write(fullFileContent[i]);
         }
         return output.toByteArray();
+    }
+
+    public String getFileContentAsString(String filePath) throws IOException {
+        return new String(Files.readAllBytes(Paths.get(filePath)));
     }
 }

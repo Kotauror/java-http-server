@@ -6,8 +6,6 @@ import httpserver.response.ResponseStatus;
 import httpserver.utilities.Method;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -22,7 +20,7 @@ public class FormHandler extends Handler {
     }
     @Override
     public Response processRequest(Request request) throws IOException {
-        if (isFormRequestWithGet(request)) {
+        if (isGetRequest(request)) {
           return this.getResponseForGetRequest(request);
         }
         return new Response(ResponseStatus.OK, null, new HashMap<>());
@@ -33,31 +31,30 @@ public class FormHandler extends Handler {
         return request.getPath().contains("form");
     }
 
-    private boolean isFormRequestWithGet(Request request) {
+    private boolean isGetRequest(Request request) {
         return request.getMethod().equals(Method.GET);
     }
 
     private Response getResponseForGetRequest(Request request) throws IOException {
-        String filePathWithoutContentReference = this.getPathToFile(request.getPath());
-        if (this.requestedFileExists(filePathWithoutContentReference)) {
+        String pathWithoutKey = this.removeKeyFromPath(request.getPath());
+        if (this.requestedFileExists(pathWithoutKey)) {
             String keyFromPath = this.getKeyFromFilePath(request.getPath());
-            byte[] encodedContentOfRequestedFile = Files.readAllBytes(Paths.get(filePathWithoutContentReference));
-            String decodedContentOfFile = new String(encodedContentOfRequestedFile);
-            if (!decodedContentOfFile.contains(keyFromPath)) {
-                return this.getNotFoundResponse();
-            } else {
+            String contentOfFile = this.getFileContentConverter().getFileContentAsString(pathWithoutKey);
+            if (contentOfFile.contains(keyFromPath)) {
                 return new Response(ResponseStatus.OK, null, new HashMap<>());
+            } else {
+                return this.getNotFoundResponse();
             }
         } else {
             return this.getNotFoundResponse();
         }
     }
 
-    private String getPathToFile(String fullPath) {
+    private String removeKeyFromPath(String fullPath) {
         String[] pathsOfPath = fullPath.split("/");
-        int lengthOfLastElement = pathsOfPath[pathsOfPath.length-1].length();
-        int lengthOfPathWithoutLastElement = fullPath.length() - lengthOfLastElement;
-        return fullPath.substring(0, lengthOfPathWithoutLastElement-1);
+        int lengthOfContentReference = pathsOfPath[pathsOfPath.length-1].length();
+        int lengthOfPathWithoutContentReference = fullPath.length() - lengthOfContentReference;
+        return fullPath.substring(0, lengthOfPathWithoutContentReference-1);
     }
 
     private String getKeyFromFilePath(String path) {

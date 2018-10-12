@@ -51,7 +51,7 @@ public class getHandlerTests {
     @Test
     public void createsResponseWithBody() throws IOException {
         String pathToTestFile = "src/httpserver/utilities/sampleTestFiles/testFile.txt";
-        byte[] expected = fileContentConverter.getFileContent(new File(pathToTestFile));
+        byte[] expected = fileContentConverter.getFileContentFromFile(new File(pathToTestFile));
 
         Response response = getHandler.processRequest(request);
 

@@ -56,12 +56,4 @@ public class formHandlerTests {
 
         assertEquals(ResponseStatus.OK, response.getStatus());
     }
-//
-//    @Test
-//    public void returnsPathOfFileWithoutLastElement() {
-//        String path = "src/httpserver/utilities/empty-form/data";
-//        String actual = formHandler.getPathWithoutFileContent(path);
-//
-//        assertEquals("src/httpserver/utilities/empty-form", actual);
-//    }
 }

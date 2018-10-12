@@ -28,7 +28,7 @@ public class FileContentConverterTests {
         byte[] fileContent = "test strjjing hehhe\n".getBytes();
         Files.write(Paths.get(filePath), fileContent);
 
-        byte[] actual = fileContentConverter.getFileContent(new File(filePath));
+        byte[] actual = fileContentConverter.getFileContentFromFile(new File(filePath));
 
         assertArrayEquals(fileContent, actual);
     }
