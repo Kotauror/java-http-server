@@ -2,6 +2,7 @@ package httpserver.handlers;
 
 import httpserver.request.Request;
 import httpserver.response.Response;
+import httpserver.response.ResponseHeader;
 import httpserver.response.ResponseStatus;
 import httpserver.utilities.Method;
 
@@ -63,7 +64,12 @@ public class FormHandler extends Handler {
             try {
                 File file = this.getFileOperator().getRequestedFileByName(request, this.rootPath);
                 this.getFileOperator().writeToFile(file, request);
-                return new Response(ResponseStatus.CREATED, null, new HashMap<>());
+                String contentOfFile = new String(this.getFileContentConverter().getFileContentFromFile(file));
+                String[] partsOfFile = contentOfFile.split("=");
+                HashMap<ResponseHeader, String> location = new HashMap<ResponseHeader, String>() {{
+                    put(ResponseHeader.LOCATION, request.getPath() + "/" + partsOfFile[0]);
+                }};
+                return new Response(ResponseStatus.CREATED, null, location);
             } catch (IOException e) {
                 return new Response(ResponseStatus.INTERNAL_SERVER_ERROR, null, new HashMap<>());
             }

@@ -17,10 +17,10 @@ public class RedirectHandler extends Handler {
 
     @Override
     public Response processRequest(Request request) {
-        HashMap<ResponseHeader, String> Location = new HashMap<ResponseHeader, String>() {{
+        HashMap<ResponseHeader, String> location = new HashMap<ResponseHeader, String>() {{
             put(ResponseHeader.LOCATION, "/");
         }};
-        return new Response(ResponseStatus.FOUND, null, Location);
+        return new Response(ResponseStatus.FOUND, null, location);
     }
 
     @Override

@@ -3,6 +3,7 @@ package handlersTests;
 import httpserver.handlers.FormHandler;
 import httpserver.request.Request;
 import httpserver.response.Response;
+import httpserver.response.ResponseHeader;
 import httpserver.response.ResponseStatus;
 import httpserver.utilities.Method;
 import org.junit.After;
@@ -78,6 +79,7 @@ public class formHandlerTests {
         String contentOfFile = new String(Files.readAllBytes(Paths.get("src/httpserver/utilities/sampleTestFiles/cat-form")));
         assertEquals(ResponseStatus.CREATED, response.getStatus());
         assertEquals("data=fatcat", contentOfFile);
+        assertEquals("/cat-form/data", response.getHeaders().get(ResponseHeader.LOCATION.toString()));
     }
 
     @After
