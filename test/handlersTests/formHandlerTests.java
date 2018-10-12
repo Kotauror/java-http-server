@@ -72,29 +72,29 @@ public class formHandlerTests {
     }
 
     @Test
-    public void onPostRequestReturnsStatus201WhenFileExists() throws IOException {
+    public void onPostRequestReturnsStatus201WhenFileDoesNotExist() throws IOException {
         String httpVersion = "HTTP/1.1";
         String body = "data=fatcat";
-        Request request = new Request(Method.POST, catFormFilePath, httpVersion, null,body);
+        Request request = new Request(Method.POST, "/samplesample", httpVersion, null,body);
 
         Response response = formHandler.processRequest(request);
 
-        String contentOfFile = new String(Files.readAllBytes(Paths.get("src/httpserver/utilities/sampleTestFiles" + catFormFilePath)));
+        String contentOfFile = new String(Files.readAllBytes(Paths.get("src/httpserver/utilities/sampleTestFiles" + "/samplesample")));
         assertEquals(ResponseStatus.CREATED, response.getStatus());
         assertEquals("data=fatcat", contentOfFile);
-        assertEquals(catFormFilePath + "/data", response.getHeaders().get(ResponseHeader.LOCATION.toString()));
+        assertEquals("/samplesample" + "/data", response.getHeaders().get(ResponseHeader.LOCATION.toString()));
     }
 
     @Test
     public void onPutRequestReturnsStatus200WhenFileExists() throws IOException {
         String httpVersion = "HTTP/1.1";
         String body = "data=tabbycat";
-        Request request = new Request(Method.POST, catFormFilePath, httpVersion, null,body);
+        Request request = new Request(Method.PUT, "/cat-form/data", httpVersion, null,body);
 
         Response response = formHandler.processRequest(request);
 
-        String contentOfFile = new String(Files.readAllBytes(Paths.get("src/httpserver/utilities/sampleTestFiles" + catFormFilePath)));
-        assertEquals(ResponseStatus.CREATED, response.getStatus());
+        String contentOfFile = new String(Files.readAllBytes(Paths.get("src/httpserver/utilities/sampleTestFiles/cat-form")));
+        assertEquals(ResponseStatus.OK, response.getStatus());
         assertEquals("data=tabbycat", contentOfFile);
     }
 
@@ -127,5 +127,7 @@ public class formHandlerTests {
     public void deleteCreatedFile() {
         File file = formHandler.getFileOperator().getRequestedFileByPath("src/httpserver/utilities/sampleTestFiles/anotherTestFile");
         file.delete();
+        File file2 = formHandler.getFileOperator().getRequestedFileByPath("src/httpserver/utilities/sampleTestFiles/samplesample");
+        file2.delete();
     }
 }

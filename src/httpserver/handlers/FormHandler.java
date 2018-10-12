@@ -77,20 +77,23 @@ public class FormHandler extends Handler {
 
     private Response getResponseForPostRequest(Request request) {
         File file = this.getFileOperator().getRequestedFileByName(request, this.rootPath);
-        try {
-            this.getFileOperator().writeToFile(file, request);
-            this.getFileOperator().writeToFile(file, request);
-            HashMap<ResponseHeader, String> locationHeader = this.getLocationHeader(request.getPath(), request.getBody());
-            return new Response(ResponseStatus.CREATED, null, locationHeader);
-        } catch (IOException e) {
-            return this.getInternalErrorResponse();
+        String fullFilePath = this.rootPath + request.getPath();
+        if (this.getFileOperator().fileExists(fullFilePath)) {
+            return this.getNotFoundResponse();
+        } else {
+            try {
+                this.getFileOperator().writeToFile(file, request);
+                HashMap<ResponseHeader, String> locationHeader = this.getLocationHeader(request.getPath(), request.getBody());
+                return new Response(ResponseStatus.CREATED, null, locationHeader);
+            } catch (IOException e) {
+                return this.getInternalErrorResponse();
+            }
         }
     }
 
     private Response getResponseForPutRequest(Request request) {
         String fileName = this.removeKeyFromPath(request.getPath());
         String fullFilePath = this.rootPath + fileName;
-        if (this.requestedFileExists(fullFilePath)) {
             try {
                 File file = this.getFileOperator().getRequestedFileByPath(fullFilePath);
                 this.getFileOperator().writeToFile(file, request);
@@ -98,9 +101,6 @@ public class FormHandler extends Handler {
             } catch (IOException e) {
                 return this.getInternalErrorResponse();
             }
-        } else {
-            return this.getNotFoundResponse();
-        }
     }
 
     private Response getResponseForDeleteRequest(Request request) throws FileNotFoundException {
