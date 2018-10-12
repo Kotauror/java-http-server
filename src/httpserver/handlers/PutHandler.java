@@ -23,7 +23,7 @@ public class PutHandler extends Handler{
 
     @Override
     public Response processRequest(Request request) {
-        File file = this.getFileOperator().getRequestedFile(request, this.rootPath);
+        File file = this.getFileOperator().getRequestedFileByName(request, this.rootPath);
         try {
             if (this.getFileOperator().fileExistsOnPath(request, this.rootPath)) {
                 this.getFileOperator().writeToFile(file, request);

@@ -5,6 +5,7 @@ import httpserver.response.Response;
 import httpserver.response.ResponseStatus;
 import httpserver.utilities.Method;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -23,6 +24,9 @@ public class FormHandler extends Handler {
         if (isGetRequest(request)) {
           return this.getResponseForGetRequest(request);
         }
+        if (isPostRequest(request)) {
+            return this.getResponseForPostRequest(request);
+        }
         return new Response(ResponseStatus.OK, null, new HashMap<>());
     }
 
@@ -33,6 +37,10 @@ public class FormHandler extends Handler {
 
     private boolean isGetRequest(Request request) {
         return request.getMethod().equals(Method.GET);
+    }
+
+    private boolean isPostRequest(Request request) {
+        return request.getMethod().equals(Method.POST);
     }
 
     private Response getResponseForGetRequest(Request request) throws IOException {
@@ -48,6 +56,19 @@ public class FormHandler extends Handler {
         } else {
             return this.getNotFoundResponse();
         }
+    }
+
+    private Response getResponseForPostRequest(Request request) {
+        if (this.getFileOperator().fileExistsOnPath(request, this.rootPath)) {
+            try {
+                File file = this.getFileOperator().getRequestedFileByName(request, this.rootPath);
+                this.getFileOperator().writeToFile(file, request);
+                return new Response(ResponseStatus.CREATED, null, new HashMap<>());
+            } catch (IOException e) {
+                return new Response(ResponseStatus.INTERNAL_SERVER_ERROR, null, new HashMap<>());
+            }
+        }
+        return this.getNotFoundResponse();
     }
 
     private String removeKeyFromPath(String fullPath) {

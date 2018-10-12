@@ -9,8 +9,12 @@ import java.nio.file.Paths;
 
 public class FileOperator {
 
-    public File getRequestedFile(Request request, String rootPath) {
+    public File getRequestedFileByName(Request request, String rootPath) {
         return new File(rootPath + "/" + request.getPath());
+    }
+
+    public File getRequestedFileByPath(String path) {
+        return new File(path);
     }
 
     public boolean fileExistsOnPath(Request request, String rootPath) {
@@ -32,6 +36,6 @@ public class FileOperator {
     }
 
     public void deleteFile(Request request, String rootPath) {
-        this.getRequestedFile(request, rootPath).delete();
+        this.getRequestedFileByName(request, rootPath).delete();
     }
 }

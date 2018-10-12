@@ -25,7 +25,7 @@ public class PostHandler extends Handler {
 
     @Override
     public Response processRequest(Request request) throws IOException {
-        File file = this.getFileOperator().getRequestedFile(request, this.rootPath);
+        File file = this.getFileOperator().getRequestedFileByName(request, this.rootPath);
         if (this.getFileOperator().fileExistsOnPath(request, this.rootPath)) {
             return this.getResponseForNotAllowedMethod();
         } else {

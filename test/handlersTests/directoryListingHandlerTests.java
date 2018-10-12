@@ -55,6 +55,7 @@ public class directoryListingHandlerTests {
         String path = "/";
         Request request = new Request(method, path, httpVersion, headers, body);
         byte[] expectedBody = ("<html><head></head><body>" +
+                "<a href='/cat-form'>cat-form</a><br>"  +
                 "<a href='/empty-form'>empty-form</a><br>"  +
                 "<a href='/form-with-data'>form-with-data</a><br>"  +
                 "<a href='/partial_content.txt'>partial_content.txt</a><br>"  +
