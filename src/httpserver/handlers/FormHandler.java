@@ -62,16 +62,13 @@ public class FormHandler extends Handler {
     private Response getResponseForPostRequest(Request request) {
         if (this.getFileOperator().fileExistsOnPath(request, this.rootPath)) {
             try {
-                File file = this.getFileOperator().getRequestedFileByName(request, this.rootPath);
+                String fullFilePath = this.rootPath + request.getPath();
+                File file = this.getFileOperator().getRequestedFileByPath(fullFilePath);
                 this.getFileOperator().writeToFile(file, request);
-                String contentOfFile = new String(this.getFileContentConverter().getFileContentFromFile(file));
-                String[] partsOfFile = contentOfFile.split("=");
-                HashMap<ResponseHeader, String> location = new HashMap<ResponseHeader, String>() {{
-                    put(ResponseHeader.LOCATION, request.getPath() + "/" + partsOfFile[0]);
-                }};
-                return new Response(ResponseStatus.CREATED, null, location);
+                HashMap<ResponseHeader, String> locationHeader = this.getLocationHeader(request.getPath(), request.getBody());
+                return new Response(ResponseStatus.CREATED, null, locationHeader);
             } catch (IOException e) {
-                return new Response(ResponseStatus.INTERNAL_SERVER_ERROR, null, new HashMap<>());
+                return this.getInternalErrorResponse();
             }
         }
         return this.getNotFoundResponse();
@@ -95,5 +92,17 @@ public class FormHandler extends Handler {
 
     private Response getNotFoundResponse() {
         return new Response(ResponseStatus.NOT_FOUND, null, new HashMap<>());
+    }
+
+    private HashMap<ResponseHeader, String> getLocationHeader(String path, String bodyOfRequest) {
+        String[] partsOfFile = bodyOfRequest.split("=");
+        String locationString =  path + "/" + partsOfFile[0];;
+        return new HashMap<ResponseHeader, String>() {{
+            put(ResponseHeader.LOCATION, locationString);
+        }};
+    }
+
+    private Response getInternalErrorResponse() {
+        return new Response(ResponseStatus.INTERNAL_SERVER_ERROR, null, new HashMap<>());
     }
 }

@@ -24,11 +24,13 @@ public class formHandlerTests {
 
     private String rootPath;
     private FormHandler formHandler;
+    private String catFormFilePath;
 
     @Before
     public void setup() {
         rootPath = "src/httpserver/utilities/sampleTestFiles";
         formHandler = new FormHandler(rootPath);
+        catFormFilePath = "/cat-form";
     }
 
 
@@ -69,22 +71,21 @@ public class formHandlerTests {
 
     @Test
     public void onPostRequestReturnsStatus201WhenFileExists() throws IOException {
-        String path = "/cat-form";
         String httpVersion = "HTTP/1.1";
         String body = "data=fatcat";
-        Request request = new Request(Method.POST, path, httpVersion, null,body);
+        Request request = new Request(Method.POST, catFormFilePath, httpVersion, null,body);
 
         Response response = formHandler.processRequest(request);
 
-        String contentOfFile = new String(Files.readAllBytes(Paths.get("src/httpserver/utilities/sampleTestFiles/cat-form")));
+        String contentOfFile = new String(Files.readAllBytes(Paths.get("src/httpserver/utilities/sampleTestFiles" + catFormFilePath)));
         assertEquals(ResponseStatus.CREATED, response.getStatus());
         assertEquals("data=fatcat", contentOfFile);
-        assertEquals("/cat-form/data", response.getHeaders().get(ResponseHeader.LOCATION.toString()));
+        assertEquals(catFormFilePath + "/data", response.getHeaders().get(ResponseHeader.LOCATION.toString()));
     }
 
     @After
     public void emptyOverwrittenFile() throws FileNotFoundException {
-        File file = formHandler.getFileOperator().getRequestedFileByPath("src/httpserver/utilities/sampleTestFiles/cat-form");
+        File file = formHandler.getFileOperator().getRequestedFileByPath("src/httpserver/utilities/sampleTestFiles" + catFormFilePath);
         PrintWriter writer = new PrintWriter(file);
         writer.close();
     }
