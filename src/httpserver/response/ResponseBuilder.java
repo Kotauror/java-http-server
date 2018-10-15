@@ -27,7 +27,19 @@ public class ResponseBuilder {
         return new Response(ResponseStatus.INTERNAL_SERVER_ERROR, null, new HashMap<>());
     }
 
-    public Response getCreatedResponse(HashMap<ResponseHeader, String> headers) {
-        return new Response(ResponseStatus.CREATED, null, headers);
+    public Response getCreatedResponse(byte[] body, HashMap<ResponseHeader, String> headers) {
+        return new Response(ResponseStatus.CREATED, body, headers);
+    }
+
+    public Response getFoundResponse(String path) {
+        HashMap<ResponseHeader, String> location = new HashMap<ResponseHeader, String>() {{
+            put(ResponseHeader.LOCATION, path);
+        }};
+        return new Response(ResponseStatus.FOUND, null, location);
+    }
+
+    public Response getTeapotResponse() {
+        byte[] body = "I'm a teapot".getBytes();
+        return new Response(ResponseStatus.TEAPOT, body, new HashMap<>());
     }
 }

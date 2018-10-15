@@ -2,11 +2,7 @@ package httpserver.handlers;
 
 import httpserver.request.Request;
 import httpserver.response.Response;
-import httpserver.response.ResponseHeader;
-import httpserver.response.ResponseStatus;
 import httpserver.utilities.Method;
-
-import java.util.HashMap;
 
 public class RedirectHandler extends Handler {
 
@@ -17,10 +13,7 @@ public class RedirectHandler extends Handler {
 
     @Override
     public Response processRequest(Request request) {
-        HashMap<ResponseHeader, String> location = new HashMap<ResponseHeader, String>() {{
-            put(ResponseHeader.LOCATION, "/");
-        }};
-        return new Response(ResponseStatus.FOUND, null, location);
+        return this.getResponseBuilder().getFoundResponse("/");
     }
 
     @Override

@@ -1,7 +1,6 @@
 package httpserver.handlers;
 
 import httpserver.response.ResponseHeader;
-import httpserver.response.ResponseStatus;
 import httpserver.utilities.FileType;
 import httpserver.utilities.Method;
 import httpserver.request.Request;
@@ -45,6 +44,6 @@ public class PostHandler extends Handler {
         HashMap<ResponseHeader, String> headers = new HashMap<ResponseHeader, String>() {{
             put(ResponseHeader.CONTENT_TYPE, fileType.value());
         }};
-        return new Response(ResponseStatus.CREATED, body, headers);
+        return this.getResponseBuilder().getCreatedResponse(body, headers);
     }
 }

@@ -2,7 +2,6 @@ package httpserver.handlers;
 
 import httpserver.request.Request;
 import httpserver.response.Response;
-import httpserver.response.ResponseStatus;
 import httpserver.utilities.Method;
 
 import java.io.File;
@@ -52,11 +51,11 @@ public class PutHandler extends Handler{
 
     private Response getResponseForCreatedFile(File file) throws IOException {
         byte[] body =  Files.readAllBytes(Paths.get(file.getPath()));
-        return new Response(ResponseStatus.CREATED, body, new HashMap<>());
+        return this.getResponseBuilder().getCreatedResponse(body, new HashMap<>());
     }
 
     private Response getResponseForUpdatedFile(File file) throws IOException {
         byte[] body =  Files.readAllBytes(Paths.get(file.getPath()));
-        return new Response(ResponseStatus.OK, body, new HashMap<>());
+        return this.getResponseBuilder().getOKResponse(body, new HashMap<>());
     }
 }

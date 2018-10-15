@@ -67,7 +67,7 @@ public class FormHandler extends Handler {
             try {
                 this.getFileOperator().writeToFile(file, request);
                 HashMap<ResponseHeader, String> locationHeader = this.getLocationHeader(request.getPath(), request.getBody());
-                return this.getResponseBuilder().getCreatedResponse(locationHeader);
+                return this.getResponseBuilder().getCreatedResponse(null, locationHeader);
             } catch (IOException e) {
                 return this.getResponseBuilder().getInternalErrorResponse();
             }
