@@ -63,15 +63,8 @@ public class FormHandler extends Handler {
     }
 
     private Response handlePut(Request request) {
-        String fileName = this.getFileOperator().removeKeyFromPathIfExists(request.getPath());
-        String fullFilePath = this.rootPath + fileName;
-            try {
-                File file = this.getFileOperator().getRequestedFileByPath(fullFilePath);
-                this.getFileOperator().writeToFile(file, request);
-                return this.getResponseBuilder().getOKResponse(null, new HashMap<>());
-            } catch (IOException e) {
-                return this.getResponseBuilder().getInternalErrorResponse();
-            }
+        PutHandler putHandler = new PutHandler(this.rootPath);
+        return putHandler.processRequest(request);
     }
 
     private Response handleDelete(Request request) {
@@ -86,14 +79,5 @@ public class FormHandler extends Handler {
 
     private boolean requestedFileExists(String fullFilePath) {
         return this.getFileOperator().fileExists(fullFilePath);
-    }
-
-
-    private HashMap<ResponseHeader, String> getLocationHeader(String path, String bodyOfRequest) {
-        String[] partsOfFile = bodyOfRequest.split("=");
-        String locationString =  path + "/" + partsOfFile[0];
-        return new HashMap<ResponseHeader, String>() {{
-            put(ResponseHeader.LOCATION, locationString);
-        }};
     }
 }

@@ -22,9 +22,10 @@ public class PutHandler extends Handler{
 
     @Override
     public Response processRequest(Request request) {
-        File file = this.getFileOperator().getRequestedFileByName(request, this.rootPath);
+        String fileName = this.getFileOperator().removeKeyFromPathIfExists(request.getPath());
+        File file = this.getFileOperator().getRequestedFileByPath(this.rootPath + fileName);
         try {
-            if (this.getFileOperator().fileExistsOnPath(request, this.rootPath)) {
+            if (this.getFileOperator().fileExists(this.rootPath + fileName)) {
                 this.getFileOperator().writeToFile(file, request);
                 return this.getResponseForUpdatedFile(file);
             } else {
