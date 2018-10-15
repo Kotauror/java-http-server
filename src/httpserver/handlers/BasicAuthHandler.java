@@ -1,9 +1,7 @@
 package httpserver.handlers;
 
 import httpserver.request.Request;
-import httpserver.response.ResponseHeader;
 import httpserver.response.Response;
-import httpserver.response.ResponseStatus;
 import httpserver.utilities.Method;
 
 import java.nio.charset.StandardCharsets;
@@ -28,10 +26,10 @@ public class BasicAuthHandler extends Handler {
             if (this.requestHasAllowedMethod(request)) {
                 return this.getResponseForSuccessfulBasicAuth();
             } else {
-                return this.getResponseForUnallowedMethod();
+                return this.getResponseBuilder().getNotAllowedResponse();
             }
         } else {
-            return this.getResponseForUnauthorizedRequest();
+            return this.getResponseBuilder().getUnauthorizedResponse();
         }
     }
 
@@ -64,21 +62,6 @@ public class BasicAuthHandler extends Handler {
 
     private Response getResponseForSuccessfulBasicAuth() {
         byte [] body = "GET /logs HTTP/1.1 PUT /these HTTP/1.1 HEAD /requests HTTP/1.1".getBytes();
-        return new Response(ResponseStatus.OK, body, new HashMap<>());
-    }
-
-    private Response getResponseForUnallowedMethod() {
-        return new Response(ResponseStatus.NOT_ALLOWED, null, new HashMap<>());
-    }
-
-    private Response getResponseForUnauthorizedRequest() {
-        HashMap<ResponseHeader, String> header = this.getHeaderForUnauthorizedRequest();
-        return new Response(ResponseStatus.UNAUTHORIZED, null, header);
-    }
-
-    private HashMap<ResponseHeader, String> getHeaderForUnauthorizedRequest() {
-        return new HashMap<ResponseHeader, String>() {{
-            put(ResponseHeader.AUTHENTICATE, "Basic realm=\"Access to staging site\"");
-        }};
+        return this.getResponseBuilder().getOKResponse(body, new HashMap<>());
     }
 }
