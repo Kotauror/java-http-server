@@ -2,7 +2,6 @@ package httpserver.handlers;
 
 import httpserver.request.Request;
 import httpserver.response.Response;
-import httpserver.response.ResponseStatus;
 import httpserver.utilities.Method;
 
 import java.util.HashMap;
