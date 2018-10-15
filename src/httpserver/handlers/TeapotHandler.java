@@ -2,7 +2,6 @@ package httpserver.handlers;
 
 import httpserver.request.Request;
 import httpserver.response.Response;
-import httpserver.response.ResponseStatus;
 import httpserver.utilities.Method;
 
 import java.util.HashMap;
@@ -18,10 +17,9 @@ public class TeapotHandler extends Handler {
     public Response processRequest(Request request) {
         String path = request.getPath().toLowerCase();
         if (path.equals("/coffee")) {
-            byte[] body = "I'm a teapot".getBytes();
-            return new Response(ResponseStatus.TEAPOT, body, new HashMap<>());
+            return this.getResponseBuilder().getTeapotResponse();
         } else {
-            return new Response(ResponseStatus.OK, null, new HashMap<>());
+            return this.getResponseBuilder().getOKResponse(null, new HashMap<>());
         }
     }
 

@@ -35,7 +35,23 @@ public class FileOperator {
         return fileContent.length;
     }
 
-    public void deleteFile(Request request, String rootPath) {
-        this.getRequestedFileByName(request, rootPath).delete();
+    public void deleteFile(String fileName, String rootPath) {
+        File file = new File(rootPath + "/" + fileName);
+        file.delete();
+    }
+
+    public String removeKeyFromPathIfExists(String fullPath) {
+        String[] partsOfPath = fullPath.split("/");
+        if (this.keyDoesntExist(partsOfPath)) {
+            return "/" + partsOfPath[1];
+        } else {
+            int lengthOfKeyInPath = partsOfPath[partsOfPath.length-1].length();
+            int lengthOfPathWithoutKey = fullPath.length() - lengthOfKeyInPath;
+            return fullPath.substring(0, lengthOfPathWithoutKey-1);
+        }
+    }
+
+    private boolean keyDoesntExist(String[] partsOfPath) {
+        return partsOfPath.length == 2;
     }
 }

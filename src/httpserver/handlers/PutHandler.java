@@ -2,7 +2,6 @@ package httpserver.handlers;
 
 import httpserver.request.Request;
 import httpserver.response.Response;
-import httpserver.response.ResponseStatus;
 import httpserver.utilities.Method;
 
 import java.io.File;
@@ -23,9 +22,10 @@ public class PutHandler extends Handler{
 
     @Override
     public Response processRequest(Request request) {
-        File file = this.getFileOperator().getRequestedFileByName(request, this.rootPath);
+        String fileName = this.getFileOperator().removeKeyFromPathIfExists(request.getPath());
+        File file = this.getFileOperator().getRequestedFileByPath(this.rootPath + fileName);
         try {
-            if (this.getFileOperator().fileExistsOnPath(request, this.rootPath)) {
+            if (this.getFileOperator().fileExists(this.rootPath + fileName)) {
                 this.getFileOperator().writeToFile(file, request);
                 return this.getResponseForUpdatedFile(file);
             } else {
@@ -33,34 +33,22 @@ public class PutHandler extends Handler{
                 return this.getResponseForCreatedFile(file);
             }
         } catch (IOException e) {
-            return this.getResponseForInternalError();
+            return this.getResponseBuilder().getInternalErrorResponse();
         }
     }
 
     @Override
     public boolean coversPathFromRequest(Request request) {
-        String pathFromRequest = request.getPath();
-        if (null != pathFromRequest && pathFromRequest.length() > 0 ) {
-            int indexOfLastSlash = pathFromRequest.lastIndexOf("/");
-            if (indexOfLastSlash != -1) {
-                String directoryPath = pathFromRequest.substring(0, indexOfLastSlash);
-                return this.rootPath.contains(directoryPath);
-            }
-        }
-        return false;
+        return true;
     }
 
     private Response getResponseForCreatedFile(File file) throws IOException {
         byte[] body =  Files.readAllBytes(Paths.get(file.getPath()));
-        return new Response(ResponseStatus.CREATED, body, new HashMap<>());
+        return this.getResponseBuilder().getCreatedResponse(body, new HashMap<>());
     }
 
     private Response getResponseForUpdatedFile(File file) throws IOException {
         byte[] body =  Files.readAllBytes(Paths.get(file.getPath()));
-        return new Response(ResponseStatus.OK, body, new HashMap<>());
-    }
-
-    private Response getResponseForInternalError() {
-        return new Response(ResponseStatus.INTERNAL_SERVER_ERROR, null, new HashMap<>());
+        return this.getResponseBuilder().getOKResponse(body, new HashMap<>());
     }
 }

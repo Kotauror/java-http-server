@@ -11,7 +11,6 @@ public enum ResponseStatus {
     NOT_ALLOWED("405"),
     RANGE_NOT_SATISFIABLE("416"),
     TEAPOT("418"),
-    UNPROCESSABLE("422"),
     NOT_FOUND("404");
 
     private String status;

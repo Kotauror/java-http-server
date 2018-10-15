@@ -2,11 +2,8 @@ package httpserver.handlers;
 
 import httpserver.request.Request;
 import httpserver.response.Response;
-import httpserver.response.ResponseHeader;
-import httpserver.response.ResponseStatus;
 import httpserver.utilities.Method;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -22,7 +19,7 @@ public class FormHandler extends Handler {
     }
 
     @Override
-    public Response processRequest(Request request) throws IOException {
+    public Response processRequest(Request request) {
         switch (request.getMethod()) {
             case GET:
                 return this.handleGet(request);
@@ -33,7 +30,7 @@ public class FormHandler extends Handler {
             case DELETE:
                 return this.handleDelete(request);
             default:
-                return this.getNotFoundResponse();
+                return this.getResponseBuilder().getNotFoundResponse();
         }
     }
 
@@ -42,67 +39,39 @@ public class FormHandler extends Handler {
         return request.getPath().contains("form");
     }
 
-    private Response handleGet(Request request) throws IOException {
-        String fileName = this.removeKeyFromPath(request.getPath());
+    private Response handleGet(Request request) {
+        String fileName = this.getFileOperator().removeKeyFromPathIfExists(request.getPath());
         String fullFilePath = this.rootPath + fileName;
         if (this.requestedFileExists(fullFilePath)) {
-            String keyFromPath = this.getKeyFromFilePath(request.getPath());
-            String contentOfFile = this.getFileContentConverter().getFileContentAsString(fullFilePath);
-            if (contentOfFile.contains(keyFromPath)) {
-                return new Response(ResponseStatus.OK, contentOfFile.getBytes(), new HashMap<>());
-            } else {
-                return this.getNotFoundResponse();
+            try {
+                String keyFromPath = this.getKeyFromFilePath(request.getPath());
+                String contentOfFile = this.getFileContentConverter().getFileContentAsString(fullFilePath);
+                if (contentOfFile.contains(keyFromPath)) {
+                    return this.getResponseBuilder().getOKResponse(contentOfFile.getBytes(), new HashMap<>());
+                } else {
+                    return this.getResponseBuilder().getNotFoundResponse();
+                }
+            } catch (IOException e) {
+                return this.getResponseBuilder().getInternalErrorResponse();
             }
         } else {
-            return this.getNotFoundResponse();
+            return this.getResponseBuilder().getNotFoundResponse();
         }
     }
 
     private Response handlePost(Request request) {
-        File file = this.getFileOperator().getRequestedFileByName(request, this.rootPath);
-        String fullFilePath = this.rootPath + request.getPath();
-        if (this.requestedFileExists(fullFilePath)) {
-            return new Response(ResponseStatus.NOT_ALLOWED, null, new HashMap<>());
-        } else {
-            try {
-                this.getFileOperator().writeToFile(file, request);
-                HashMap<ResponseHeader, String> locationHeader = this.getLocationHeader(request.getPath(), request.getBody());
-                return new Response(ResponseStatus.CREATED, null, locationHeader);
-            } catch (IOException e) {
-                return this.getInternalErrorResponse();
-            }
-        }
+        PostHandler postHandler = new PostHandler(this.rootPath);
+        return postHandler.processRequest(request);
     }
 
     private Response handlePut(Request request) {
-        String fileName = this.removeKeyFromPath(request.getPath());
-        String fullFilePath = this.rootPath + fileName;
-            try {
-                File file = this.getFileOperator().getRequestedFileByPath(fullFilePath);
-                this.getFileOperator().writeToFile(file, request);
-                return new Response(ResponseStatus.OK, null, new HashMap<>());
-            } catch (IOException e) {
-                return this.getInternalErrorResponse();
-            }
+        PutHandler putHandler = new PutHandler(this.rootPath);
+        return putHandler.processRequest(request);
     }
 
     private Response handleDelete(Request request) {
-        String fileName = this.removeKeyFromPath(request.getPath());
-        String fullFilePath = this.rootPath + fileName;
-        if (this.requestedFileExists(fullFilePath)) {
-            File file = this.getFileOperator().getRequestedFileByPath(fullFilePath);
-            file.delete();
-            return new Response(ResponseStatus.OK, null, new HashMap<>());
-        } else {
-            return this.getNotFoundResponse();
-        }
-    }
-
-    private String removeKeyFromPath(String fullPath) {
-        String[] pathsOfPath = fullPath.split("/");
-        int lengthOfKeyInPath = pathsOfPath[pathsOfPath.length-1].length();
-        int lengthOfPathWithoutKey = fullPath.length() - lengthOfKeyInPath;
-        return fullPath.substring(0, lengthOfPathWithoutKey-1);
+        DeleteHandler deleteHandler = new DeleteHandler(this.rootPath);
+        return deleteHandler.processRequest(request);
     }
 
     private String getKeyFromFilePath(String path) {
@@ -112,21 +81,5 @@ public class FormHandler extends Handler {
 
     private boolean requestedFileExists(String fullFilePath) {
         return this.getFileOperator().fileExists(fullFilePath);
-    }
-
-    private Response getNotFoundResponse() {
-        return new Response(ResponseStatus.NOT_FOUND, null, new HashMap<>());
-    }
-
-    private HashMap<ResponseHeader, String> getLocationHeader(String path, String bodyOfRequest) {
-        String[] partsOfFile = bodyOfRequest.split("=");
-        String locationString =  path + "/" + partsOfFile[0];
-        return new HashMap<ResponseHeader, String>() {{
-            put(ResponseHeader.LOCATION, locationString);
-        }};
-    }
-
-    private Response getInternalErrorResponse() {
-        return new Response(ResponseStatus.INTERNAL_SERVER_ERROR, null, new HashMap<>());
     }
 }

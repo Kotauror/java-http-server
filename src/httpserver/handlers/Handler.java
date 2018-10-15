@@ -1,5 +1,6 @@
 package httpserver.handlers;
 
+import httpserver.response.ResponseBuilder;
 import httpserver.utilities.FileOperator;
 import httpserver.utilities.FileTypeDecoder;
 import httpserver.utilities.Method;
@@ -16,6 +17,7 @@ public abstract class Handler {
     private static final FileContentConverter fileContentConverter = new FileContentConverter();
     private static final FileTypeDecoder fileTypeDecoder = new FileTypeDecoder();
     private static final FileOperator fileOperator = new FileOperator();
+    private static final ResponseBuilder responseBuilder = new ResponseBuilder();
     private final ArrayList<Method> handledMethods = new ArrayList<>();
     private HandlerType typeOfHandler = null;
 
@@ -48,6 +50,8 @@ public abstract class Handler {
     public FileOperator getFileOperator() {
         return fileOperator;
     }
+
+    public ResponseBuilder getResponseBuilder() { return responseBuilder; }
 
     public boolean handles(Request request) {
         return (this.handledMethods.contains(request.getMethod()) && this.coversPathFromRequest(request));
