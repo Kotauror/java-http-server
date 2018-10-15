@@ -23,13 +23,17 @@ public class PostHandler extends Handler {
     }
 
     @Override
-    public Response processRequest(Request request) throws IOException {
+    public Response processRequest(Request request) {
         File file = this.getFileOperator().getRequestedFileByName(request, this.rootPath);
         if (this.getFileOperator().fileExistsOnPath(request, this.rootPath)) {
             return this.getResponseBuilder().getNotAllowedResponse();
         } else {
-            this.getFileOperator().writeToFile(file, request);
-            return this.getResponseForCreatingFile(file);
+            try {
+                this.getFileOperator().writeToFile(file, request);
+                return this.getResponseForCreatingFile(file, request);
+            } catch (IOException e) {
+                return this.getResponseBuilder().getInternalErrorResponse();
+            }
         }
     }
 
@@ -38,12 +42,19 @@ public class PostHandler extends Handler {
         return true;
     }
 
-    private Response getResponseForCreatingFile(File file) throws IOException {
-        FileType fileType = this.getFileTypeDecoder().getFileType(file.getName());
+    private Response getResponseForCreatingFile(File file, Request request) throws IOException {
         byte[] body = Files.readAllBytes(Paths.get(file.getPath()));
+        FileType fileType = this.getFileTypeDecoder().getFileType(file.getName());
+        String locationString = this.getLocationString(request);
         HashMap<ResponseHeader, String> headers = new HashMap<ResponseHeader, String>() {{
             put(ResponseHeader.CONTENT_TYPE, fileType.value());
+            put(ResponseHeader.LOCATION, locationString);
         }};
         return this.getResponseBuilder().getCreatedResponse(body, headers);
+    }
+
+    private String getLocationString(Request request) {
+        String[] partsOfFile = request.getBody().split("=");
+        return request.getPath() + "/" + partsOfFile[0];
     }
 }
