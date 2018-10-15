@@ -37,7 +37,7 @@ public class formHandlerTests {
 
 
     @Test
-    public void whenFileDoesntExistReturn404() throws IOException {
+    public void onHandleGetWhenFileDoesntExistReturn404() throws IOException {
         String path = "/testtes/datat";
         String httpVersion = "HTTP/1.1";
         Request request = new Request(Method.GET, path, httpVersion, null,null);
@@ -48,7 +48,7 @@ public class formHandlerTests {
     }
 
     @Test
-    public void whenFileHasNoRequestedContentReturn404() throws IOException {
+    public void onHandleGetWhenFileHasNoRequestedContentReturn404() throws IOException {
         String path = "/empty-form/data";
         String httpVersion = "HTTP/1.1";
         Request request = new Request(Method.GET, path, httpVersion, null,null);
@@ -59,7 +59,7 @@ public class formHandlerTests {
     }
 
     @Test
-    public void whenFileHasContentReturnStatusOK() throws IOException {
+    public void onHandleGetWhenFileHasContentReturnStatusOK() throws IOException {
         String path = "/form-with-data/data";
         String httpVersion = "HTTP/1.1";
         byte[] expectedBody = "data=koteczek".getBytes();
@@ -72,7 +72,7 @@ public class formHandlerTests {
     }
 
     @Test
-    public void onPostRequestReturnsStatus201WhenFileDoesNotExist() throws IOException {
+    public void onHandlePostRequestReturnsStatus201WhenFileDoesNotExistAndActionsIsSuccess() throws IOException {
         String httpVersion = "HTTP/1.1";
         String body = "data=fatcat";
         Request request = new Request(Method.POST, "/samplesample", httpVersion, null,body);
@@ -86,7 +86,18 @@ public class formHandlerTests {
     }
 
     @Test
-    public void onPutRequestReturnsStatus200WhenFileExists() throws IOException {
+    public void onHandlePostRequestReturnsStatus422WhenFileExists() throws IOException {
+        String httpVersion = "HTTP/1.1";
+        String body = "data=fatcat";
+        Request request = new Request(Method.POST, "/empty-form", httpVersion, null,body);
+
+        Response response = formHandler.processRequest(request);
+
+        assertEquals(ResponseStatus.UNPROCESSABLE, response.getStatus());
+    }
+
+    @Test
+    public void onHandlePutRequestReturnsStatus200WhenFileExists() throws IOException {
         String httpVersion = "HTTP/1.1";
         String body = "data=tabbycat";
         Request request = new Request(Method.PUT, "/cat-form/data", httpVersion, null,body);

@@ -7,7 +7,6 @@ import httpserver.response.ResponseStatus;
 import httpserver.utilities.Method;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -21,21 +20,21 @@ public class FormHandler extends Handler {
         setType(HandlerType.FORM_HANDLER);
         addHandledMethods(Arrays.asList(Method.GET, Method.POST, Method.PUT, Method.DELETE));
     }
+
     @Override
     public Response processRequest(Request request) throws IOException {
-        if (isGetRequest(request)) {
-          return this.getResponseForGetRequest(request);
+        switch (request.getMethod()) {
+            case GET:
+                return this.handleGet(request);
+            case POST:
+                return this.handlePost(request);
+            case PUT:
+                return this.handlePut(request);
+            case DELETE:
+                return this.handleDelete(request);
+            default:
+                return this.getNotFoundResponse();
         }
-        if (isPostRequest(request)) {
-            return this.getResponseForPostRequest(request);
-        }
-        if (isPutRequest(request)) {
-            return this.getResponseForPutRequest(request);
-        }
-        if (isDeleteRequest(request)) {
-            return this.getResponseForDeleteRequest(request);
-        }
-        return new Response(ResponseStatus.OK, null, new HashMap<>());
     }
 
     @Override
@@ -43,23 +42,7 @@ public class FormHandler extends Handler {
         return request.getPath().contains("form");
     }
 
-    private boolean isGetRequest(Request request) {
-        return request.getMethod().equals(Method.GET);
-    }
-
-    private boolean isPostRequest(Request request) {
-        return request.getMethod().equals(Method.POST);
-    }
-
-    private boolean isPutRequest(Request request) {
-        return request.getMethod().equals(Method.PUT);
-    }
-
-    private boolean isDeleteRequest(Request request) {
-        return request.getMethod().equals(Method.DELETE);
-    }
-
-    private Response getResponseForGetRequest(Request request) throws IOException {
+    private Response handleGet(Request request) throws IOException {
         String fileName = this.removeKeyFromPath(request.getPath());
         String fullFilePath = this.rootPath + fileName;
         if (this.requestedFileExists(fullFilePath)) {
@@ -75,11 +58,11 @@ public class FormHandler extends Handler {
         }
     }
 
-    private Response getResponseForPostRequest(Request request) {
+    private Response handlePost(Request request) {
         File file = this.getFileOperator().getRequestedFileByName(request, this.rootPath);
         String fullFilePath = this.rootPath + request.getPath();
-        if (this.getFileOperator().fileExists(fullFilePath)) {
-            return this.getNotFoundResponse();
+        if (this.requestedFileExists(fullFilePath)) {
+            return new Response(ResponseStatus.UNPROCESSABLE, null, new HashMap<>());
         } else {
             try {
                 this.getFileOperator().writeToFile(file, request);
@@ -91,7 +74,7 @@ public class FormHandler extends Handler {
         }
     }
 
-    private Response getResponseForPutRequest(Request request) {
+    private Response handlePut(Request request) {
         String fileName = this.removeKeyFromPath(request.getPath());
         String fullFilePath = this.rootPath + fileName;
             try {
@@ -103,17 +86,13 @@ public class FormHandler extends Handler {
             }
     }
 
-    private Response getResponseForDeleteRequest(Request request) throws FileNotFoundException {
+    private Response handleDelete(Request request) {
         String fileName = this.removeKeyFromPath(request.getPath());
         String fullFilePath = this.rootPath + fileName;
         if (this.requestedFileExists(fullFilePath)) {
-            try {
-                File file = this.getFileOperator().getRequestedFileByPath(fullFilePath);
-                file.delete();
-                return new Response(ResponseStatus.OK, null, new HashMap<>());
-            } catch (Error e) {
-                return this.getInternalErrorResponse();
-            }
+            File file = this.getFileOperator().getRequestedFileByPath(fullFilePath);
+            file.delete();
+            return new Response(ResponseStatus.OK, null, new HashMap<>());
         } else {
             return this.getNotFoundResponse();
         }
