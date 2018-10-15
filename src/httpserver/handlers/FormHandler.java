@@ -3,7 +3,6 @@ package httpserver.handlers;
 import httpserver.request.Request;
 import httpserver.response.Response;
 import httpserver.response.ResponseHeader;
-import httpserver.response.ResponseStatus;
 import httpserver.utilities.Method;
 
 import java.io.File;
@@ -90,8 +89,7 @@ public class FormHandler extends Handler {
         String fileName = this.removeKeyFromPath(request.getPath());
         String fullFilePath = this.rootPath + fileName;
         if (this.requestedFileExists(fullFilePath)) {
-            File file = this.getFileOperator().getRequestedFileByPath(fullFilePath);
-            file.delete();
+            this.getFileOperator().deleteFile(fileName, this.rootPath);
             return this.getResponseBuilder().getOKResponse(null, new HashMap<>());
         } else {
             return this.getResponseBuilder().getNotFoundResponse();
