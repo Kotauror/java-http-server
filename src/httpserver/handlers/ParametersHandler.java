@@ -16,9 +16,13 @@ public class ParametersHandler extends Handler {
     }
 
     @Override
-    public Response processRequest(Request request) throws UnsupportedEncodingException {
-        String bodyOfResponse = this.decodeRequestPath(request.getPath());
-        return this.getResponseBuilder().getOKResponse(bodyOfResponse.getBytes(), new HashMap<>());
+    public Response processRequest(Request request) {
+        try {
+            String bodyOfResponse = this.decodeRequestPath(request.getPath());
+            return this.getResponseBuilder().getOKResponse(bodyOfResponse.getBytes(), new HashMap<>());
+        } catch (UnsupportedEncodingException e) {
+            return this.getResponseBuilder().getNotFoundResponse();
+        }
     }
 
     @Override
@@ -28,11 +32,14 @@ public class ParametersHandler extends Handler {
 
     private String decodeRequestPath(String requestPath) throws UnsupportedEncodingException {
         String pathWithoutParametersKey = requestPath.substring(12, requestPath.length());
+        String[] keyValuePairs = pathWithoutParametersKey.split("&");
         StringBuilder bodyContent = new StringBuilder();
-        String[] variableAndCode = pathWithoutParametersKey.split("=");
-        bodyContent.append(variableAndCode[0]);
-        bodyContent.append(" = ");
-        bodyContent.append(decode(variableAndCode[1]));
+        for (String keyValuePair : keyValuePairs) {
+            String[] keyAndValue = keyValuePair.split("=");
+            bodyContent.append(keyAndValue[0]);
+            bodyContent.append(" = ");
+            bodyContent.append(decode(keyAndValue[1]) + "\n");
+        }
         return new String(bodyContent);
     }
 
