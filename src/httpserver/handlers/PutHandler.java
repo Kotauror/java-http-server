@@ -39,15 +39,7 @@ public class PutHandler extends Handler{
 
     @Override
     public boolean coversPathFromRequest(Request request) {
-        String pathFromRequest = request.getPath();
-        if (null != pathFromRequest && pathFromRequest.length() > 0 ) {
-            int indexOfLastSlash = pathFromRequest.lastIndexOf("/");
-            if (indexOfLastSlash != -1) {
-                String directoryPath = pathFromRequest.substring(0, indexOfLastSlash);
-                return this.rootPath.contains(directoryPath);
-            }
-        }
-        return false;
+        return true;
     }
 
     private Response getResponseForCreatedFile(File file) throws IOException {

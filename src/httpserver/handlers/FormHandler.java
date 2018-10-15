@@ -2,10 +2,8 @@ package httpserver.handlers;
 
 import httpserver.request.Request;
 import httpserver.response.Response;
-import httpserver.response.ResponseHeader;
 import httpserver.utilities.Method;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
