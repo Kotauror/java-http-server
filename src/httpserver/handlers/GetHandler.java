@@ -24,9 +24,13 @@ public class GetHandler extends Handler{
     }
 
     @Override
-    public Response processRequest(Request request) throws IOException {
+    public Response processRequest(Request request) {
         if (this.getFileOperator().fileExistsOnPath(request, this.rootPath)) {
-            return this.getResponse(request);
+            try {
+                return this.getResponse(request);
+            } catch (IOException e) {
+                return this.getResponseBuilder().getInternalErrorResponse();
+            }
         } else {
             return this.getResponseBuilder().getNotFoundResponse();
         }

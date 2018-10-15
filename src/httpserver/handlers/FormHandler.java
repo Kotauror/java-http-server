@@ -19,7 +19,7 @@ public class FormHandler extends Handler {
     }
 
     @Override
-    public Response processRequest(Request request) throws IOException {
+    public Response processRequest(Request request) {
         switch (request.getMethod()) {
             case GET:
                 return this.handleGet(request);
@@ -39,16 +39,20 @@ public class FormHandler extends Handler {
         return request.getPath().contains("form");
     }
 
-    private Response handleGet(Request request) throws IOException {
+    private Response handleGet(Request request) {
         String fileName = this.getFileOperator().removeKeyFromPathIfExists(request.getPath());
         String fullFilePath = this.rootPath + fileName;
         if (this.requestedFileExists(fullFilePath)) {
-            String keyFromPath = this.getKeyFromFilePath(request.getPath());
-            String contentOfFile = this.getFileContentConverter().getFileContentAsString(fullFilePath);
-            if (contentOfFile.contains(keyFromPath)) {
-                return this.getResponseBuilder().getOKResponse(contentOfFile.getBytes(), new HashMap<>());
-            } else {
-                return this.getResponseBuilder().getNotFoundResponse();
+            try {
+                String keyFromPath = this.getKeyFromFilePath(request.getPath());
+                String contentOfFile = this.getFileContentConverter().getFileContentAsString(fullFilePath);
+                if (contentOfFile.contains(keyFromPath)) {
+                    return this.getResponseBuilder().getOKResponse(contentOfFile.getBytes(), new HashMap<>());
+                } else {
+                    return this.getResponseBuilder().getNotFoundResponse();
+                }
+            } catch (IOException e) {
+                return this.getResponseBuilder().getInternalErrorResponse();
             }
         } else {
             return this.getResponseBuilder().getNotFoundResponse();

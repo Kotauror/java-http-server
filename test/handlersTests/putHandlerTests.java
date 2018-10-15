@@ -45,14 +45,6 @@ public class putHandlerTests {
     }
 
     @Test
-    public void returnsFalseWhenPathIsNotCovered() {
-        String path = "src/httpserver/utilities/testKoteczki/testFile";
-        Request request = new Request(Method.GET, path, httpVersion, headers, body);
-
-        assertFalse(putHandler.coversPathFromRequest(request));
-    }
-
-    @Test
     public void createsANewFileWithContent() throws IOException {
         String path = "/filetesting";
         Request request = new Request(Method.GET, path, httpVersion, headers, "Some content");
