@@ -15,4 +15,5 @@ public enum HandlerType {
     TEAPOT_HANDLER,
     REDIRECT_HANDLER,
     FORM_HANDLER,
+    PATCH_HANDLER,
 }

@@ -28,6 +28,7 @@ public class requestRouterTests {
     private Method methodHead;
     private Method methodPut;
     private Method methodDelete;
+    private Method methodPatch;
 
     @Before
     public void setup() {
@@ -40,6 +41,7 @@ public class requestRouterTests {
         methodPut = Method.PUT;
         methodDelete = Method.DELETE;
         methodOption = Method.OPTIONS;
+        methodPatch = Method.PATCH;
         path = "http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1";
         httpVersion = " HTTP/1.1";
         headers = new LinkedHashMap<String, String>() {{
@@ -170,11 +172,19 @@ public class requestRouterTests {
     }
 
     @Test
-    public void findHandlerReturnsRightHandlerForFormHandlerWithParameters() {
+    public void findHandlerReturnsRightHandlerForHandlerWithParameters() {
         Request request = new Request(methodGet, "/parameters?variable_1=a%20query%20string%20parameter", httpVersion, headers, body);
         Handler handler = requestRouter.findHandler(request);
 
         assertEquals(HandlerType.PARAMETERS_HANDLER, handler.getType());
+    }
+
+    @Test
+    public void findHandlerReturnsRightHandlerForPatch() {
+        Request request = new Request(methodPatch, "/patch-content.txt", httpVersion, headers, body);
+        Handler handler = requestRouter.findHandler(request);
+
+        assertEquals(HandlerType.PATCH_HANDLER, handler.getType());
     }
 
     @Test

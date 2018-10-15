@@ -5,6 +5,7 @@ public enum ResponseStatus {
     INTERNAL_SERVER_ERROR("500"),
     OK("200"),
     CREATED("201"),
+    NO_CONTENT("204"),
     RANGE_REQUEST("206"),
     FOUND("302"),
     UNAUTHORIZED("401"),

@@ -42,4 +42,8 @@ public class ResponseBuilder {
         byte[] body = "I'm a teapot".getBytes();
         return new Response(ResponseStatus.TEAPOT, body, new HashMap<>());
     }
+
+    public Response getPatchResponse() {
+        return new Response(ResponseStatus.NO_CONTENT, null, new HashMap<>());
+    }
 }
