@@ -62,7 +62,7 @@ public class FormHandler extends Handler {
         File file = this.getFileOperator().getRequestedFileByName(request, this.rootPath);
         String fullFilePath = this.rootPath + request.getPath();
         if (this.requestedFileExists(fullFilePath)) {
-            return new Response(ResponseStatus.UNPROCESSABLE, null, new HashMap<>());
+            return new Response(ResponseStatus.NOT_ALLOWED, null, new HashMap<>());
         } else {
             try {
                 this.getFileOperator().writeToFile(file, request);
