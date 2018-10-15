@@ -86,14 +86,14 @@ public class formHandlerTests {
     }
 
     @Test
-    public void onHandlePostRequestReturnsStatus422WhenFileExists() throws IOException {
+    public void onHandlePostRequestReturnsStatus405WhenFileExists() throws IOException {
         String httpVersion = "HTTP/1.1";
         String body = "data=fatcat";
         Request request = new Request(Method.POST, "/empty-form", httpVersion, null,body);
 
         Response response = formHandler.processRequest(request);
 
-        assertEquals(ResponseStatus.UNPROCESSABLE, response.getStatus());
+        assertEquals(ResponseStatus.NOT_ALLOWED, response.getStatus());
     }
 
     @Test
