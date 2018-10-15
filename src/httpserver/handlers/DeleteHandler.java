@@ -18,8 +18,12 @@ public class DeleteHandler extends Handler {
 
     @Override
     public Response processRequest(Request request) {
-        this.getFileOperator().deleteFile(request, this.rootPath);
-        return this.getResponseBuilder().getOKResponse(null, new HashMap<>());
+        if (this.getFileOperator().fileExists(this.rootPath + request.getPath())) {
+            this.getFileOperator().deleteFile(request, this.rootPath);
+            return this.getResponseBuilder().getOKResponse(null, new HashMap<>());
+        } else {
+            return this.getResponseBuilder().getNotFoundResponse();
+        }
     }
 
     @Override

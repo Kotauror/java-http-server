@@ -36,7 +36,17 @@ public class deleteHandlerTests {
     }
 
     @Test
-    public void deletesFile() {
+    public void returnsNotFoundWhenDoestExist() {
+        String nonExistingPath = "/hehehhehhehehe";
+        Request request = new Request(Method.DELETE, nonExistingPath, httpVersion, headers, "Some content");
+        DeleteHandler deleteHandler = new DeleteHandler(rootPath);
+        Response response = deleteHandler.processRequest(request);
+
+        assertEquals(ResponseStatus.NOT_FOUND, response.getStatus());
+    }
+
+    @Test
+    public void deletesFileWhenItExists() {
         Request request = new Request(Method.DELETE, path, httpVersion, headers, "Some content");
         DeleteHandler deleteHandler = new DeleteHandler(rootPath);
         Response response = deleteHandler.processRequest(request);
