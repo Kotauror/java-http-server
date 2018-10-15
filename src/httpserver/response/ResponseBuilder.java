@@ -43,7 +43,11 @@ public class ResponseBuilder {
         return new Response(ResponseStatus.TEAPOT, body, new HashMap<>());
     }
 
-    public Response getPatchResponse() {
+    public Response getNoContentResponse() {
         return new Response(ResponseStatus.NO_CONTENT, null, new HashMap<>());
+    }
+
+    public Response getPreconditionFailedResponse() {
+        return new Response(ResponseStatus.PRECONDITION_FAILED, null, new HashMap<>());
     }
 }

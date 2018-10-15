@@ -18,7 +18,10 @@ public class PatchHandler extends Handler {
 
     @Override
     public Response processRequest(Request request) {
-        return this.getResponseBuilder().getPatchResponse();
+        if (!request.getHeaders().containsKey("If-Match")) {
+            return this.getResponseBuilder().getPreconditionFailedResponse();
+        }
+        return this.getResponseBuilder().getNoContentResponse();
     }
 
     @Override

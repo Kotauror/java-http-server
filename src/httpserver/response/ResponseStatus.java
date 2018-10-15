@@ -10,6 +10,7 @@ public enum ResponseStatus {
     FOUND("302"),
     UNAUTHORIZED("401"),
     NOT_ALLOWED("405"),
+    PRECONDITION_FAILED("412"),
     RANGE_NOT_SATISFIABLE("416"),
     TEAPOT("418"),
     NOT_FOUND("404");
