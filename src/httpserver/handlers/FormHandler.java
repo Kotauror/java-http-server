@@ -86,14 +86,8 @@ public class FormHandler extends Handler {
     }
 
     private Response handleDelete(Request request) {
-        String fileName = this.removeKeyFromPath(request.getPath());
-        String fullFilePath = this.rootPath + fileName;
-        if (this.requestedFileExists(fullFilePath)) {
-            this.getFileOperator().deleteFile(fileName, this.rootPath);
-            return this.getResponseBuilder().getOKResponse(null, new HashMap<>());
-        } else {
-            return this.getResponseBuilder().getNotFoundResponse();
-        }
+        DeleteHandler deleteHandler = new DeleteHandler(this.rootPath);
+        return deleteHandler.processRequest(request);
     }
 
     private String removeKeyFromPath(String fullPath) {
