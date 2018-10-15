@@ -42,7 +42,7 @@ public class FormHandler extends Handler {
     }
 
     private Response handleGet(Request request) throws IOException {
-        String fileName = this.removeKeyFromPath(request.getPath());
+        String fileName = this.getFileOperator().removeKeyFromPathIfExists(request.getPath());
         String fullFilePath = this.rootPath + fileName;
         if (this.requestedFileExists(fullFilePath)) {
             String keyFromPath = this.getKeyFromFilePath(request.getPath());
@@ -74,7 +74,7 @@ public class FormHandler extends Handler {
     }
 
     private Response handlePut(Request request) {
-        String fileName = this.removeKeyFromPath(request.getPath());
+        String fileName = this.getFileOperator().removeKeyFromPathIfExists(request.getPath());
         String fullFilePath = this.rootPath + fileName;
             try {
                 File file = this.getFileOperator().getRequestedFileByPath(fullFilePath);
@@ -88,13 +88,6 @@ public class FormHandler extends Handler {
     private Response handleDelete(Request request) {
         DeleteHandler deleteHandler = new DeleteHandler(this.rootPath);
         return deleteHandler.processRequest(request);
-    }
-
-    private String removeKeyFromPath(String fullPath) {
-        String[] pathsOfPath = fullPath.split("/");
-        int lengthOfKeyInPath = pathsOfPath[pathsOfPath.length-1].length();
-        int lengthOfPathWithoutKey = fullPath.length() - lengthOfKeyInPath;
-        return fullPath.substring(0, lengthOfPathWithoutKey-1);
     }
 
     private String getKeyFromFilePath(String path) {

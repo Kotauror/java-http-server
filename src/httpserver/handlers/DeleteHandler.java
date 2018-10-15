@@ -18,7 +18,7 @@ public class DeleteHandler extends Handler {
 
     @Override
     public Response processRequest(Request request) {
-        String fileName = this.removeKeyFromPathIfItExists(request.getPath());
+        String fileName = this.getFileOperator().removeKeyFromPathIfExists(request.getPath());
         String fullFilePath = this.rootPath + fileName;
         if (this.getFileOperator().fileExists(fullFilePath)) {
             this.getFileOperator().deleteFile(fileName, this.rootPath);
@@ -31,16 +31,5 @@ public class DeleteHandler extends Handler {
     @Override
     public boolean coversPathFromRequest(Request request) {
         return true;
-    }
-
-    private String removeKeyFromPathIfItExists(String fullPath) {
-        String[] pathsOfPath = fullPath.split("/");
-        if (pathsOfPath.length == 2) {
-            return "/" + pathsOfPath[1];
-        } else {
-            int lengthOfKeyInPath = pathsOfPath[pathsOfPath.length-1].length();
-            int lengthOfPathWithoutKey = fullPath.length() - lengthOfKeyInPath;
-            return fullPath.substring(0, lengthOfPathWithoutKey-1);
-        }
     }
 }

@@ -6,9 +6,11 @@ import httpserver.request.Request;
 import httpserver.response.Response;
 import httpserver.response.ResponseStatus;
 import httpserver.utilities.Method;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.LinkedHashMap;
@@ -22,6 +24,7 @@ public class deleteHandlerTests {
     private LinkedHashMap<String, String> headers;
     private String httpVersion;
     private String path;
+    private PutHandler putHandler;
 
     @Before
     public void setupAndAddFile() {
@@ -30,7 +33,7 @@ public class deleteHandlerTests {
         headers = new LinkedHashMap<>();
         path = "/filetesting";
 
-        PutHandler putHandler = new PutHandler(rootPath);
+        putHandler = new PutHandler(rootPath);
         Request request = new Request(Method.GET, path, httpVersion, headers, "Some content");
         putHandler.processRequest(request);
     }
@@ -53,5 +56,11 @@ public class deleteHandlerTests {
 
         assertFalse(Files.exists(Paths.get(rootPath + request.getPath())));
         assertEquals(ResponseStatus.OK, response.getStatus());
+    }
+
+    @After
+    public void deleteCreatedFiles() {
+        File file = putHandler.getFileOperator().getRequestedFileByPath("src/httpserver/utilities/sampleTestFiles/filetesting");
+        file.delete();
     }
 }
