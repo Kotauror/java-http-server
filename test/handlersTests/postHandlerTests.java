@@ -36,7 +36,7 @@ public class postHandlerTests {
     }
 
     @Test
-    public void returns405WhenFileExists() throws IOException {
+    public void returns422WhenFileExists() throws IOException {
         String path = "/kosiowaty";
         PutHandler putHandler = new PutHandler(rootPath);
         Request request = new Request(Method.GET, path, httpVersion, headers, "Some content");
@@ -46,7 +46,7 @@ public class postHandlerTests {
         Response response = postHandler.processRequest(request2);
 
         assertTrue(Files.exists(Paths.get(rootPath + request.getPath())));
-        assertTrue(response.getStatus().equals(ResponseStatus.NOT_ALLOWED));
+        assertTrue(response.getStatus().equals(ResponseStatus.UNPROCESSABLE));
     }
 
     @Test

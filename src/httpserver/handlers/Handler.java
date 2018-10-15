@@ -9,6 +9,7 @@ import httpserver.response.Response;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Handler {
 
@@ -33,6 +34,8 @@ public abstract class Handler {
     public void addHandledMethod(Method method) {
         handledMethods.add(method);
     }
+
+    public void addHandledMethods(List<Method> methods) { handledMethods.addAll(methods); }
 
     public FileContentConverter getFileContentConverter() {
         return fileContentConverter;
