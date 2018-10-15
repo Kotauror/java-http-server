@@ -174,7 +174,7 @@ public class requestRouterTests {
         Request request = new Request(methodGet, "/parameters?variable_1=a%20query%20string%20parameter", httpVersion, headers, body);
         Handler handler = requestRouter.findHandler(request);
 
-        assertEquals(HandlerType.PARAMETERS_HANDER, handler.getType());
+        assertEquals(HandlerType.PARAMETERS_HANDLER, handler.getType());
     }
 
     @Test

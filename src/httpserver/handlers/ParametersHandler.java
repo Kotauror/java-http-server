@@ -11,7 +11,7 @@ import java.util.HashMap;
 public class ParametersHandler extends Handler {
 
     public ParametersHandler() {
-        setType(HandlerType.PARAMETERS_HANDER);
+        setType(HandlerType.PARAMETERS_HANDLER);
         addHandledMethod(Method.GET);
     }
 
