@@ -25,7 +25,7 @@ public class OptionHandler extends Handler{
         HashMap<ResponseHeader, String> headers = new HashMap<ResponseHeader, String>() {{
             put(ResponseHeader.ALLOW, allowedMethodsString);
         }};
-        return new Response(ResponseStatus.OK, null, headers);
+        return this.getResponseBuilder().getOKResponse(null, headers);
     }
 
     @Override

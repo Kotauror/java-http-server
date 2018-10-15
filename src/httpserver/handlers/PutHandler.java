@@ -33,7 +33,7 @@ public class PutHandler extends Handler{
                 return this.getResponseForCreatedFile(file);
             }
         } catch (IOException e) {
-            return this.getResponseForInternalError();
+            return this.getResponseBuilder().getInternalErrorResponse();
         }
     }
 
@@ -58,9 +58,5 @@ public class PutHandler extends Handler{
     private Response getResponseForUpdatedFile(File file) throws IOException {
         byte[] body =  Files.readAllBytes(Paths.get(file.getPath()));
         return new Response(ResponseStatus.OK, body, new HashMap<>());
-    }
-
-    private Response getResponseForInternalError() {
-        return new Response(ResponseStatus.INTERNAL_SERVER_ERROR, null, new HashMap<>());
     }
 }

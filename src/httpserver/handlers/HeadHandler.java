@@ -28,10 +28,10 @@ public class HeadHandler extends Handler {
     }
 
     private Response getFullResponse() {
-        return new Response(ResponseStatus.OK, null, new HashMap<>());
+        return this.getResponseBuilder().getOKResponse(null, new HashMap<>());
     }
 
     private Response getNotFoundResponse() {
-        return new Response(ResponseStatus.NOT_FOUND, null, new HashMap<>());
+        return this.getResponseBuilder().getNotFoundResponse();
     }
 }

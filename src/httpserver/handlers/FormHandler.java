@@ -33,7 +33,7 @@ public class FormHandler extends Handler {
             case DELETE:
                 return this.handleDelete(request);
             default:
-                return this.getNotFoundResponse();
+                return this.getResponseBuilder().getNotFoundResponse();
         }
     }
 
@@ -49,12 +49,12 @@ public class FormHandler extends Handler {
             String keyFromPath = this.getKeyFromFilePath(request.getPath());
             String contentOfFile = this.getFileContentConverter().getFileContentAsString(fullFilePath);
             if (contentOfFile.contains(keyFromPath)) {
-                return new Response(ResponseStatus.OK, contentOfFile.getBytes(), new HashMap<>());
+                return this.getResponseBuilder().getOKResponse(contentOfFile.getBytes(), new HashMap<>());
             } else {
-                return this.getNotFoundResponse();
+                return this.getResponseBuilder().getNotFoundResponse();
             }
         } else {
-            return this.getNotFoundResponse();
+            return this.getResponseBuilder().getNotFoundResponse();
         }
     }
 
@@ -62,14 +62,14 @@ public class FormHandler extends Handler {
         File file = this.getFileOperator().getRequestedFileByName(request, this.rootPath);
         String fullFilePath = this.rootPath + request.getPath();
         if (this.requestedFileExists(fullFilePath)) {
-            return new Response(ResponseStatus.NOT_ALLOWED, null, new HashMap<>());
+            return this.getResponseBuilder().getNotAllowedResponse();
         } else {
             try {
                 this.getFileOperator().writeToFile(file, request);
                 HashMap<ResponseHeader, String> locationHeader = this.getLocationHeader(request.getPath(), request.getBody());
-                return new Response(ResponseStatus.CREATED, null, locationHeader);
+                return this.getResponseBuilder().getCreatedResponse(locationHeader);
             } catch (IOException e) {
-                return this.getInternalErrorResponse();
+                return this.getResponseBuilder().getInternalErrorResponse();
             }
         }
     }
@@ -80,9 +80,9 @@ public class FormHandler extends Handler {
             try {
                 File file = this.getFileOperator().getRequestedFileByPath(fullFilePath);
                 this.getFileOperator().writeToFile(file, request);
-                return new Response(ResponseStatus.OK, null, new HashMap<>());
+                return this.getResponseBuilder().getOKResponse(null, new HashMap<>());
             } catch (IOException e) {
-                return this.getInternalErrorResponse();
+                return this.getResponseBuilder().getInternalErrorResponse();
             }
     }
 
@@ -92,9 +92,9 @@ public class FormHandler extends Handler {
         if (this.requestedFileExists(fullFilePath)) {
             File file = this.getFileOperator().getRequestedFileByPath(fullFilePath);
             file.delete();
-            return new Response(ResponseStatus.OK, null, new HashMap<>());
+            return this.getResponseBuilder().getOKResponse(null, new HashMap<>());
         } else {
-            return this.getNotFoundResponse();
+            return this.getResponseBuilder().getNotFoundResponse();
         }
     }
 
@@ -114,9 +114,6 @@ public class FormHandler extends Handler {
         return this.getFileOperator().fileExists(fullFilePath);
     }
 
-    private Response getNotFoundResponse() {
-        return new Response(ResponseStatus.NOT_FOUND, null, new HashMap<>());
-    }
 
     private HashMap<ResponseHeader, String> getLocationHeader(String path, String bodyOfRequest) {
         String[] partsOfFile = bodyOfRequest.split("=");
@@ -124,9 +121,5 @@ public class FormHandler extends Handler {
         return new HashMap<ResponseHeader, String>() {{
             put(ResponseHeader.LOCATION, locationString);
         }};
-    }
-
-    private Response getInternalErrorResponse() {
-        return new Response(ResponseStatus.INTERNAL_SERVER_ERROR, null, new HashMap<>());
     }
 }

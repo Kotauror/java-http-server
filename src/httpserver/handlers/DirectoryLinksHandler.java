@@ -3,7 +3,6 @@ package httpserver.handlers;
 import httpserver.request.Request;
 import httpserver.response.ResponseHeader;
 import httpserver.response.Response;
-import httpserver.response.ResponseStatus;
 import httpserver.utilities.FileType;
 import httpserver.utilities.Method;
 
@@ -25,7 +24,7 @@ public class DirectoryLinksHandler extends Handler {
         File[] files = new File(this.rootPath).listFiles();
         byte[] body = this.getBodyContent(files);
         HashMap<ResponseHeader, String> headers = this.getHeaders();
-        return new Response(ResponseStatus.OK, body, headers);
+        return this.getResponseBuilder().getOKResponse(body, headers);
     }
 
     @Override

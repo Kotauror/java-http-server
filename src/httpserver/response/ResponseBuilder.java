@@ -18,4 +18,16 @@ public class ResponseBuilder {
         }};
         return new Response(ResponseStatus.UNAUTHORIZED, null, header);
     }
+
+    public Response getNotFoundResponse() {
+        return new Response(ResponseStatus.NOT_FOUND, null, new HashMap<>());
+    }
+
+    public Response getInternalErrorResponse() {
+        return new Response(ResponseStatus.INTERNAL_SERVER_ERROR, null, new HashMap<>());
+    }
+
+    public Response getCreatedResponse(HashMap<ResponseHeader, String> headers) {
+        return new Response(ResponseStatus.CREATED, null, headers);
+    }
 }

@@ -17,7 +17,7 @@ public class MethodNotAllowedHandler extends Handler{
 
     @Override
     public Response processRequest(Request request) {
-        return new Response(ResponseStatus.NOT_ALLOWED, null, new HashMap<>());
+        return this.getResponseBuilder().getNotAllowedResponse();
     }
 
     @Override

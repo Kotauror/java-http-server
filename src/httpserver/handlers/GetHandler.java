@@ -6,7 +6,6 @@ import httpserver.utilities.FileType;
 import httpserver.utilities.Method;
 import httpserver.request.Request;
 import httpserver.response.Response;
-import httpserver.response.ResponseStatus;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,16 +25,16 @@ public class GetHandler extends Handler{
 
     @Override
     public Response processRequest(Request request) throws IOException {
-        return (this.getFileOperator().fileExistsOnPath(request, this.rootPath)) ? this.getResponse(request) : this.getNotFoundResponse();
+        if (this.getFileOperator().fileExistsOnPath(request, this.rootPath)) {
+            return this.getResponse(request);
+        } else {
+            return this.getResponseBuilder().getNotFoundResponse();
+        }
     }
 
     @Override
     public boolean coversPathFromRequest(Request request) {
        return true;
-    }
-
-    private Response getNotFoundResponse() {
-        return new Response(ResponseStatus.NOT_FOUND, null, new HashMap<>());
     }
 
     private Response getResponse(Request request) throws IOException {
@@ -53,7 +52,7 @@ public class GetHandler extends Handler{
         HashMap<ResponseHeader, String> headers = new HashMap<ResponseHeader, String>() {{
             put(ResponseHeader.CONTENT_TYPE, fileType.value());
         }};
-        return new Response(ResponseStatus.OK, body, headers);
+        return this.getResponseBuilder().getOKResponse(body, headers);
     }
 
     private boolean isRangeRequest(Request request) {
