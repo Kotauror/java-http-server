@@ -10,10 +10,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.LinkedHashMap;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -21,37 +19,33 @@ import static org.junit.Assert.assertFalse;
 public class DeleteHandlerTests {
 
     private String rootPath;
-    private LinkedHashMap<String, String> headers;
-    private String httpVersion;
-    private String path;
-    private PutHandler putHandler;
+    private String pathOfFileToBeDeleted;
+    private DeleteHandler deleteHandler;
 
     @Before
-    public void setupAndAddFile() {
+    public void setupTestAndCreateFileToBeLaterDeleted() {
         rootPath = "src/httpserver/utilities/sampleTestFiles";
-        httpVersion = "HTTP/1.1";
-        headers = new LinkedHashMap<>();
-        path = "/filetesting";
-
-        putHandler = new PutHandler(rootPath);
-        Request request = new Request(Method.GET, path, httpVersion, headers, "Some content");
+        pathOfFileToBeDeleted = "/filetesting";
+        PutHandler putHandler = new PutHandler(rootPath);
+        Request request = new Request(Method.GET, pathOfFileToBeDeleted, null, null, "Some content");
         putHandler.processRequest(request);
+        deleteHandler = new DeleteHandler(rootPath);
     }
 
     @Test
-    public void returnsNotFoundWhenDoestExist() {
+    public void returnsNotFoundWhen_RequestedFileDoestExist() {
         String nonExistingPath = "/hehehhehhehehe";
-        Request request = new Request(Method.DELETE, nonExistingPath, httpVersion, headers, "Some content");
-        DeleteHandler deleteHandler = new DeleteHandler(rootPath);
+        Request request = new Request(Method.DELETE, nonExistingPath, null, null, "Some content");
+
         Response response = deleteHandler.processRequest(request);
 
         assertEquals(ResponseStatus.NOT_FOUND, response.getStatus());
     }
 
     @Test
-    public void deletesFileWhenItExists() {
-        Request request = new Request(Method.DELETE, path, httpVersion, headers, "Some content");
-        DeleteHandler deleteHandler = new DeleteHandler(rootPath);
+    public void deletesFile_WhenTheFileExists() {
+        Request request = new Request(Method.DELETE, pathOfFileToBeDeleted, null, null, "Some content");
+
         Response response = deleteHandler.processRequest(request);
 
         assertFalse(Files.exists(Paths.get(rootPath + request.getPath())));
@@ -60,7 +54,6 @@ public class DeleteHandlerTests {
 
     @After
     public void deleteCreatedFiles() {
-        File file = putHandler.getFileOperator().getRequestedFile(this.rootPath + "/filetesting");
-        file.delete();
+        deleteHandler.getFileOperator().deleteFile(this.rootPath + pathOfFileToBeDeleted);
     }
 }
