@@ -26,7 +26,7 @@ public class RangeRequestResponder {
     }
 
     public Response getRangeResponse(Request request) throws IOException {
-        int lengthOfRequestedFile = this.fileOperator.getLengthOfFileContent(request, this.rootPath);
+        int lengthOfRequestedFile = this.fileOperator.getLengthOfFileContent(request.getPath(), this.rootPath);
         String requestedRangeString = request.getHeaders().get("Range").toString();
         HashMap<String, String> rangeLimits = this.getRangeLimits(requestedRangeString, lengthOfRequestedFile);
 
@@ -82,7 +82,7 @@ public class RangeRequestResponder {
     }
 
     private Response getSuccessfulRangeResponse(Request request, HashMap<String, String> rangeLimits, int lengthOfRequestedFile) throws IOException {
-        File file = this.fileOperator.getRequestedFileByName(request, this.rootPath);
+        File file = this.fileOperator.getRequestedFile(request.getPath(), this.rootPath);
         byte[] body = this.getPartOfFileContent(rangeLimits, file);
         FileType fileType = this.fileTypeDecoder.getFileType(request.getPath());
         String contentRangeHeader = this.getContentRangeHeader(lengthOfRequestedFile, rangeLimits);

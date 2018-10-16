@@ -22,7 +22,7 @@ public class PatchHandler extends Handler {
         File file;
         byte[] fileContent;
         try {
-            file = this.getFileOperator().getRequestedFileByName(request, this.rootPath);
+            file = this.getFileOperator().getRequestedFile(request.getPath(), this.rootPath);
             fileContent = this.getFileContentConverter().getFileContentFromFile(file);
         } catch (IOException e) {
             return this.getResponseBuilder().getNotFoundResponse();

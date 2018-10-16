@@ -50,7 +50,7 @@ public class GetHandler extends Handler{
     }
 
     private Response getFullResponse(Request request) throws IOException {
-        File file = this.getFileOperator().getRequestedFileByName(request, this.rootPath);
+        File file = this.getFileOperator().getRequestedFile(request.getPath(), this.rootPath);
         byte[] body = this.getFileContentConverter().getFileContentFromFile(file);
         FileType fileType = this.getFileTypeDecoder().getFileType(file.getName());
         HashMap<ResponseHeader, String> headers = new HashMap<ResponseHeader, String>() {{

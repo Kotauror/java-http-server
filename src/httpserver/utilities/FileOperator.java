@@ -9,12 +9,8 @@ import java.nio.file.Paths;
 
 public class FileOperator {
 
-    public File getRequestedFileByName(Request request, String rootPath) {
-        return new File(rootPath + "/" + request.getPath());
-    }
-
-    public File getRequestedFileByPath(String path) {
-        return new File(path);
+    public File getRequestedFile(String filePath, String rootPath) {
+        return new File(rootPath + "/" + filePath);
     }
 
     public boolean fileExistsOnPath(Request request, String rootPath) {
@@ -29,8 +25,8 @@ public class FileOperator {
         Files.write(Paths.get(file.getPath()), request.getBody().getBytes());
     }
 
-    public int getLengthOfFileContent(Request request, String rootPath) throws IOException {
-        File file = new File(rootPath + "/" + request.getPath());
+    public int getLengthOfFileContent(String filePath, String rootPath) throws IOException {
+        File file = new File(rootPath + "/" + filePath);
         byte[] fileContent = Files.readAllBytes(file.toPath());
         return fileContent.length;
     }
