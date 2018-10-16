@@ -14,7 +14,7 @@ import java.util.LinkedHashMap;
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class headHandlerTests {
+public class HeadHandlerTests {
 
     private HeadHandler headHandler;
     private Request request;

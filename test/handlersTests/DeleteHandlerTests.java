@@ -18,7 +18,7 @@ import java.util.LinkedHashMap;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
-public class deleteHandlerTests {
+public class DeleteHandlerTests {
 
     private String rootPath;
     private LinkedHashMap<String, String> headers;

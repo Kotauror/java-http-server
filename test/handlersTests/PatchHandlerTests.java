@@ -16,7 +16,7 @@ import java.util.LinkedHashMap;
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertArrayEquals;
 
-public class patchHandlerTests {
+public class PatchHandlerTests {
 
     private PatchHandler patchHandler;
     private String rootPath;

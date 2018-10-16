@@ -12,7 +12,7 @@ import java.util.LinkedHashMap;
 
 import static junit.framework.Assert.assertEquals;
 
-public class redirectHandlerTests {
+public class RedirectHandlerTests {
 
     private RedirectHandler redirectHandler;
 

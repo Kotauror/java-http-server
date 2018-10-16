@@ -18,7 +18,7 @@ import java.util.LinkedHashMap;
 
 import static org.junit.Assert.assertTrue;
 
-public class postHandlerTests {
+public class PostHandlerTests {
 
     private String rootPath;
     private String httpVersion;

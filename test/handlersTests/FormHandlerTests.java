@@ -22,7 +22,7 @@ import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertFalse;
 
-public class formHandlerTests {
+public class FormHandlerTests {
 
     private String rootPath;
     private FormHandler formHandler;

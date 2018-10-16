@@ -13,7 +13,7 @@ import java.util.LinkedHashMap;
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertArrayEquals;
 
-public class parametersHandlerTests {
+public class ParametersHandlerTests {
 
     private ParametersHandler parametersHandler;
 

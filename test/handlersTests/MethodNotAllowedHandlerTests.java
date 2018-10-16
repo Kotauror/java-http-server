@@ -11,7 +11,7 @@ import java.util.LinkedHashMap;
 
 import static junit.framework.Assert.assertEquals;
 
-public class methodNotAllowedHandlerTests {
+public class MethodNotAllowedHandlerTests {
 
     @Test
     public void returnsStatusNotAllowed() {

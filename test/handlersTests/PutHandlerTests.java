@@ -19,7 +19,7 @@ import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class putHandlerTests {
+public class PutHandlerTests {
 
     private PutHandler putHandler;
     private String rootPath;

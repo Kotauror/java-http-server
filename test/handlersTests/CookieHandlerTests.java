@@ -13,7 +13,7 @@ import java.util.LinkedHashMap;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
-public class cookieHandlerTests {
+public class CookieHandlerTests {
 
     private CookieHandler cookieHandler;
 

@@ -14,7 +14,7 @@ import java.util.LinkedHashMap;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
-public class basicAuthTests {
+public class BasicAuthTests {
 
     private BasicAuthHandler basicAuthHandler;
     private String httpVersion;

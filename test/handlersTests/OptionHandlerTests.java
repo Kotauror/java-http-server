@@ -12,7 +12,7 @@ import java.util.LinkedHashMap;
 
 import static org.junit.Assert.assertEquals;
 
-public class optionHandlerTests {
+public class OptionHandlerTests {
 
     private OptionHandler optionHandler;
     private String httpVersion;
