@@ -39,7 +39,6 @@ public class FormHandlerTests {
         pathForFileCreatedForTestingDelete = "/anotherTestFile";
     }
 
-
     @Test
     public void onHandleGet_WhenFileDoesNotExist_ReturnStatus404() {
         String path = "/testtes/datataTest";
@@ -133,9 +132,7 @@ public class FormHandlerTests {
 
     @After
     public void deleteCreatedFile() {
-        File file = formHandler.getFileOperator().getRequestedFile(rootPath + pathForFileCreatedForTestingDelete);
-        file.delete();
-        File file2 = formHandler.getFileOperator().getRequestedFile(rootPath + pathForFileCreatedOnPost);
-        file2.delete();
+        formHandler.getFileOperator().deleteFile(rootPath + pathForFileCreatedForTestingDelete);
+        formHandler.getFileOperator().deleteFile(rootPath + pathForFileCreatedOnPost);
     }
 }

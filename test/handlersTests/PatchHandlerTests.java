@@ -30,7 +30,7 @@ public class PatchHandlerTests {
     }
 
     @Test
-    public void patchHandlerReturnsResponseWith412WhenNoIfMatchHeader() {
+    public void whenNoIfMatchHeader_ReturnsStatus412() {
         LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {};
         Request request = new Request(Method.PATCH, patchFileName, null, headers, null);
 
@@ -40,7 +40,7 @@ public class PatchHandlerTests {
     }
 
     @Test
-    public void patchHandlerReturnsResponseWith404WhenFileNotFound() {
+    public void whenRequestedFileNotFound_ReturnsStatus404() {
         String path = "/nonExistingTestFilehehehe";
         LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {};
         Request request = new Request(Method.PATCH, path, null, headers, null);
@@ -51,9 +51,9 @@ public class PatchHandlerTests {
     }
 
     @Test
-    public void patchHandlerReturnsResponseWith412WhenShaOfFileDoesNotMatchIfMatch() {
+    public void whenIfMatchHeaderAndFilePresentButSHAOfRequestedFileDoesNotMatchIfMatchHeader_ReturnStatus412() {
         LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
-            put("If-Match", "kotekowyTest");
+            put("If-Match", "kotekowyTestInvalid");
         }};
         Request request = new Request(Method.PATCH, patchFileName, null, headers, null);
 
@@ -63,22 +63,25 @@ public class PatchHandlerTests {
     }
 
     @Test
-    public void patchChangesFileAndReturnsStatusNoContent() throws IOException {
-        String httpVersion = "HTTP/1.1";
-        String shaForFile = this.getShaForFilePath(patchFileName);
-        LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
-            put("If-Match", shaForFile);
-        }};
-        String contentToPath = "patched content";
-        Request request = new Request(Method.PATCH, patchFileName, httpVersion, headers, contentToPath);
-        File file = patchHandler.getFileOperator().getRequestedFile(rootPath + patchFileName);
+    public void updatesFileOnPatchWhenFileExistsAndSHAMatch_andReturnStatus204() throws IOException {
+        String contentToPatch = "patched content";
+        Request request = this.getAValidRequest(contentToPatch);
+        File requestedFile = patchHandler.getFileOperator().getRequestedFile(rootPath + patchFileName);
 
         Response response = patchHandler.processRequest(request);
 
-        byte[] fileContent = patchHandler.getFileContentConverter().getFileContentFromFile(file);
-        assertArrayEquals(fileContent, contentToPath.getBytes());
+        byte[] fileContent = patchHandler.getFileContentConverter().getFileContentFromFile(requestedFile);
+        assertArrayEquals(fileContent, contentToPatch.getBytes());
         assertEquals(ResponseStatus.NO_CONTENT, response.getStatus());
-        assertArrayEquals(contentToPath.getBytes(), response.getBodyContent());
+        assertArrayEquals(contentToPatch.getBytes(), response.getBodyContent());
+    }
+
+    private Request getAValidRequest(String contentToPath) throws IOException {
+        String shaOfRequestedFile = this.getShaForFilePath(patchFileName);
+        LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
+            put("If-Match", shaOfRequestedFile);
+        }};
+        return new Request(Method.PATCH, patchFileName, null, headers, contentToPath);
     }
 
     private String getShaForFilePath(String path) throws IOException {
@@ -88,9 +91,8 @@ public class PatchHandlerTests {
     }
 
     @After
-    public void revertFileContent() throws IOException {
-        Request request = new Request(Method.PATCH, null, null, null, "default content");
+    public void revertPatch() throws IOException {
         File file = patchHandler.getFileOperator().getRequestedFile(rootPath + patchFileName);
-        patchHandler.getFileOperator().writeToFile(file, request.getBody());
+        patchHandler.getFileOperator().writeToFile(file, "default content");
     }
 }

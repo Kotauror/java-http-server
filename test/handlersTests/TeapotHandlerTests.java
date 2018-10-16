@@ -23,12 +23,12 @@ public class TeapotHandlerTests {
     }
 
     @Test
-    public void returns418WHenPathEqualsCoffee() {
-        String httpVersion = "HTTP/1.1";
+    public void whenPathEqualsCoffee_ReturnsStatus418() {
         LinkedHashMap<String, String> headers = new LinkedHashMap<>();
         String path = "/coffee";
-        Request request = new Request(Method.GET, path, httpVersion, headers, null);
+        Request request = new Request(Method.GET, path, null, headers, null);
         byte[] expectedBody = "I'm a teapot".getBytes();
+
         Response response = teapotHandler.processRequest(request);
 
         assertEquals(ResponseStatus.TEAPOT, response.getStatus());
@@ -36,11 +36,10 @@ public class TeapotHandlerTests {
     }
 
     @Test
-    public void returns418WHenPathEqualsTee() {
-        String httpVersion = "HTTP/1.1";
+    public void whenPathEqualsTee_ReturnsStatus418() {
         LinkedHashMap<String, String> headers = new LinkedHashMap<>();
         String path = "/tea";
-        Request request = new Request(Method.GET, path, httpVersion, headers, null);
+        Request request = new Request(Method.GET, path, null, headers, null);
 
         Response response = teapotHandler.processRequest(request);
 

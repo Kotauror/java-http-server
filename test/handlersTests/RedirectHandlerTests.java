@@ -22,11 +22,10 @@ public class RedirectHandlerTests {
     }
 
     @Test
-    public void returnsResponseWIthStatus302() {
+    public void onPathLogs_ReturnsStatus302() {
         String path = "/logs";
-        String httpVersion = "HTTP/1.1";
         LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {};
-        Request request = new Request(Method.GET, path, httpVersion, headers, null);
+        Request request = new Request(Method.GET, path, null, headers, null);
 
         Response response = redirectHandler.processRequest(request);
 

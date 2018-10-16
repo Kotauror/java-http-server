@@ -17,13 +17,8 @@ public class MethodNotAllowedHandlerTests {
     public void returnsStatusNotAllowed() {
         MethodNotAllowedHandler methodNotAllowedHandler = new MethodNotAllowedHandler();
         String path = "/testFile.txt";
-        String httpVersion = "HTTP/1.1";
-        LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
-            put("Host", "localhost");
-            put("Accept-Language", "en-US");
-        }};
-        String body = "example body";
-        Request request = new Request(Method.INVALID, path, httpVersion, headers, body);
+        LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>(){};
+        Request request = new Request(Method.INVALID, path, null, headers, null);
 
         Response response = methodNotAllowedHandler.processRequest(request);
 

@@ -23,62 +23,60 @@ public class PutHandlerTests {
 
     private PutHandler putHandler;
     private String rootPath;
-    private String httpVersion;
     private LinkedHashMap<String, String> headers;
     private String body;
+    private String pathToNewFile1;
+    private String pathToNewFile2;
 
     @Before
     public void setup() {
         rootPath = "src/httpserver/utilities/sampleTestFiles";
         putHandler = new PutHandler(rootPath);
-        httpVersion = "HTTP/1.1";
         headers = new LinkedHashMap<>();
         body = "example body";
+        pathToNewFile1 = "/filetesting";
+        pathToNewFile2 = "/fileToUpdate";
     }
 
     @Test
-    public void returnsTrueWhenPathIsCovered() {
+    public void coversPath_when_PathIsValid_ReturnTrue() {
         String path = "src/httpserver/utilities/testFile";
-        Request request = new Request(Method.GET, path, httpVersion, headers, body);
+        Request request = new Request(Method.GET, path, null, headers, body);
 
         assertTrue(putHandler.coversPathFromRequest(request));
     }
 
     @Test
-    public void createsANewFileWithContent() throws IOException {
-        String path = "/filetesting";
-        Request request = new Request(Method.GET, path, httpVersion, headers, "Some content");
-        Response response = putHandler.processRequest(request);
-        String contentOfFile = new String(Files.readAllBytes(Paths.get("src/httpserver/utilities/sampleTestFiles/filetesting")));
+    public void whenFileDoesNotExist_createsANewFile_ReturnsStatus201() throws IOException {
+        this.createFileToExecutePutUpon(pathToNewFile1);
+//
+        String contentOfFile = new String(Files.readAllBytes(Paths.get(rootPath + pathToNewFile1)));
 
-        assertTrue(Files.exists(Paths.get(rootPath + request.getPath())));
+        assertTrue(Files.exists(Paths.get(rootPath + pathToNewFile1)));
         assertEquals("Some content", contentOfFile);
-        assertEquals(ResponseStatus.CREATED, response.getStatus());;
     }
 
     @Test
-    public void updatesAContentOfExistingFile() throws IOException {
-        String path = "/fileToUpdate";
-        Request request = new Request(Method.GET, path, httpVersion, headers, "Some content");
-        putHandler.processRequest(request);
-        Request request2 = new Request(Method.GET, path, httpVersion, headers, "Some updated content");
-        Response response = putHandler.processRequest(request2);
-        String contentOfFile = new String(Files.readAllBytes(Paths.get("src/httpserver/utilities/sampleTestFiles/fileToUpdate")));
+    public void whenFileExists_updatesAContentOfExistingFile_ReturnsStatus200() throws IOException {
+        this.createFileToExecutePutUpon(pathToNewFile2);
+        Request request2 = new Request(Method.GET, pathToNewFile2, null, headers, "Some updated content");
 
-        assertTrue(Files.exists(Paths.get(rootPath + request.getPath())));
+        Response response = putHandler.processRequest(request2);
+
+        String contentOfFile = new String(Files.readAllBytes(Paths.get("src/httpserver/utilities/sampleTestFiles" + pathToNewFile2)));
+        assertTrue(Files.exists(Paths.get(rootPath + pathToNewFile2)));
         assertEquals("Some updated content", contentOfFile);
         assertEquals(ResponseStatus.OK, response.getStatus());
     }
 
+    private void createFileToExecutePutUpon(String nameOfFile) {
+        Request request = new Request(Method.GET, nameOfFile, null, headers, "Some content");
+        putHandler.processRequest(request);
+    }
+
     @After
-    public void deleteOutputFile() {
-        File folder = new File("src/httpserver/utilities/sampleTestFiles");
-        File[] listOfFiles = folder.listFiles();
-        for(int i = 0; i < listOfFiles.length; i++){
-            File file = listOfFiles[i];
-            if (file.getName().equals("filetesting") || file.getName().equals("fileToUpdate")){
-                file.delete();
-            }
-        }
+    public void deleteCreatedFiles() {
+        putHandler.getFileOperator().deleteFile(rootPath + pathToNewFile1);
+        putHandler.getFileOperator().deleteFile(rootPath + pathToNewFile2);
     }
 }
