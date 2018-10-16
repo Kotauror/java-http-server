@@ -84,7 +84,7 @@ public class patchHandlerTests {
     private String getShaForFilePath(String path) throws IOException {
         File file = patchHandler.getFileOperator().getRequestedFile(rootPath + path);
         byte[] fileContent = patchHandler.getFileContentConverter().getFileContentFromFile(file);
-        return patchHandler.getEncoder().getHash(fileContent, "SHA-1");
+        return patchHandler.getEncoder().encode(fileContent, "SHA-1");
     }
 
     @After

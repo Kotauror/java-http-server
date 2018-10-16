@@ -27,7 +27,7 @@ public class PatchHandler extends Handler {
         } catch (IOException e) {
             return this.getResponseBuilder().getNotFoundResponse();
         }
-        String actualShaOfRequestedFile = this.getEncoder().getHash(fileContent, "SHA-1");
+        String actualShaOfRequestedFile = this.getEncoder().encode(fileContent, "SHA-1");
         if (this.isValidPatchRequest(request, actualShaOfRequestedFile)) {
             return this.processValidPatchRequest(request, file);
         } else {

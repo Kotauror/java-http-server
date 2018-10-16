@@ -21,7 +21,7 @@ public class EncoderTests {
         String algorithm = "SHA-1";
         String expectedHash = "a9993e364706816aba3e25717850c26c9cd0d89d";
 
-        String actualHash = encoder.getHash(byteArray, algorithm);
+        String actualHash = encoder.encode(byteArray, algorithm);
 
         assertEquals(expectedHash, actualHash);
     }
@@ -32,7 +32,7 @@ public class EncoderTests {
         String algorithm = "SHA-1DoestExist";
         String expectedHash = null;
 
-        String actualHash = encoder.getHash(byteArray, algorithm);
+        String actualHash = encoder.encode(byteArray, algorithm);
 
         assertEquals(actualHash, expectedHash);
     }
