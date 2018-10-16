@@ -26,21 +26,24 @@ public class FormHandlerTests {
 
     private String rootPath;
     private FormHandler formHandler;
-    private String catFormFilePath;
+    private String pathForFileUpdatedOnPut;
+    private String pathForFileCreatedOnPost;
+    private String pathForFileCreatedForTestingDelete;
 
     @Before
     public void setup() {
         rootPath = "src/httpserver/utilities/sampleTestFiles";
         formHandler = new FormHandler(rootPath);
-        catFormFilePath = "/cat-form";
+        pathForFileUpdatedOnPut = "/cat-form";
+        pathForFileCreatedOnPost = "/samplesample";
+        pathForFileCreatedForTestingDelete = "/anotherTestFile";
     }
 
 
     @Test
-    public void onHandleGetWhenFileDoesntExistReturn404() throws IOException {
-        String path = "/testtes/datat";
-        String httpVersion = "HTTP/1.1";
-        Request request = new Request(Method.GET, path, httpVersion, null,null);
+    public void onHandleGet_WhenFileDoesNotExist_ReturnStatus404() {
+        String path = "/testtes/datataTest";
+        Request request = new Request(Method.GET, path, null, null,null);
 
         Response response = formHandler.processRequest(request);
 
@@ -48,10 +51,9 @@ public class FormHandlerTests {
     }
 
     @Test
-    public void onHandleGetWhenFileHasNoRequestedContentReturn404() throws IOException {
+    public void onHandleGet_WhenFileExistsButHasNoRequestedContent_ReturnStatus404() {
         String path = "/empty-form/data";
-        String httpVersion = "HTTP/1.1";
-        Request request = new Request(Method.GET, path, httpVersion, null,null);
+        Request request = new Request(Method.GET, path, null, null,null);
 
         Response response = formHandler.processRequest(request);
 
@@ -59,11 +61,10 @@ public class FormHandlerTests {
     }
 
     @Test
-    public void onHandleGetWhenFileHasContentReturnStatusOK() throws IOException {
+    public void onHandleGet_WhenFileExistsAndHasContent_ReturnStatusOK() {
         String path = "/form-with-data/data";
-        String httpVersion = "HTTP/1.1";
         byte[] expectedBody = "data=koteczek".getBytes();
-        Request request = new Request(Method.GET, path, httpVersion, null,null);
+        Request request = new Request(Method.GET, path, null, null,null);
 
         Response response = formHandler.processRequest(request);
 
@@ -72,24 +73,22 @@ public class FormHandlerTests {
     }
 
     @Test
-    public void onHandlePostRequestReturnsStatus201WhenFileDoesNotExistAndActionsIsSuccess() throws IOException {
-        String httpVersion = "HTTP/1.1";
+    public void onHandlePost_WhenFileDoesNotAlreadyExistAndActionIsSuccessful_ReturnStatus201() throws IOException {
         String body = "data=fatcat";
-        Request request = new Request(Method.POST, "/samplesample", httpVersion, null,body);
+        Request request = new Request(Method.POST, pathForFileCreatedOnPost, null, null, body);
 
         Response response = formHandler.processRequest(request);
 
-        String contentOfFile = new String(Files.readAllBytes(Paths.get("src/httpserver/utilities/sampleTestFiles" + "/samplesample")));
+        String contentOfFile = new String(Files.readAllBytes(Paths.get("src/httpserver/utilities/sampleTestFiles" + pathForFileCreatedOnPost)));
         assertEquals(ResponseStatus.CREATED, response.getStatus());
-        assertEquals("data=fatcat", contentOfFile);
-        assertEquals("/samplesample" + "/data", response.getHeaders().get(ResponseHeader.LOCATION.toString()));
+        assertEquals(body, contentOfFile);
+        assertEquals(pathForFileCreatedOnPost + "/data", response.getHeaders().get(ResponseHeader.LOCATION.toString()));
     }
 
     @Test
-    public void onHandlePostRequestReturnsStatus405WhenFileExists() throws IOException {
-        String httpVersion = "HTTP/1.1";
+    public void onHandlePost_WhenFileAlreadyExists_ReturnsStatus405() {
         String body = "data=fatcat";
-        Request request = new Request(Method.POST, "/empty-form", httpVersion, null,body);
+        Request request = new Request(Method.POST, "/empty-form", null, null, body);
 
         Response response = formHandler.processRequest(request);
 
@@ -97,38 +96,36 @@ public class FormHandlerTests {
     }
 
     @Test
-    public void onHandlePutRequestReturnsStatus200WhenFileExists() throws IOException {
-        String httpVersion = "HTTP/1.1";
+    public void onHandlePut_WhenFileExistsAndChanged_ReturnsStatus200() throws IOException {
         String body = "data=tabbycat";
-        Request request = new Request(Method.PUT, "/cat-form/data", httpVersion, null,body);
+        Request request = new Request(Method.PUT, pathForFileUpdatedOnPut + "/data", null, null, body);
 
         Response response = formHandler.processRequest(request);
 
-        String contentOfFile = new String(Files.readAllBytes(Paths.get("src/httpserver/utilities/sampleTestFiles/cat-form")));
+        String contentOfFile = new String(Files.readAllBytes(Paths.get("src/httpserver/utilities/sampleTestFiles" + pathForFileUpdatedOnPut)));
         assertEquals(ResponseStatus.OK, response.getStatus());
-        assertEquals("data=tabbycat", contentOfFile);
+        assertEquals(body, contentOfFile);
     }
 
     @Test
-    public void onDeleteRequestDeletesContentOfFileANdReturnsStatus200() throws IOException {
+    public void onDeleteRequest_WhenDeletesContentOfFile_ReturnsStatus200() {
         // Create file to be deleted
-        String path = "/anotherTestFile";
-        Request request = new Request(Method.GET, path, "", null, "data=hihiihih");
+        Request request = new Request(Method.GET, pathForFileCreatedForTestingDelete, null, null, "data=hihiihih");
         PutHandler putHandler = new PutHandler(rootPath);
         putHandler.processRequest(request);
 
         // request to delete the file
         String httpVersion = "HTTP/1.1";
-        Request requestToDelete = new Request(Method.DELETE, "/anotherTestFile", httpVersion, null,null);
+        Request requestToDelete = new Request(Method.DELETE, pathForFileCreatedForTestingDelete, httpVersion, null,null);
         Response response = formHandler.processRequest(requestToDelete);
 
-        assertFalse(Files.exists(Paths.get(rootPath + "anotherTestFile")));
+        assertFalse(Files.exists(Paths.get(rootPath + pathForFileCreatedForTestingDelete)));
         assertEquals(ResponseStatus.OK, response.getStatus());
     }
 
     @After
     public void emptyOverwrittenFile() throws FileNotFoundException {
-        File file = formHandler.getFileOperator().getRequestedFile(rootPath + catFormFilePath);
+        File file = formHandler.getFileOperator().getRequestedFile(rootPath + pathForFileUpdatedOnPut);
         PrintWriter writer = new PrintWriter(file);
         writer.print("");
         writer.close();
@@ -136,9 +133,9 @@ public class FormHandlerTests {
 
     @After
     public void deleteCreatedFile() {
-        File file = formHandler.getFileOperator().getRequestedFile(rootPath + "/anotherTestFile");
+        File file = formHandler.getFileOperator().getRequestedFile(rootPath + pathForFileCreatedForTestingDelete);
         file.delete();
-        File file2 = formHandler.getFileOperator().getRequestedFile(rootPath + "/samplesample");
+        File file2 = formHandler.getFileOperator().getRequestedFile(rootPath + pathForFileCreatedOnPost);
         file2.delete();
     }
 }
