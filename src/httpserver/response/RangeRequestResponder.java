@@ -26,7 +26,7 @@ public class RangeRequestResponder {
     }
 
     public Response getRangeResponse(Request request) throws IOException {
-        int lengthOfRequestedFile = this.fileOperator.getLengthOfFileContent(request.getPath(), this.rootPath);
+        int lengthOfRequestedFile = this.fileOperator.getLengthOfFileContent(this.rootPath + request.getPath());
         String requestedRangeString = request.getHeaders().get("Range").toString();
         HashMap<String, String> rangeLimits = this.getRangeLimits(requestedRangeString, lengthOfRequestedFile);
 

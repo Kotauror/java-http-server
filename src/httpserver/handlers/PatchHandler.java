@@ -46,7 +46,7 @@ public class PatchHandler extends Handler {
 
     private Response processValidPatchRequest(Request request, File file) {
         try {
-            this.getFileOperator().writeToFile(file, request);
+            this.getFileOperator().writeToFile(file, request.getBody());
             return this.getResponseBuilder().getNoContentResponse(request.getBody().getBytes());
         } catch (IOException e) {
             return this.getResponseBuilder().getInternalErrorResponse();

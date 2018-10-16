@@ -29,7 +29,7 @@ public class PostHandler extends Handler {
             return this.getResponseBuilder().getNotAllowedResponse();
         } else {
             try {
-                this.getFileOperator().writeToFile(file, request);
+                this.getFileOperator().writeToFile(file, request.getBody());
                 return this.getResponseForCreatingFile(file, request);
             } catch (IOException e) {
                 return this.getResponseBuilder().getInternalErrorResponse();

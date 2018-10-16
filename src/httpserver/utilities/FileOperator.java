@@ -1,7 +1,5 @@
 package httpserver.utilities;
 
-import httpserver.request.Request;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,32 +7,32 @@ import java.nio.file.Paths;
 
 public class FileOperator {
 
-    public File getRequestedFile(String path) {
-        return new File(path);
+    public File getRequestedFile(String fullFilePath) {
+        return new File(fullFilePath);
     }
 
-    public boolean fileExists(String path) {
-        return Files.exists(Paths.get(path));
+    public boolean fileExists(String fullFilePath) {
+        return Files.exists(Paths.get(fullFilePath));
     }
 
-    public void writeToFile(File file, Request request) throws IOException {
-        Files.write(Paths.get(file.getPath()), request.getBody().getBytes());
+    public void writeToFile(File file, String content) throws IOException {
+        Files.write(Paths.get(file.getPath()),content.getBytes());
     }
 
-    public int getLengthOfFileContent(String filePath, String rootPath) throws IOException {
-        File file = new File(rootPath + "/" + filePath);
+    public int getLengthOfFileContent(String fullFilePath) throws IOException {
+        File file = new File(fullFilePath);
         byte[] fileContent = Files.readAllBytes(file.toPath());
         return fileContent.length;
     }
 
-    public void deleteFile(String fileName, String rootPath) {
-        File file = new File(rootPath + "/" + fileName);
+    public void deleteFile(String fullFilePath) {
+        File file = new File(fullFilePath);
         file.delete();
     }
 
     public String removeKeyFromPathIfExists(String fullPath) {
         String[] partsOfPath = fullPath.split("/");
-        if (this.keyDoesntExist(partsOfPath)) {
+        if (this.keyDoesNotExist(partsOfPath)) {
             return "/" + partsOfPath[1];
         } else {
             int lengthOfKeyInPath = partsOfPath[partsOfPath.length-1].length();
@@ -43,7 +41,7 @@ public class FileOperator {
         }
     }
 
-    private boolean keyDoesntExist(String[] partsOfPath) {
+    private boolean keyDoesNotExist(String[] partsOfPath) {
         return partsOfPath.length == 2;
     }
 }

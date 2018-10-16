@@ -62,7 +62,6 @@ public class patchHandlerTests {
         assertEquals(ResponseStatus.PRECONDITION_FAILED, response.getStatus());
     }
 
-
     @Test
     public void patchChangesFileAndReturnsStatusNoContent() throws IOException {
         String httpVersion = "HTTP/1.1";
@@ -92,6 +91,6 @@ public class patchHandlerTests {
     public void revertFileContent() throws IOException {
         Request request = new Request(Method.PATCH, null, null, null, "default content");
         File file = patchHandler.getFileOperator().getRequestedFile(rootPath + patchFileName);
-        patchHandler.getFileOperator().writeToFile(file, request);
+        patchHandler.getFileOperator().writeToFile(file, request.getBody());
     }
 }

@@ -26,10 +26,10 @@ public class PutHandler extends Handler{
         File file = this.getFileOperator().getRequestedFile(this.rootPath + fileName);
         try {
             if (this.getFileOperator().fileExists(this.rootPath + fileName)) {
-                this.getFileOperator().writeToFile(file, request);
+                this.getFileOperator().writeToFile(file, request.getBody());
                 return this.getResponseForUpdatedFile(file);
             } else {
-                this.getFileOperator().writeToFile(file, request);
+                this.getFileOperator().writeToFile(file, request.getBody());
                 return this.getResponseForCreatedFile(file);
             }
         } catch (IOException e) {
