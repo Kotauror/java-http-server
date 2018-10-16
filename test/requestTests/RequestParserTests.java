@@ -56,7 +56,7 @@ public class RequestParserTests {
         assertEquals("http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages", request.getPath());
         assertEquals("HTTP/1.1", request.getHttpVersion());
         assertEquals(headers, request.getHeaders());
-        assertEquals("", request.getBody());
+        assertEquals(null, request.getBody());
     }
 
     @Test
@@ -74,7 +74,7 @@ public class RequestParserTests {
         assertEquals("http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages", request.getPath());
         assertEquals("HTTP/1.1", request.getHttpVersion());
         assertEquals(headers, request.getHeaders());
-        assertEquals("", request.getBody());
+        assertEquals(null, request.getBody());
     }
 
     @Test
@@ -98,7 +98,7 @@ public class RequestParserTests {
         assertEquals("/file1", request.getPath());
         assertEquals("HTTP/1.1", request.getHttpVersion());
         assertEquals(headers, request.getHeaders());
-        assertEquals("", request.getBody());
+        assertEquals(null, request.getBody());
     }
 
     @Test
