@@ -21,7 +21,7 @@ public class DeleteHandler extends Handler {
         String fileName = this.getFileOperator().removeKeyFromPathIfExists(request.getPath());
         String fullFilePath = this.rootPath + fileName;
         if (this.getFileOperator().fileExists(fullFilePath)) {
-            this.getFileOperator().deleteFile(fileName, this.rootPath);
+            this.getFileOperator().deleteFile(fullFilePath);
             return this.getResponseBuilder().getOKResponse(null, new HashMap<>());
         } else {
             return this.getResponseBuilder().getNotFoundResponse();

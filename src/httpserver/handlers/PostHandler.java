@@ -24,12 +24,12 @@ public class PostHandler extends Handler {
 
     @Override
     public Response processRequest(Request request) {
-        File file = this.getFileOperator().getRequestedFileByName(request, this.rootPath);
-        if (this.getFileOperator().fileExistsOnPath(request, this.rootPath)) {
+        File file = this.getFileOperator().getRequestedFile(this.rootPath + request.getPath());
+        if (this.getFileOperator().fileExists(this.rootPath + request.getPath())) {
             return this.getResponseBuilder().getNotAllowedResponse();
         } else {
             try {
-                this.getFileOperator().writeToFile(file, request);
+                this.getFileOperator().writeToFile(file, request.getBody());
                 return this.getResponseForCreatingFile(file, request);
             } catch (IOException e) {
                 return this.getResponseBuilder().getInternalErrorResponse();
@@ -47,7 +47,7 @@ public class PostHandler extends Handler {
         FileType fileType = this.getFileTypeDecoder().getFileType(file.getName());
         String locationString = this.getLocationString(request);
         HashMap<ResponseHeader, String> headers = new HashMap<ResponseHeader, String>() {{
-            put(ResponseHeader.CONTENT_TYPE, fileType.value());
+            put(ResponseHeader.CONTENT_TYPE, fileType.getType());
             put(ResponseHeader.LOCATION, locationString);
         }};
         return this.getResponseBuilder().getCreatedResponse(body, headers);

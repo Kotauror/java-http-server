@@ -19,38 +19,38 @@ public class FileTypeDecoderTests {
     @Test
     public void decodesFileTypeForTxt() {
         FileType expected = fileTypeDecoder.getFileType("file.txt");
-        assertEquals("text/plain", expected.value());
+        assertEquals("text/plain", expected.getType());
     }
 
     @Test
     public void decodesFileTypeForJpeg() {
         FileType expected = fileTypeDecoder.getFileType("file.jpeg");
-        assertEquals("image/jpeg", expected.value());
+        assertEquals("image/jpeg", expected.getType());
     }
 
     @Test
     public void decodesFileTypeForGif() {
         FileType expected = fileTypeDecoder.getFileType("file.gif");
-        assertEquals("image/gif", expected.value());
+        assertEquals("image/gif", expected.getType());
     }
 
 
     @Test
     public void decodesFileTypeForPng() {
         FileType expected = fileTypeDecoder.getFileType("file.png");
-        assertEquals("image/png", expected.value());
+        assertEquals("image/png", expected.getType());
     }
 
     @Test
     public void decodesFileTypeForhtml() {
         FileType expected = fileTypeDecoder.getFileType("file.html");
-        assertEquals("text/html", expected.value());
+        assertEquals("text/html", expected.getType());
     }
 
     @Test
     public void decodesFileWithoutExtension() {
         FileType expected = fileTypeDecoder.getFileType("file");
-        assertEquals("text/plain", expected.value());
+        assertEquals("text/plain", expected.getType());
     }
 
 }

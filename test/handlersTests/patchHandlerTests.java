@@ -62,7 +62,6 @@ public class patchHandlerTests {
         assertEquals(ResponseStatus.PRECONDITION_FAILED, response.getStatus());
     }
 
-
     @Test
     public void patchChangesFileAndReturnsStatusNoContent() throws IOException {
         String httpVersion = "HTTP/1.1";
@@ -72,7 +71,7 @@ public class patchHandlerTests {
         }};
         String contentToPath = "patched content";
         Request request = new Request(Method.PATCH, patchFileName, httpVersion, headers, contentToPath);
-        File file = patchHandler.getFileOperator().getRequestedFileByPath(rootPath + patchFileName);
+        File file = patchHandler.getFileOperator().getRequestedFile(rootPath + patchFileName);
 
         Response response = patchHandler.processRequest(request);
 
@@ -83,15 +82,15 @@ public class patchHandlerTests {
     }
 
     private String getShaForFilePath(String path) throws IOException {
-        File file = patchHandler.getFileOperator().getRequestedFileByPath(rootPath + path);
+        File file = patchHandler.getFileOperator().getRequestedFile(rootPath + path);
         byte[] fileContent = patchHandler.getFileContentConverter().getFileContentFromFile(file);
-        return patchHandler.getEncoder().getHash(fileContent, "SHA-1");
+        return patchHandler.getEncoder().encode(fileContent, "SHA-1");
     }
 
     @After
     public void revertFileContent() throws IOException {
         Request request = new Request(Method.PATCH, null, null, null, "default content");
-        File file = patchHandler.getFileOperator().getRequestedFileByPath(rootPath + patchFileName);
-        patchHandler.getFileOperator().writeToFile(file, request);
+        File file = patchHandler.getFileOperator().getRequestedFile(rootPath + patchFileName);
+        patchHandler.getFileOperator().writeToFile(file, request.getBody());
     }
 }

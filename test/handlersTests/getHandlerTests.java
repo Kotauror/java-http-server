@@ -62,7 +62,7 @@ public class getHandlerTests {
     public void pathExistsReturnsTrueWHenExists() {
         String pathToTestFile = "src/httpserver/utilities/sampleTestFiles/";
 
-        boolean actual = getHandler.getFileOperator().fileExistsOnPath(request, pathToTestFile);
+        boolean actual = getHandler.getFileOperator().fileExists(pathToTestFile + request.getPath());
 
         assertEquals(true, actual);
     }
@@ -71,7 +71,7 @@ public class getHandlerTests {
     public void pathExistsReturnsFalseeWHenExists() {
         String pathToTestFile = "src/httpserver/utilities/sampleTestFiles/testFolder";
 
-        boolean actual = getHandler.getFileOperator().fileExistsOnPath(request, pathToTestFile);
+        boolean actual = getHandler.getFileOperator().fileExists(pathToTestFile + request.getPath());
 
         assertEquals(false, actual);
     }

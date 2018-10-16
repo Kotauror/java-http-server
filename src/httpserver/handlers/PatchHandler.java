@@ -22,12 +22,12 @@ public class PatchHandler extends Handler {
         File file;
         byte[] fileContent;
         try {
-            file = this.getFileOperator().getRequestedFileByName(request, this.rootPath);
+            file = this.getFileOperator().getRequestedFile(this.rootPath + request.getPath());
             fileContent = this.getFileContentConverter().getFileContentFromFile(file);
         } catch (IOException e) {
             return this.getResponseBuilder().getNotFoundResponse();
         }
-        String actualShaOfRequestedFile = this.getEncoder().getHash(fileContent, "SHA-1");
+        String actualShaOfRequestedFile = this.getEncoder().encode(fileContent, "SHA-1");
         if (this.isValidPatchRequest(request, actualShaOfRequestedFile)) {
             return this.processValidPatchRequest(request, file);
         } else {
@@ -46,7 +46,7 @@ public class PatchHandler extends Handler {
 
     private Response processValidPatchRequest(Request request, File file) {
         try {
-            this.getFileOperator().writeToFile(file, request);
+            this.getFileOperator().writeToFile(file, request.getBody());
             return this.getResponseBuilder().getNoContentResponse(request.getBody().getBytes());
         } catch (IOException e) {
             return this.getResponseBuilder().getInternalErrorResponse();

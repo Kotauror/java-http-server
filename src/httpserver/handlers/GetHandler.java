@@ -25,7 +25,7 @@ public class GetHandler extends Handler{
 
     @Override
     public Response processRequest(Request request) {
-        if (this.getFileOperator().fileExistsOnPath(request, this.rootPath)) {
+        if (this.getFileOperator().fileExists(this.rootPath + request.getPath())) {
             try {
                 return this.getResponse(request);
             } catch (IOException e) {
@@ -50,11 +50,11 @@ public class GetHandler extends Handler{
     }
 
     private Response getFullResponse(Request request) throws IOException {
-        File file = this.getFileOperator().getRequestedFileByName(request, this.rootPath);
+        File file = this.getFileOperator().getRequestedFile(this.rootPath + request.getPath());
         byte[] body = this.getFileContentConverter().getFileContentFromFile(file);
         FileType fileType = this.getFileTypeDecoder().getFileType(file.getName());
         HashMap<ResponseHeader, String> headers = new HashMap<ResponseHeader, String>() {{
-            put(ResponseHeader.CONTENT_TYPE, fileType.value());
+            put(ResponseHeader.CONTENT_TYPE, fileType.getType());
         }};
         return this.getResponseBuilder().getOKResponse(body, headers);
     }

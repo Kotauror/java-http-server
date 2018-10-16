@@ -7,7 +7,7 @@ import java.security.NoSuchAlgorithmException;
 public class Encoder {
 
 
-    public String getHash(byte[] byteArray, String algorithm) {
+    public String encode(byte[] byteArray, String algorithm) {
         try {
             MessageDigest messageDigest = MessageDigest.getInstance(algorithm);
             messageDigest.update(byteArray);
