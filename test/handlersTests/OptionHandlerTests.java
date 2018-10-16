@@ -12,25 +12,21 @@ import java.util.LinkedHashMap;
 
 import static org.junit.Assert.assertEquals;
 
-public class optionHandlerTests {
+public class OptionHandlerTests {
 
     private OptionHandler optionHandler;
-    private String httpVersion;
     private LinkedHashMap<String, String> headers;
-    private String body;
 
     @Before
     public void setup() {
         optionHandler = new OptionHandler();
-        httpVersion = "HTTP/1.1";
         headers = new LinkedHashMap<>();
-        body = "example body";
     }
 
     @Test
-    public void returnsResponseWithMethodsAllowedWhenFileExists() {
+    public void whenRequestedFileExits_ReturnsResponseWithMethodsAllowed() {
         String path = "/testFile.txt";
-        Request request = new Request(Method.OPTIONS, path, httpVersion, headers, body);
+        Request request = new Request(Method.OPTIONS, path, null, headers, null);
 
         Response response = optionHandler.processRequest(request);
 
@@ -39,9 +35,9 @@ public class optionHandlerTests {
     }
 
     @Test
-    public void returnsResponseWithMethodsAllowedWhenFileDoesNotExist() {
+    public void whenRequestedFileDoesNotExist_ReturnsResponseWithMethodsAllowed() {
         String path = "/testFileNotExist.txt";
-        Request request = new Request(Method.OPTIONS, path, httpVersion, headers, body);
+        Request request = new Request(Method.OPTIONS, path, null, headers, null);
 
         Response response = optionHandler.processRequest(request);
 
@@ -50,9 +46,9 @@ public class optionHandlerTests {
     }
 
     @Test
-    public void returnsResponseWithMethodsAllowedWhenRequestedLogs() {
+    public void whenRequestedLogsRoot_ReturnsResponseWithMethodsAllowed() {
         String path = "/logs";
-        Request request = new Request(Method.OPTIONS, path, httpVersion, headers, body);
+        Request request = new Request(Method.OPTIONS, path, null, headers, null);
 
         Response response = optionHandler.processRequest(request);
 

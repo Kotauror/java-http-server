@@ -8,13 +8,13 @@ import httpserver.utilities.Method;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.LinkedHashMap;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-public class headHandlerTests {
+public class HeadHandlerTests {
 
     private HeadHandler headHandler;
     private Request request;
@@ -23,31 +23,25 @@ public class headHandlerTests {
     public void setup() {
         String rootPath = "src/httpserver/utilities/sampleTestFiles";
         headHandler = new HeadHandler(rootPath);
-
         String path = "/";
-        String httpVersion = "HTTP/1.1";
-        LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
-            put("Host", "localhost");
-            put("Accept-Language", "en-US");
-        }};
-
-        request = new Request(Method.GET, path, httpVersion, headers, null);
+        LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>(){};
+        request = new Request(Method.GET, path, null, headers, null);
     }
 
     @Test
-    public void returnsResponseWithStatus200() throws IOException {
+    public void returnsResponseWithStatus200() {
         Response response = headHandler.processRequest(request);
         assertEquals(ResponseStatus.OK, response.getStatus());
     }
 
     @Test
-    public void returnsResponseWithEmptyBody() throws IOException {
+    public void returnsResponseWithEmptyBody() {
         Response response = headHandler.processRequest(request);
-        assertEquals(null, response.getBodyContent());
+        assertNull(response.getBodyContent());
     }
 
     @Test
-    public void returnsResponseWithEmptyHeaders() throws IOException {
+    public void returnsResponseWithEmptyHeaders() {
         Response response = headHandler.processRequest(request);
         assertTrue(response.getHeaders().isEmpty());
     }

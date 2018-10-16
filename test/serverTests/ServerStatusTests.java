@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
 
 public class ServerStatusTests {
 
@@ -17,6 +18,6 @@ public class ServerStatusTests {
 
     @Test
     public void isRunningReturnsTrue() {
-        assertEquals(true, serverStatus.isRunning());
+        assertTrue(serverStatus.isRunning());
     }
 }

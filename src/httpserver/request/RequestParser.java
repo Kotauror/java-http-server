@@ -64,7 +64,7 @@ public class RequestParser {
 
     private String getBody(String contentLengthKey, BufferedReader bufferedReader) throws IOException {
         if (contentLengthKey == null) {
-            return "";
+            return null;
         } else {
             int contentLengthAsInt = Integer.parseInt(contentLengthKey);
             StringBuilder body = new StringBuilder();

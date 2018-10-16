@@ -1,7 +1,6 @@
 package handlersTests;
 
 import httpserver.handlers.PostHandler;
-import httpserver.handlers.PutHandler;
 import httpserver.request.Request;
 import httpserver.response.Response;
 import httpserver.response.ResponseStatus;
@@ -11,48 +10,43 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 
 import static org.junit.Assert.assertTrue;
 
-public class postHandlerTests {
+public class PostHandlerTests {
 
     private String rootPath;
-    private String httpVersion;
     private LinkedHashMap<String, String> headers;
     private String body;
     private PostHandler postHandler;
+    private String pathToFileCreatedOnPost;
 
     @Before
     public void setup() {
         rootPath = "src/httpserver/utilities/sampleTestFiles";
-        httpVersion = "HTTP/1.1";
         headers = new LinkedHashMap<>();
         body = "example body";
         postHandler = new PostHandler(rootPath);
+        pathToFileCreatedOnPost = "/testFileKotek";
     }
 
     @Test
-    public void returns405WhenFileExists() throws IOException {
-        String path = "/kosiowaty";
-        PutHandler putHandler = new PutHandler(rootPath);
-        Request request = new Request(Method.GET, path, httpVersion, headers, "Some content");
-        putHandler.processRequest(request);
+    public void whenFileExists_ReturnStatus405() {
+        String pathOfExistingFile = "/cat-form";
+        Request request = new Request(Method.POST, pathOfExistingFile, null, headers, body);
 
-        Request request2 = new Request(Method.POST, path, httpVersion, headers, body);
-        Response response = postHandler.processRequest(request2);
+        Response response = postHandler.processRequest(request);
 
         assertTrue(Files.exists(Paths.get(rootPath + request.getPath())));
         assertTrue(response.getStatus().equals(ResponseStatus.NOT_ALLOWED));
     }
 
     @Test
-    public void createsANewFileWhenDoesntExist() throws IOException {
-        String path = "/testFileKotek";
-        Request request = new Request(Method.POST, path, httpVersion, headers, body);
+    public void whenFileDoesNotExist_createsANewFile_ReturnsStatus201() {
+        Request request = new Request(Method.POST, pathToFileCreatedOnPost, null, headers, body);
         Response response = postHandler.processRequest(request);
 
         assertTrue(response.getStatus().equals(ResponseStatus.CREATED));
@@ -60,13 +54,7 @@ public class postHandlerTests {
 
     @After
     public void deleteOutputFile() {
-        File folder = new File("src/httpserver/utilities/sampleTestFiles");
-        File[] listOfFiles = folder.listFiles();
-        for(int i = 0; i < listOfFiles.length; i++){
-            File file = listOfFiles[i];
-            if (file.getName().equals("kosiowaty") || file.getName().equals("testFileKotek")){
-                file.delete();
-            }
-        }
+        File file = postHandler.getFileOperator().getRequestedFile(rootPath + pathToFileCreatedOnPost);
+        file.delete();
     }
 }

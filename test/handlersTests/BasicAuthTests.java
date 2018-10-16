@@ -14,27 +14,23 @@ import java.util.LinkedHashMap;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
-public class basicAuthTests {
+public class BasicAuthTests {
 
     private BasicAuthHandler basicAuthHandler;
-    private String httpVersion;
     private String path;
 
     @Before
     public void setup() {
         basicAuthHandler = new BasicAuthHandler();
         path = "/logs";
-        httpVersion = "HTTP/1.1";
     }
 
     @Test
-    public void returnsResponseWithStatusOKWhenReqHasGetMethodAndIsAuthorised() {
+    public void returnsResponseWithStatusOKWhen_RequestHasGetMethodAndIsAuthorised() {
         LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
-            put("Host", "localhost");
-            put("Accept-Language", "en-US");
             put("Authorization", "Basic YWRtaW46aHVudGVyMg==");
         }};
-        Request request = new Request(Method.GET, path, httpVersion, headers, null);
+        Request request = new Request(Method.GET, path, null, headers, null);
         byte [] expectedBody = "GET /logs HTTP/1.1 PUT /these HTTP/1.1 HEAD /requests HTTP/1.1".getBytes();
 
         Response response = basicAuthHandler.processRequest(request);
@@ -44,13 +40,11 @@ public class basicAuthTests {
     }
 
     @Test
-    public void returnsResponseWithStatusNotAllowedWhenHasWrongCredentials() {
+    public void returnsResponseWithStatusNotAllowedWhen_RequestHasWrongCredentials() {
         LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
-            put("Host", "localhost");
-            put("Accept-Language", "en-US");
             put("Authorization", "Basic YWRtaW46aHVudTestTestGVyMg==");
         }};
-        Request request = new Request(Method.GET, path, httpVersion, headers, null);
+        Request request = new Request(Method.GET, path, null, headers, null);
 
         Response response = basicAuthHandler.processRequest(request);
 
@@ -59,12 +53,10 @@ public class basicAuthTests {
     }
 
     @Test
-    public void returnsResponseWithStatusUnauthorizedWhenNoAuthorizationHeader() {
+    public void returnsResponseWithStatusUnauthorizedWhen_RequestHasNoAuthorizationHeader() {
         LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
-            put("Host", "localhost");
-            put("Accept-Language", "en-US");
         }};
-        Request request = new Request(Method.GET, path, httpVersion, headers, null);
+        Request request = new Request(Method.GET, path, null, headers, null);
 
         Response response = basicAuthHandler.processRequest(request);
 
@@ -73,13 +65,11 @@ public class basicAuthTests {
     }
 
     @Test
-    public void returnsResponseWithStatusNotAllowedWhenReqHasMethodOtherThanGet() {
+    public void returnsResponseWithStatusNotAllowedWhen_RequestHasMethodOtherThanGet() {
         LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
-            put("Host", "localhost");
-            put("Accept-Language", "en-US");
             put("Authorization", "Basic YWRtaW46aHVudGVyMg==");
         }};
-        Request request = new Request(Method.PUT, path, httpVersion, headers, null);
+        Request request = new Request(Method.PUT, path, null, headers, null);
 
         Response response = basicAuthHandler.processRequest(request);
 

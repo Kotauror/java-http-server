@@ -13,7 +13,7 @@ import java.util.LinkedHashMap;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
-public class cookieHandlerTests {
+public class CookieHandlerTests {
 
     private CookieHandler cookieHandler;
 
@@ -23,14 +23,13 @@ public class cookieHandlerTests {
     }
 
     @Test
-    public void whenRequestHasEatAndPathAndCookieAsHeaderReturnsResponseWithOKAndValueOfCookieHeaderInBody() {
-        String httpVersion = "HTTP/1.1";
+    public void whenRequestHasEatInPathAndCookieAsHeader_ReturnsResponseWithOKStatusAndValueOfCookieHeaderInBody() {
         LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
             put("Cookie", "chocolate");
         }};
         String path = "/eat_cookie";
         byte[] expectedBody = "mmmm chocolate".getBytes();
-        Request request = new Request(Method.GET, path, httpVersion, headers, "Some content");
+        Request request = new Request(Method.GET, path, null, headers, null);
 
         Response response = cookieHandler.processRequest(request);
 
@@ -39,13 +38,12 @@ public class cookieHandlerTests {
     }
 
     @Test
-    public void whenRequestHasEatAndPathAndCookieAsHeaderReturnsResponseWithOKEatInBodyAndCookieTasteInHeader() {
-        String httpVersion = "HTTP/1.1";
+    public void whenRequestHasPathSettingACookie_ReturnsResponseWithOKEatInBodyAndCookieTasteInHeader() {
         LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
         }};
         String path = "/cookie?type=chocolate";
         byte[] expectedBody = "Eat".getBytes();
-        Request request = new Request(Method.GET, path, httpVersion, headers, "Some content");
+        Request request = new Request(Method.GET, path, null, headers, null);
 
         Response response = cookieHandler.processRequest(request);
 
@@ -55,12 +53,11 @@ public class cookieHandlerTests {
     }
 
     @Test
-    public void whenRequestHasNoCookieHeaderAndNotSettingTypeReturns404() {
-        String httpVersion = "HTTP/1.1";
+    public void whenRequestHasNoCookieHeaderAndNotSettingCookie_Returns404() {
         LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
         }};
-        String path = "/cookTestie?type=chocolate";
-        Request request = new Request(Method.GET, path, httpVersion, headers, "Some content");
+        String path = "/cookTestieInvalidPath?type=chocolateInvalidPath";
+        Request request = new Request(Method.GET, path, null, headers, "Some content");
 
         Response response = cookieHandler.processRequest(request);
 

@@ -12,7 +12,7 @@ import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertTrue;
 
-public class responseTests {
+public class ResponseTests {
 
     private Response fullResponse;
     private byte[] fileContent;

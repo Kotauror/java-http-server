@@ -11,19 +11,14 @@ import java.util.LinkedHashMap;
 
 import static junit.framework.Assert.assertEquals;
 
-public class methodNotAllowedHandlerTests {
+public class MethodNotAllowedHandlerTests {
 
     @Test
     public void returnsStatusNotAllowed() {
         MethodNotAllowedHandler methodNotAllowedHandler = new MethodNotAllowedHandler();
         String path = "/testFile.txt";
-        String httpVersion = "HTTP/1.1";
-        LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
-            put("Host", "localhost");
-            put("Accept-Language", "en-US");
-        }};
-        String body = "example body";
-        Request request = new Request(Method.INVALID, path, httpVersion, headers, body);
+        LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>(){};
+        Request request = new Request(Method.INVALID, path, null, headers, null);
 
         Response response = methodNotAllowedHandler.processRequest(request);
 

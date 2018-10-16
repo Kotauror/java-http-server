@@ -23,63 +23,62 @@ public class RequestParserTests {
     }
 
     @Test
-    public void parseReturnsRequestWithAllFieldsFilled() throws IOException {
+    public void parseRequestWithCompleteStartLineHeadersAndBody() throws IOException {
         String requestString = "GET http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1\n" +
                 "Host: 0.0.0.0:5000\n" +
                 "Content-Length: 23\n\r\n" +
                 "nomethod body\ntestbody";
-        ByteArrayInputStream mockStream = new ByteArrayInputStream(requestString.getBytes());
-        LinkedHashMap headers = new LinkedHashMap<String, String>() {{
+        ByteArrayInputStream mockInputStream = new ByteArrayInputStream(requestString.getBytes());
+        LinkedHashMap expectedHeaders = new LinkedHashMap<String, String>() {{
             put("Host", "0.0.0.0:5000");
             put("Content-Length", "23");
         }};
 
-        Request request = requestParser.parse(mockStream);
+        Request request = requestParser.parse(mockInputStream);
 
         assertEquals(Method.GET, request.getMethod());
         assertEquals("http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages", request.getPath());
         assertEquals("HTTP/1.1", request.getHttpVersion());
-        assertEquals(headers, request.getHeaders());
+        assertEquals(expectedHeaders, request.getHeaders());
         assertTrue(request.getBody().contains("nomethod body"));
         assertTrue(request.getBody().contains("testbody"));
-//        assertEquals("nomethod body\ntestbody", request.getBody());
     }
 
     @Test
-    public void parseReturnsRequestWithOnlyMethodAndPath() throws IOException {
+    public void parseRequestWithOnlyMethodAndPath() throws IOException {
         String requestString = "GET http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1\n";
-        ByteArrayInputStream mockStream = new ByteArrayInputStream(requestString.getBytes());
+        ByteArrayInputStream mockInputStream = new ByteArrayInputStream(requestString.getBytes());
         LinkedHashMap headers = new LinkedHashMap<String, String>();
 
-        Request request = requestParser.parse(mockStream);
+        Request request = requestParser.parse(mockInputStream);
 
         assertEquals(Method.GET, request.getMethod());
         assertEquals("http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages", request.getPath());
         assertEquals("HTTP/1.1", request.getHttpVersion());
         assertEquals(headers, request.getHeaders());
-        assertEquals("", request.getBody());
+        assertEquals(null, request.getBody());
     }
 
     @Test
     public void parseReturnsRequestWithMethodPathAndHeaders() throws IOException {
         String requestString = "GET http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1\n" +
                 "Host: 0.0.0.0:5000\n";
-        ByteArrayInputStream mockStream = new ByteArrayInputStream(requestString.getBytes());
+        ByteArrayInputStream mockInputStream = new ByteArrayInputStream(requestString.getBytes());
         LinkedHashMap headers = new LinkedHashMap<String, String>() {{
             put("Host", "0.0.0.0:5000");
         }};
 
-        Request request = requestParser.parse(mockStream);
+        Request request = requestParser.parse(mockInputStream);
 
         assertEquals(Method.GET, request.getMethod());
         assertEquals("http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages", request.getPath());
         assertEquals("HTTP/1.1", request.getHttpVersion());
         assertEquals(headers, request.getHeaders());
-        assertEquals("", request.getBody());
+        assertEquals(null, request.getBody());
     }
 
     @Test
-    public void testCaseFromFitnesseAPISimpleGet() throws IOException {
+    public void parseTestCaseFromFitnesse_SimpleGet() throws IOException {
         String input = "GET /file1 HTTP/1.1\n" +
         "Host: localhost:5000\n" +
         "Connection: Keep-Alive\n" +
@@ -99,32 +98,12 @@ public class RequestParserTests {
         assertEquals("/file1", request.getPath());
         assertEquals("HTTP/1.1", request.getHttpVersion());
         assertEquals(headers, request.getHeaders());
-        assertEquals("", request.getBody());
+        assertEquals(null, request.getBody());
     }
 
     @Test
-    public void testParsingWithBogusTwoPartsMethod() throws IOException {
+    public void parseTestCaseFromFitnesse_BogusMethod() throws IOException {
         String input = "test bogus /file1 HTTP/1.1\n" +
-                "Host: localhost:5000\n" +
-                "Connection: Keep-Alive\n" +
-                "User-Agent: Apache-HttpClient/4.3.5 (java 1.5)\n" +
-                "Accept-Encoding: gzip,deflate";
-        ByteArrayInputStream mockStream1 = new ByteArrayInputStream(input.getBytes());
-        LinkedHashMap headers = new LinkedHashMap<String, String>() {{
-            put("Host", "localhost:5000");
-            put("Connection", "Keep-Alive");
-            put("User-Agent", "Apache-HttpClient/4.3.5 (java 1.5)");
-            put("Accept-Encoding", "gzip,deflate");
-        }};
-
-        Request request = requestParser.parse(mockStream1);
-
-        assertEquals(Method.INVALID, request.getMethod());
-    }
-
-    @Test
-    public void testParsingWithBogusOnePartMethod() throws IOException {
-        String input = "test /file1 HTTP/1.1\n" +
                 "Host: localhost:5000\n" +
                 "Connection: Keep-Alive\n" +
                 "User-Agent: Apache-HttpClient/4.3.5 (java 1.5)\n" +

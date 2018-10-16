@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class EncoderTests {
 
@@ -30,10 +31,9 @@ public class EncoderTests {
     public void returnsNullWhenPassedAlgorithmDoestExist() {
         byte[] byteArray = "abc".getBytes();
         String algorithm = "SHA-1DoestExist";
-        String expectedHash = null;
 
         String actualHash = encoder.encode(byteArray, algorithm);
 
-        assertEquals(actualHash, expectedHash);
+        assertNull(actualHash);
     }
 }

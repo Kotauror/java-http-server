@@ -7,45 +7,34 @@ import httpserver.utilities.Method;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.LinkedHashMap;
-
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class directoryListingHandlerTests {
+public class DirectoryListingHandlerTests {
 
     private DirectoryLinksHandler directoryLinksHandler;
     private Method method;
-    private String httpVersion;
-    private LinkedHashMap<String, String> headers;
-    private String body;
 
     @Before
     public void setup() {
-        httpVersion = "HTTP/1.1";
-        headers = new LinkedHashMap<String, String>() {{
-            put("Host", "localhost");
-            put("Accept-Language", "en-US");
-        }};
-        body = "example body";
         method = Method.GET;
         String rootPath = "src/httpserver/utilities/sampleTestFiles";
         directoryLinksHandler = new DirectoryLinksHandler(rootPath);
     }
 
     @Test
-    public void returnsTrueWhenRequestPathIsRoot() {
+    public void coversPathReturnsTrueWhen_RequestPathIsRoot() {
         String path = "/";
-        Request request = new Request(method, path, httpVersion, headers, body);
+        Request request = new Request(method, path, null, null, null);
 
         assertTrue(directoryLinksHandler.coversPathFromRequest(request));
     }
 
     @Test
-    public void returnsFalseWhenRequestPathIsRoot() {
+    public void coversPathReturnsFalseWhen_RequestPathIsNotRoot() {
         String path = "/AnyOtherPath";
-        Request request = new Request(method, path, httpVersion, headers, body);
+        Request request = new Request(method, path, null, null, null);
 
         assertFalse(directoryLinksHandler.coversPathFromRequest(request));
     }
@@ -53,7 +42,7 @@ public class directoryListingHandlerTests {
     @Test
     public void returnsResponseWithStatus200() {
         String path = "/";
-        Request request = new Request(method, path, httpVersion, headers, body);
+        Request request = new Request(method, path, null, null, null);
         byte[] expectedBody = ("<html><head></head><body>" +
                 "<a href='/cat-form'>cat-form</a><br>"  +
                 "<a href='/empty-form'>empty-form</a><br>"  +
