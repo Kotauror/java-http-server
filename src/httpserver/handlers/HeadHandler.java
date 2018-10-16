@@ -18,7 +18,7 @@ public class HeadHandler extends Handler {
 
     @Override
     public Response processRequest(Request request) {
-        return (this.getFileOperator().fileExistsOnPath(request, this.rootPath)) ? this.getFullResponse() : this.getNotFoundResponse();
+        return (this.getFileOperator().fileExists(this.rootPath + request.getPath())) ? this.getFullResponse() : this.getNotFoundResponse();
     }
 
     @Override

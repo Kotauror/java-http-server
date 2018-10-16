@@ -13,10 +13,6 @@ public class FileOperator {
         return new File(rootPath + "/" + filePath);
     }
 
-    public boolean fileExistsOnPath(Request request, String rootPath) {
-        return Files.exists(Paths.get(rootPath + request.getPath()));
-    }
-
     public boolean fileExists(String path) {
         return Files.exists(Paths.get(path));
     }

@@ -25,7 +25,7 @@ public class GetHandler extends Handler{
 
     @Override
     public Response processRequest(Request request) {
-        if (this.getFileOperator().fileExistsOnPath(request, this.rootPath)) {
+        if (this.getFileOperator().fileExists(this.rootPath + request.getPath())) {
             try {
                 return this.getResponse(request);
             } catch (IOException e) {
