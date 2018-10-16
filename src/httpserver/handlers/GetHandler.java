@@ -54,7 +54,7 @@ public class GetHandler extends Handler{
         byte[] body = this.getFileContentConverter().getFileContentFromFile(file);
         FileType fileType = this.getFileTypeDecoder().getFileType(file.getName());
         HashMap<ResponseHeader, String> headers = new HashMap<ResponseHeader, String>() {{
-            put(ResponseHeader.CONTENT_TYPE, fileType.value());
+            put(ResponseHeader.CONTENT_TYPE, fileType.getType());
         }};
         return this.getResponseBuilder().getOKResponse(body, headers);
     }

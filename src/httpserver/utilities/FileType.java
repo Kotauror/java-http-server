@@ -2,19 +2,29 @@ package httpserver.utilities;
 
 public enum FileType {
 
-    TXT("text/plain"),
-    JPEG("image/jpeg"),
-    GIF("image/gif"),
-    PNG("image/png"),
-    HTML("text/html");
+    TXT("text/plain", "txt"),
+    JPEG("image/jpeg", "jpeg"),
+    GIF("image/gif", "gif"),
+    PNG("image/png", "png"),
+    HTML("text/html", "html");
 
-    private final String value;
+    private final String fileType;
+    private final String extension;
 
-    FileType(String fileType) {
-        this.value = fileType;
+    FileType(String fileType, String extension) {
+        this.fileType = fileType;
+        this.extension = extension;
     }
 
-    public String value() {
-        return value;
+    public String getType() {
+        return fileType;
+    }
+
+    public String getExtension() {
+        return extension;
+    }
+
+    public static FileType[] getFileTypes() {
+        return FileType.class.getEnumConstants();
     }
 }

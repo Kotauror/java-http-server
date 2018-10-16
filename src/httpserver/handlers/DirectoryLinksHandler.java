@@ -49,7 +49,7 @@ public class DirectoryLinksHandler extends Handler {
 
     private HashMap<ResponseHeader, String> getHeaders(){
         return new HashMap<ResponseHeader, String>() {{
-            put(ResponseHeader.CONTENT_TYPE, FileType.HTML.value());
+            put(ResponseHeader.CONTENT_TYPE, FileType.HTML.getType());
         }};
     }
 }

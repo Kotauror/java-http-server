@@ -100,7 +100,7 @@ public class RangeRequestResponder {
 
     private HashMap<ResponseHeader, String> getHeaders(FileType fileType, String contentRangeHeader) {
         return new HashMap<ResponseHeader, String>() {{
-            put(ResponseHeader.CONTENT_TYPE, fileType.value());
+            put(ResponseHeader.CONTENT_TYPE, fileType.getType());
             put(ResponseHeader.CONTENT_RANGE, contentRangeHeader);
         }};
     }

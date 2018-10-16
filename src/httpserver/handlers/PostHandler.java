@@ -47,7 +47,7 @@ public class PostHandler extends Handler {
         FileType fileType = this.getFileTypeDecoder().getFileType(file.getName());
         String locationString = this.getLocationString(request);
         HashMap<ResponseHeader, String> headers = new HashMap<ResponseHeader, String>() {{
-            put(ResponseHeader.CONTENT_TYPE, fileType.value());
+            put(ResponseHeader.CONTENT_TYPE, fileType.getType());
             put(ResponseHeader.LOCATION, locationString);
         }};
         return this.getResponseBuilder().getCreatedResponse(body, headers);

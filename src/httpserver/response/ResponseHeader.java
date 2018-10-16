@@ -9,15 +9,15 @@ public enum ResponseHeader {
     LOCATION("Location"),
     SET_COOKIE("Set-Cookie");
 
-    private final String text;
+    private final String headerContent;
 
-    ResponseHeader(final String text) {
-        this.text = text;
+    ResponseHeader(final String headerContent) {
+        this.headerContent = headerContent;
     }
 
     @Override
     public String toString() {
-        return text;
+        return headerContent;
     }
 
     public static ResponseHeader[] getHeaders() {
