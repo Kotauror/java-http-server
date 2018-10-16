@@ -60,7 +60,7 @@ public class deleteHandlerTests {
 
     @After
     public void deleteCreatedFiles() {
-        File file = putHandler.getFileOperator().getRequestedFile("/filetesting", this.rootPath);
+        File file = putHandler.getFileOperator().getRequestedFile(this.rootPath + "/filetesting");
         file.delete();
     }
 }

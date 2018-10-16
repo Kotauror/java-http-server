@@ -9,8 +9,8 @@ import java.nio.file.Paths;
 
 public class FileOperator {
 
-    public File getRequestedFile(String filePath, String rootPath) {
-        return new File(rootPath + "/" + filePath);
+    public File getRequestedFile(String path) {
+        return new File(path);
     }
 
     public boolean fileExists(String path) {

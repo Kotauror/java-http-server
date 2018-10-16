@@ -128,7 +128,7 @@ public class formHandlerTests {
 
     @After
     public void emptyOverwrittenFile() throws FileNotFoundException {
-        File file = formHandler.getFileOperator().getRequestedFile(catFormFilePath, rootPath);
+        File file = formHandler.getFileOperator().getRequestedFile(rootPath + catFormFilePath);
         PrintWriter writer = new PrintWriter(file);
         writer.print("");
         writer.close();
@@ -136,9 +136,9 @@ public class formHandlerTests {
 
     @After
     public void deleteCreatedFile() {
-        File file = formHandler.getFileOperator().getRequestedFile("/anotherTestFile", rootPath);
+        File file = formHandler.getFileOperator().getRequestedFile(rootPath + "/anotherTestFile");
         file.delete();
-        File file2 = formHandler.getFileOperator().getRequestedFile("/samplesample", rootPath);
+        File file2 = formHandler.getFileOperator().getRequestedFile(rootPath + "/samplesample");
         file2.delete();
     }
 }

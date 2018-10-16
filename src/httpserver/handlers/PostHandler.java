@@ -24,7 +24,7 @@ public class PostHandler extends Handler {
 
     @Override
     public Response processRequest(Request request) {
-        File file = this.getFileOperator().getRequestedFile(request.getPath(), this.rootPath);
+        File file = this.getFileOperator().getRequestedFile(this.rootPath + request.getPath());
         if (this.getFileOperator().fileExists(this.rootPath + request.getPath())) {
             return this.getResponseBuilder().getNotAllowedResponse();
         } else {
