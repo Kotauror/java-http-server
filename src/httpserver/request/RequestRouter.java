@@ -14,6 +14,7 @@ public class RequestRouter {
     public RequestRouter(String rootPath) {
         this.rootPath = rootPath;
         addHandlers(Arrays.asList(
+                new PatchHandler(rootPath),
                 new ParametersHandler(),
                 new FormHandler(rootPath),
                 new RedirectHandler(),

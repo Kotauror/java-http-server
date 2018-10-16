@@ -2,12 +2,12 @@ package httpserver.response;
 
 public enum ResponseHeader {
 
-    CONTENT_TYPE("Content-Type"),
-    CONTENT_RANGE("Content-Range"),
     AUTHENTICATE("WWW-Authenticate"),
-    SET_COOKIE("Set-Cookie"),
+    ALLOW("Allow"),
+    CONTENT_RANGE("Content-Range"),
+    CONTENT_TYPE("Content-Type"),
     LOCATION("Location"),
-    ALLOW("Allow");
+    SET_COOKIE("Set-Cookie");
 
     private final String text;
 

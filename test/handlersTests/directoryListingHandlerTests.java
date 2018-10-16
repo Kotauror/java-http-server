@@ -59,6 +59,7 @@ public class directoryListingHandlerTests {
                 "<a href='/empty-form'>empty-form</a><br>"  +
                 "<a href='/form-with-data'>form-with-data</a><br>"  +
                 "<a href='/partial_content.txt'>partial_content.txt</a><br>"  +
+                "<a href='/patch-content'>patch-content</a><br>"  +
                 "<a href='/testFile.txt'>testFile.txt</a><br>" +
                 "</body></html>").getBytes();
 

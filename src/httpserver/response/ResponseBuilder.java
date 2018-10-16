@@ -42,4 +42,12 @@ public class ResponseBuilder {
         byte[] body = "I'm a teapot".getBytes();
         return new Response(ResponseStatus.TEAPOT, body, new HashMap<>());
     }
+
+    public Response getNoContentResponse(byte[] body) {
+        return new Response(ResponseStatus.NO_CONTENT, body, new HashMap<>());
+    }
+
+    public Response getPreconditionFailedResponse() {
+        return new Response(ResponseStatus.PRECONDITION_FAILED, null, new HashMap<>());
+    }
 }
