@@ -43,8 +43,8 @@ public class ResponseBuilder {
         return new Response(ResponseStatus.TEAPOT, body, new HashMap<>());
     }
 
-    public Response getNoContentResponse() {
-        return new Response(ResponseStatus.NO_CONTENT, null, new HashMap<>());
+    public Response getNoContentResponse(byte[] body) {
+        return new Response(ResponseStatus.NO_CONTENT, body, new HashMap<>());
     }
 
     public Response getPreconditionFailedResponse() {

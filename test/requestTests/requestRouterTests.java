@@ -181,7 +181,7 @@ public class requestRouterTests {
 
     @Test
     public void findHandlerReturnsRightHandlerForPatch() {
-        Request request = new Request(methodPatch, "/patch-content.txt", httpVersion, headers, body);
+        Request request = new Request(methodPatch, "/patch-content", httpVersion, headers, body);
         Handler handler = requestRouter.findHandler(request);
 
         assertEquals(HandlerType.PATCH_HANDLER, handler.getType());

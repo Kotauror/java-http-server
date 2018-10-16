@@ -23,7 +23,7 @@ public class EncoderTests {
 
         String actualHash = encoder.getHash(byteArray, algorithm);
 
-        assertEquals(actualHash, expectedHash);
+        assertEquals(expectedHash, actualHash);
     }
 
     @Test

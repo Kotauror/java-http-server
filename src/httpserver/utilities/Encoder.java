@@ -1,6 +1,6 @@
 package httpserver.utilities;
 
-import javax.xml.bind.DatatypeConverter;
+import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -12,7 +12,7 @@ public class Encoder {
             MessageDigest messageDigest = MessageDigest.getInstance(algorithm);
             messageDigest.update(byteArray);
             byte[] digestedBytes = messageDigest.digest();
-            return DatatypeConverter.printHexBinary(digestedBytes).toLowerCase();
+            return new BigInteger(1, digestedBytes).toString(16);
         } catch (NoSuchAlgorithmException e) {
             return null;
         }
