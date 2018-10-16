@@ -11,7 +11,6 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.util.LinkedHashMap;
 
 import static junit.framework.Assert.assertEquals;
