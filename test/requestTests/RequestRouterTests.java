@@ -15,45 +15,25 @@ import java.util.LinkedHashMap;
 
 import static junit.framework.Assert.assertEquals;
 
-public class requestRouterTests {
+public class RequestRouterTests {
 
     private RequestRouter requestRouter;
-    private Method methodGet;
-    private Method methodPost;
-    private String path;
     private LinkedHashMap<String, String> headers;
-    private String body;
-    private Method methodOption;
-    private String httpVersion;
-    private Method methodHead;
-    private Method methodPut;
-    private Method methodDelete;
-    private Method methodPatch;
 
     @Before
     public void setup() {
         String rootPath = "/Users/justynazygmunt/Desktop/HttpServerFitnesse/cob_spec/public/";
         requestRouter = new RequestRouter(rootPath);
-        methodGet = Method.GET;
-        methodPost = Method.POST;
-        methodOption = Method.OPTIONS;
-        methodHead = Method.HEAD;
-        methodPut = Method.PUT;
-        methodDelete = Method.DELETE;
-        methodOption = Method.OPTIONS;
-        methodPatch = Method.PATCH;
-        path = "http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1";
-        httpVersion = " HTTP/1.1";
         headers = new LinkedHashMap<String, String>() {{
             put("Host", "localhost");
             put("Accept-Language", "en-US");
         }};
-        body = "example body";
     }
 
     @Test
     public void findHandlerReturnsRightHandlerForGet() {
-        Request request = new Request(methodGet, path, httpVersion, headers, body);
+        String path = "http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1";
+        Request request = new Request(Method.GET, path, null, headers, null);
         Handler handler = requestRouter.findHandler(request);
 
         assertEquals(HandlerType.GET_HANDLER, handler.getType());
@@ -61,7 +41,8 @@ public class requestRouterTests {
 
     @Test
     public void findHandlerReturnsRightHandlerForPost() {
-        Request request = new Request(methodPost, path, httpVersion, headers, body);
+        String path = "http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1";
+        Request request = new Request(Method.POST, path, null, headers, null);
         Handler handler = requestRouter.findHandler(request);
 
         assertEquals(HandlerType.POST_HANDLER, handler.getType());
@@ -69,7 +50,7 @@ public class requestRouterTests {
 
     @Test
     public void findHandlerReturnsRightHandlerForDirectoryListing() {
-        Request request = new Request(methodGet, "/", httpVersion, headers, body);
+        Request request = new Request(Method.GET, "/", null, headers, null);
         Handler handler = requestRouter.findHandler(request);
 
         assertEquals(HandlerType.DIRECTORY_LISTING_HANDLER, handler.getType());
@@ -77,7 +58,7 @@ public class requestRouterTests {
 
     @Test
     public void findHandlerReturnsRightHandlerForHead() {
-        Request request = new Request(methodHead, "/", httpVersion, headers, body);
+        Request request = new Request(Method.HEAD, "/", null, headers, null);
         Handler handler = requestRouter.findHandler(request);
 
         assertEquals(HandlerType.HEAD_HANDLER, handler.getType());
@@ -85,7 +66,7 @@ public class requestRouterTests {
 
     @Test
     public void findHandlerReturnsRightHandlerForPut() {
-        Request request = new Request(methodPut, "/", httpVersion, headers, body);
+        Request request = new Request(Method.PUT, "/", null, headers, null);
         Handler handler = requestRouter.findHandler(request);
 
         assertEquals(HandlerType.PUT_HANDLER, handler.getType());
@@ -93,7 +74,7 @@ public class requestRouterTests {
 
     @Test
     public void findHandlerReturnsRightHandlerForMethodNotAllowed() {
-        Request request = new Request(Method.INVALID, "/", httpVersion, headers, body);
+        Request request = new Request(Method.INVALID, "/", null, headers, null);
         Handler handler = requestRouter.findHandler(request);
 
         assertEquals(HandlerType.NOT_ALLOWED_HANDLER, handler.getType());
@@ -101,7 +82,7 @@ public class requestRouterTests {
 
     @Test
     public void findHandlerReturnsRightHandlerForDeleteHandler() {
-        Request request = new Request(methodDelete, "/", httpVersion, headers, body);
+        Request request = new Request(Method.DELETE, "/", null, headers, null);
         Handler handler = requestRouter.findHandler(request);
 
         assertEquals(HandlerType.DELETE_HANDLER, handler.getType());
@@ -109,7 +90,7 @@ public class requestRouterTests {
 
     @Test
     public void findHandlerReturnsRightHandlerForOptionHandler() {
-        Request request = new Request(methodOption, "/", httpVersion, headers, body);
+        Request request = new Request(Method.OPTIONS, "/", null, headers, null);
         Handler handler = requestRouter.findHandler(request);
 
         assertEquals(HandlerType.OPTION_HANDLER, handler.getType());
@@ -117,7 +98,7 @@ public class requestRouterTests {
 
     @Test
     public void findHandlerReturnsRightHandlerForBasicAuthHandler() {
-        Request request = new Request(methodGet, "/logs", httpVersion, headers, body);
+        Request request = new Request(Method.GET, "/logs", null, headers, null);
         Handler handler = requestRouter.findHandler(request);
 
         assertEquals(HandlerType.BASIC_AUTH_HANDLER, handler.getType());
@@ -125,7 +106,7 @@ public class requestRouterTests {
 
     @Test
     public void findHandlerReturnsRightHandlerForCookieHandler() {
-        Request request = new Request(methodGet, "/cookie?type=chocolate", httpVersion, headers, body);
+        Request request = new Request(Method.GET, "/cookie?type=chocolate", null, headers, null);
         Handler handler = requestRouter.findHandler(request);
 
         assertEquals(HandlerType.COOKIE_HANDLER, handler.getType());
@@ -133,7 +114,7 @@ public class requestRouterTests {
 
     @Test
     public void findHandlerReturnsRightHandlerForTeapotHandlerWhenCoffee() {
-        Request request = new Request(methodGet, "/coffee", httpVersion, headers, body);
+        Request request = new Request(Method.GET, "/coffee", null, headers, null);
         Handler handler = requestRouter.findHandler(request);
 
         assertEquals(HandlerType.TEAPOT_HANDLER, handler.getType());
@@ -141,7 +122,7 @@ public class requestRouterTests {
 
     @Test
     public void findHandlerReturnsRightHandlerForTeapotHandlerWhenTea() {
-        Request request = new Request(methodGet, "/tea", httpVersion, headers, body);
+        Request request = new Request(Method.GET, "/tea", null, headers, null);
         Handler handler = requestRouter.findHandler(request);
 
         assertEquals(HandlerType.TEAPOT_HANDLER, handler.getType());
@@ -149,7 +130,7 @@ public class requestRouterTests {
 
     @Test
     public void findHandlerReturnsRightHandlerForRedirectHandler() {
-        Request request = new Request(methodGet, "/redirect", httpVersion, headers, body);
+        Request request = new Request(Method.GET, "/redirect", null, headers, null);
         Handler handler = requestRouter.findHandler(request);
 
         assertEquals(HandlerType.REDIRECT_HANDLER, handler.getType());
@@ -157,7 +138,7 @@ public class requestRouterTests {
 
     @Test
     public void findHandlerReturnsRightHandlerForFormHandlerWithGet() {
-        Request request = new Request(methodGet, "/cat-form/data", httpVersion, headers, body);
+        Request request = new Request(Method.GET, "/cat-form/data", null, headers, null);
         Handler handler = requestRouter.findHandler(request);
 
         assertEquals(HandlerType.FORM_HANDLER, handler.getType());
@@ -165,7 +146,7 @@ public class requestRouterTests {
 
     @Test
     public void findHandlerReturnsRightHandlerForFormHandlerWithDelete() {
-        Request request = new Request(methodDelete, "/cat-form/data", httpVersion, headers, body);
+        Request request = new Request(Method.DELETE, "/cat-form/data", null, headers, null);
         Handler handler = requestRouter.findHandler(request);
 
         assertEquals(HandlerType.FORM_HANDLER, handler.getType());
@@ -173,7 +154,7 @@ public class requestRouterTests {
 
     @Test
     public void findHandlerReturnsRightHandlerForHandlerWithParameters() {
-        Request request = new Request(methodGet, "/parameters?variable_1=a%20query%20string%20parameter", httpVersion, headers, body);
+        Request request = new Request(Method.GET, "/parameters?variable_1=a%20query%20string%20parameter", null, headers, null);
         Handler handler = requestRouter.findHandler(request);
 
         assertEquals(HandlerType.PARAMETERS_HANDLER, handler.getType());
@@ -181,7 +162,7 @@ public class requestRouterTests {
 
     @Test
     public void findHandlerReturnsRightHandlerForPatch() {
-        Request request = new Request(methodPatch, "/patch-content", httpVersion, headers, body);
+        Request request = new Request(Method.PATCH, "/patch-content", null, headers, null);
         Handler handler = requestRouter.findHandler(request);
 
         assertEquals(HandlerType.PATCH_HANDLER, handler.getType());
@@ -189,7 +170,8 @@ public class requestRouterTests {
 
     @Test
     public void returnsGetWith404StatusWhenThereIsNoAppropriateHandler() throws IOException {
-        Request request = new Request(Method.INVALID, path, httpVersion, headers, body);
+        String path = "http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1";
+        Request request = new Request(Method.INVALID, path, null, headers, null);
         Handler handler = requestRouter.findHandler(request);
 
         Response response = handler.processRequest(request);

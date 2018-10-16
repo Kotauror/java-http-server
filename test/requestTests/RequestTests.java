@@ -12,7 +12,7 @@ import static junit.framework.Assert.assertEquals;
 
 public class RequestTests {
 
-    Request request;
+    private Request request;
 
     @Before
     public void setup() {
