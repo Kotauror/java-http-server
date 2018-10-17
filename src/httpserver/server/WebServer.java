@@ -17,32 +17,43 @@ public class WebServer {
     private final RequestParser requestParser;
     private final RequestRouter requestRouter;
     private final Executor executor;
+    private final Logger logger;
 
     public WebServer(PrintStream stdOut, ServerSocket serverSocket, ServerStatus serverStatus,
-                     RequestParser requestParser, RequestRouter requestRouter, Executor executor) {
+                     RequestParser requestParser, RequestRouter requestRouter, Executor executor, Logger logger) {
         this.stdOut = stdOut;
         this.serverSocket = serverSocket;
         this.serverStatus = serverStatus;
         this.requestParser = requestParser;
         this.requestRouter = requestRouter;
         this.executor = executor;
+        this.logger = logger;
     }
 
     public void start() {
         stdOut.println("I'm listening for connections");
         while (serverStatus.isRunning()) {
-            try {
-                this.connectWithClients();
-            } catch (IOException e) {
-                stdOut.println("Error in connecting with client");
-            }
+            this.connectWithClients();
         }
     }
 
-    private void connectWithClients() throws IOException {
-        Socket clientConnection = serverSocket.accept();
-        ResponseWriter responseWriter = new ResponseWriter(clientConnection.getOutputStream());
-        ConnectionManager connectionManager = new ConnectionManager(clientConnection, responseWriter, this.requestParser, this.requestRouter);
-        executor.execute(connectionManager);
+    private void connectWithClients() {
+        try {
+            Socket clientConnection = serverSocket.accept();
+            this.logger.addNewSocketLog(Integer.toString(clientConnection.getPort()));
+            this.manageConnection(clientConnection);
+        } catch (IOException e) {
+            this.logger.addConnectionException(e.getMessage());
+        }
+    }
+
+    private void manageConnection(Socket clientConnection) {
+        try {
+            ResponseWriter responseWriter = new ResponseWriter(clientConnection.getOutputStream());
+            ConnectionManager connectionManager = new ConnectionManager(clientConnection, responseWriter, this.requestParser, this.requestRouter);
+            executor.execute(connectionManager);
+        } catch (IOException e) {
+            this.logger.addResponseException(e.getMessage());
+        }
     }
 }

@@ -1,6 +1,7 @@
 package httpserver.request;
 
 import httpserver.handlers.*;
+import httpserver.server.Logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,7 +12,7 @@ public class RequestRouter {
     private final ArrayList<Handler> handlers = new ArrayList<Handler>();
     private final String rootPath;
 
-    public RequestRouter(String rootPath) {
+    public RequestRouter(String rootPath, Logger logger) {
         this.rootPath = rootPath;
         addHandlers(Arrays.asList(
                 new PatchHandler(rootPath),

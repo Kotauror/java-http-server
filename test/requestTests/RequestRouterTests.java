@@ -1,6 +1,7 @@
 package requestTests;
 
 import httpserver.handlers.HandlerType;
+import httpserver.server.Logger;
 import httpserver.utilities.Method;
 import httpserver.handlers.Handler;
 import httpserver.request.RequestRouter;
@@ -20,7 +21,8 @@ public class RequestRouterTests {
     @Before
     public void setup() {
         String rootPath = "src/httpserver/utilities/sampleTestFiles";
-        requestRouter = new RequestRouter(rootPath);
+        Logger logger = new Logger();
+        requestRouter = new RequestRouter(rootPath, logger);
         headers = new LinkedHashMap<String, String>() {{
             put("Host", "localhost");
             put("Accept-Language", "en-US");

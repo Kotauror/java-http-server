@@ -2,6 +2,7 @@ package httpserver.handlers;
 
 import httpserver.request.Request;
 import httpserver.response.Response;
+import httpserver.server.Logger;
 import httpserver.utilities.AuthenticationCredentials;
 import httpserver.utilities.Method;
 
@@ -11,7 +12,10 @@ import java.util.HashMap;
 
 public class BasicAuthHandler extends Handler {
 
-    public BasicAuthHandler() {
+    private final Logger logger;
+
+    public BasicAuthHandler(Logger logger) {
+        this.logger = logger;
         setType(HandlerType.BASIC_AUTH_HANDLER);
         addHandledMethod(Method.GET);
     }

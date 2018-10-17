@@ -11,8 +11,8 @@ public class Logger {
         this.logs = new HashMap<>();
     }
 
-    public void addNewSocketLog(String socketAddress) {
-        logs.put(LoggerHeader.NEW_SOCKET, socketAddress);
+    public void addNewSocketLog(String portInfo) {
+        logs.put(LoggerHeader.NEW_SOCKET, portInfo);
     }
 
     public void addConnectionException(String request) {

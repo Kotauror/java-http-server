@@ -28,6 +28,7 @@ public class WebServerTests {
     private RequestRouter requestRouter;
     private CurrentThreadExecutor executor;
     private PrintStream mockSystemOut;
+    private Logger logger;
 
     @Before
     public void setup() {
@@ -38,7 +39,8 @@ public class WebServerTests {
         mockServerStatus = new MockServerStatus();
         requestParser = new RequestParser(new RequestBuilder());
         rootPath = "/Users/justynazygmunt/Desktop/cob_spec/public/";
-        requestRouter = new RequestRouter(rootPath);
+        logger = new Logger();
+        requestRouter = new RequestRouter(rootPath, logger);
         executor = new CurrentThreadExecutor();
     }
 
@@ -53,7 +55,7 @@ public class WebServerTests {
         MockSocket mockSocket = new MockSocket(mockClientOutputStream, mockInputSteam);
         // Server
         MockServerSocket mockServerSocket = new MockServerSocket(mockSocket);
-        WebServer webServer = new WebServer(mockSystemOut, mockServerSocket, mockServerStatus, requestParser, requestRouter, executor);
+        WebServer webServer = new WebServer(mockSystemOut, mockServerSocket, mockServerStatus, requestParser, requestRouter, executor, logger);
 
         webServer.start();
 
@@ -74,7 +76,7 @@ public class WebServerTests {
         MockSocket mockSocket = new MockSocket(mockClientOutputStream, mockInputSteam);
         // Server
         MockServerSocket mockServerSocket = new MockServerSocket(mockSocket);
-        WebServer webServer = new WebServer(mockSystemOut, mockServerSocket, mockServerStatus, requestParser, requestRouter, executor);
+        WebServer webServer = new WebServer(mockSystemOut, mockServerSocket, mockServerStatus, requestParser, requestRouter, executor, logger);
 
         webServer.start();
 
@@ -97,7 +99,7 @@ public class WebServerTests {
         MockSocket mockSocket = new MockSocket(mockClientOutputStream, mockInputSteam);
         MockServerSocket mockServerSocket = new MockServerSocket(mockSocket);
         // Server
-        WebServer webServer = new WebServer(mockSystemOut, mockServerSocket, mockServerStatus, requestParser, requestRouter, executor);
+        WebServer webServer = new WebServer(mockSystemOut, mockServerSocket, mockServerStatus, requestParser, requestRouter, executor, logger);
 
         webServer.start();
 
