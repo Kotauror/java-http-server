@@ -27,11 +27,15 @@ public class CookieHandler extends Handler {
 
     @Override
     public boolean coversPathFromRequest(Request request) {
-        return (request.getPath().toLowerCase().contains("cookie"));
+        return this.requestHasCookieHeader(request) || this.requestSetsCookieValue(request);
     }
 
     private boolean requestHasCookieHeader(Request request) {
-        return request.getHeaders().get("Cookie") != null;
+        try {
+            return request.getHeaders().get("Cookie") != null;
+        } catch (NullPointerException e) {
+            return false;
+        }
     }
 
     private Response getResponseForUsingCookie(Request request) {
@@ -51,7 +55,11 @@ public class CookieHandler extends Handler {
     }
 
     private boolean requestSetsCookieValue(Request request) {
-        return (request.getPath().toLowerCase().contains("cookie?type="));
+        try {
+            return (request.getPath().toLowerCase().substring(0, 13).equals("/cookie?type="));
+        } catch (StringIndexOutOfBoundsException e) {
+            return false;
+        }
     }
 
     private String getCookieTaste(Request request) {
