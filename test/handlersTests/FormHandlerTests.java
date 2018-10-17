@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.LinkedHashMap;
 
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertArrayEquals;
@@ -74,7 +75,10 @@ public class FormHandlerTests {
     @Test
     public void onHandlePost_WhenFileDoesNotAlreadyExistAndActionIsSuccessful_ReturnStatus201() throws IOException {
         String body = "data=fatcat";
-        Request request = new Request(Method.POST, pathForFileCreatedOnPost, null, null, body);
+        LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
+            put("Content-Type", "application/x-www-form-urlencoded");
+        }};
+        Request request = new Request(Method.POST, pathForFileCreatedOnPost, null, headers, body);
 
         Response response = formHandler.processRequest(request);
 
@@ -87,7 +91,10 @@ public class FormHandlerTests {
     @Test
     public void onHandlePost_WhenFileAlreadyExists_ReturnsStatus405() {
         String body = "data=fatcat";
-        Request request = new Request(Method.POST, "/empty-form", null, null, body);
+        LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
+            put("Content-Type", "application/x-www-form-urlencoded");
+        }};
+        Request request = new Request(Method.POST, "/empty-form", null, headers, body);
 
         Response response = formHandler.processRequest(request);
 
@@ -97,7 +104,10 @@ public class FormHandlerTests {
     @Test
     public void onHandlePut_WhenFileExistsAndChanged_ReturnsStatus200() throws IOException {
         String body = "data=tabbycat";
-        Request request = new Request(Method.PUT, pathForFileUpdatedOnPut + "/data", null, null, body);
+        LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
+            put("Content-Type", "application/x-www-form-urlencoded");
+        }};
+        Request request = new Request(Method.PUT, pathForFileUpdatedOnPut + "/data", null, headers, body);
 
         Response response = formHandler.processRequest(request);
 

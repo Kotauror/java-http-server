@@ -36,7 +36,17 @@ public class FormHandler extends Handler {
 
     @Override
     public boolean coversPathFromRequest(Request request) {
-        return request.getPath().contains("form");
+        try {
+            if (request.getMethod().equals(Method.GET) || request.getMethod().equals(Method.DELETE)) {
+                return this.getFileOperator().filePathRefersFileContent(rootPath, request.getPath());
+            } else if (request.getMethod().equals(Method.POST) || request.getMethod().equals(Method.PUT)) {
+                return request.getHeaders().get("Content-Type").equals("application/x-www-form-urlencoded");
+            } else {
+                return false;
+            }
+        } catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
+            return false;
+        }
     }
 
     private Response handleGet(Request request) {

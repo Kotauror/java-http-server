@@ -41,6 +41,11 @@ public class FileOperator {
         }
     }
 
+    public boolean filePathRefersFileContent(String root, String filePath) {
+        String pathWithoutEventualKey = this.removeKeyFromPathIfExists(filePath);
+        return (!this.fileExists(root + filePath)) && (this.fileExists(root + pathWithoutEventualKey));
+    }
+
     private boolean keyDoesNotExist(String[] partsOfPath) {
         return partsOfPath.length == 2;
     }

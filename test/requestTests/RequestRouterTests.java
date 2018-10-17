@@ -19,7 +19,7 @@ public class RequestRouterTests {
 
     @Before
     public void setup() {
-        String rootPath = "/Users/justynazygmunt/Desktop/HttpServerFitnesse/cob_spec/public/";
+        String rootPath = "src/httpserver/utilities/sampleTestFiles";
         requestRouter = new RequestRouter(rootPath);
         headers = new LinkedHashMap<String, String>() {{
             put("Host", "localhost");
