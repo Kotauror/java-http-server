@@ -23,7 +23,7 @@ public class RequestRouter {
                 new RedirectHandler(),
                 new CookieHandler(),
                 new TeapotHandler(),
-                new BasicAuthHandler(),
+                new BasicAuthHandler(logger),
                 new DirectoryLinksHandler(rootPath),
                 new PutHandler(rootPath),
                 new GetHandler(rootPath),

@@ -5,6 +5,7 @@ import httpserver.request.Request;
 import httpserver.response.ResponseHeader;
 import httpserver.response.Response;
 import httpserver.response.ResponseStatus;
+import httpserver.server.Logger;
 import httpserver.utilities.Method;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +22,7 @@ public class BasicAuthTests {
 
     @Before
     public void setup() {
-        basicAuthHandler = new BasicAuthHandler();
+        basicAuthHandler = new BasicAuthHandler(new Logger());
         path = "/logs";
     }
 
