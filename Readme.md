@@ -10,7 +10,7 @@ Both this server and Cob Spec require Java 8 and Maven.
 
 ## Running the server
 
-1. Clone the Cob Spec repo. It will be needed to run the test suite and serve as a root directory with sample files. `$ git clone https://github.com/8thlight/cob_spec.git`
+1. Clone the Cob Spec repo. It will be needed to run the test suite and serve as a root directory with sample files: `$ git clone https://github.com/8thlight/cob_spec.git`
 
 2. Clone this server's repo: `$ git clone https://github.com/Kotauror/java-http-server`
 
@@ -30,8 +30,6 @@ You can go to `http://localhost:port/` (replace `port` with a port number set in
 
 ## Running the Cob Spec tests
 
-In order to run the Cob Spec tests against the server, you need to build the Cob Spec.
-
 1. Enter into Cob Spec directory (cloned in step 1 of the section above): `$ cd cob_spec`
 
 2. Build it using maven: `$ mvn package`
@@ -50,7 +48,7 @@ On my machine, this line looks like this:
 
 `!define SERVER_START_COMMAND {java -jar /Users/justynazygmunt/Desktop/java-http-server/out/artifacts/java_http_server_jar/java-http-server.jar}`
 
-4b. PUBLIC_DIR defines the place from which Fitnesse gets sample files to run the tests. Change the path as follows:
+4b. `PUBLIC_DIR` defines the place from which Fitnesse gets sample files to run the tests. Change the path as follows:
 `!define PUBLIC_DIR {(path-to_Cob_SPec-root)/public}`
 
 On my machine, this line looks like this:
@@ -63,15 +61,15 @@ On my machine, this line looks like this:
 
 6. Run the tests by navigating back to the HttpTestSuite website's initial page and click Suite. All tests should turn green.
 
-### Things to improve
+## Things to improve
 
-#### Authorisation data
+### Authorisation data
 Password and login required to authorize a client (see `BasicAuthHadler`) are available in `utilities/AuthenticationCredentials`.
 This information in publicly visible and was pushed to GitHub because this server is for training purpose and I wanted crafters
 from 8th Light to have a complete access to all information in an easy way. In real life though, credentials wouldn't be
 publicly visible, but would be hidden as environmental variables.
 
-#### Logger
+### Logger
 The server has no logger. When writing the server I was following requirements laid down by the Fitnesse testing framework.
 None of the tests needed a logger, so I've decided to not add this functionality and focus on the things that were actually necessary to pass tests.
 Although not explicitly required, I am aware that a form of logging is very useful and should be implemented.
@@ -79,5 +77,5 @@ If I had more time, I would write a logger that:
 - collects and logs information about requests made;
 - collects and logs information about errors.
 
-#### Continuous integration
+### Continuous integration
 There is no tool ensuring a successful build on my project like Travis CI. No further explanation needed, adding it would be beneficial.
