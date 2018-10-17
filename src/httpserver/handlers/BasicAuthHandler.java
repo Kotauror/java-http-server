@@ -2,6 +2,7 @@ package httpserver.handlers;
 
 import httpserver.request.Request;
 import httpserver.response.Response;
+import httpserver.utilities.AuthenticationCredentials;
 import httpserver.utilities.Method;
 
 import java.nio.charset.StandardCharsets;
@@ -10,14 +11,9 @@ import java.util.HashMap;
 
 public class BasicAuthHandler extends Handler {
 
-    private final String authorisedLogin;
-    private final String authorisedPassword;
-
     public BasicAuthHandler() {
         setType(HandlerType.BASIC_AUTH_HANDLER);
         addHandledMethod(Method.GET);
-        authorisedLogin = "admin";
-        authorisedPassword = "hunter2";
     }
 
     @Override
@@ -49,7 +45,8 @@ public class BasicAuthHandler extends Handler {
 
     private boolean hasValidCredentials(Request request) {
         String[] loginValues = this.getLoginValues(request);
-        return (loginValues[0].equals(this.authorisedLogin) && loginValues[1].equals(this.authorisedPassword));
+        return (loginValues[0].equals(AuthenticationCredentials.LOGIN.getValue()) &&
+                loginValues[1].equals(AuthenticationCredentials.PASSWORD.getValue()));
     }
 
     private String[] getLoginValues(Request request) {
