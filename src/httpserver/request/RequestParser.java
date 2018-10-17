@@ -57,7 +57,6 @@ public class RequestParser {
 
     private LinkedHashMap getHeaders(BufferedReader bufferedReader) throws IOException {
         LinkedHashMap<String, String> headers = new LinkedHashMap<>();
-
         String line;
         while ((line = bufferedReader.readLine()) != null) {
             if (this.hitAnEmptyLine(line)) {
@@ -71,7 +70,6 @@ public class RequestParser {
                 } catch (ArrayIndexOutOfBoundsException e) {
                     throw e;
                 }
-
             }
         }
         return headers;

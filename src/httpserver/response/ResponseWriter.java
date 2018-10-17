@@ -14,14 +14,13 @@ public class ResponseWriter {
 
     public void write(Response response) throws IOException {
         this.response = response;
-        writeStatusCode();
+        writeStatusLine();
         writeHeaders();
         writeBody();
     }
 
-    private void writeStatusCode() throws IOException {
-        String statusLine = this.response.getHttpVersion() + " " + this.response.getStatus().getStatusCode() + "\n";
-        write(statusLine.getBytes());
+    private void writeStatusLine() throws IOException {
+        write((response.getStatusLine() + "\n").getBytes());
     }
 
     private void writeHeaders() throws IOException {

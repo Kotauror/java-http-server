@@ -33,6 +33,10 @@ public class Response {
         return this.headers;
     }
 
+    public String getStatusLine() {
+        return this.getHttpVersion() + " " + this.getStatus().getStatusCode();
+    }
+
     private void addBodyContent(byte[] fileContentInBytes) {
         if (fileContentInBytes != null) {
             this.bodyContent = fileContentInBytes;
