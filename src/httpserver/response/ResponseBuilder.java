@@ -50,4 +50,8 @@ public class ResponseBuilder {
     public Response getPreconditionFailedResponse() {
         return new Response(ResponseStatus.PRECONDITION_FAILED, null, new HashMap<>());
     }
+
+    public Response getBadRequestResponse() {
+        return new Response(ResponseStatus.BAD_REQUEST, null, new HashMap<>());
+    }
 }

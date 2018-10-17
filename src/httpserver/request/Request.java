@@ -37,4 +37,8 @@ public class Request {
     public String getBody() {
         return this.body;
     }
+//
+//    public boolean isInvalid() {
+//        return (this.getMethod() == null && this.getPath() == null && this.getBody() == null && this.getHeaders() == null);
+//    }
 }

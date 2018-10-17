@@ -42,15 +42,24 @@ public class PostHandler extends Handler {
         return true;
     }
 
-    private Response getResponseForCreatingFile(File file, Request request) throws IOException {
-        byte[] body = Files.readAllBytes(Paths.get(file.getPath()));
+    private Response getResponseForCreatingFile(File file, Request request) {
+        try {
+            byte[] body = Files.readAllBytes(Paths.get(file.getPath()));
+            HashMap<ResponseHeader, String> headers = this.getHeaders(file, request);
+            return this.getResponseBuilder().getCreatedResponse(body, headers);
+        } catch (IOException e) {
+            return this.getResponseBuilder().getInternalErrorResponse();
+        }
+
+    }
+
+    private HashMap<ResponseHeader, String> getHeaders(File file, Request request) {
         FileType fileType = this.getFileTypeDecoder().getFileType(file.getName());
         String locationString = this.getLocationString(request);
-        HashMap<ResponseHeader, String> headers = new HashMap<ResponseHeader, String>() {{
+        return new HashMap<ResponseHeader, String>() {{
             put(ResponseHeader.CONTENT_TYPE, fileType.getType());
             put(ResponseHeader.LOCATION, locationString);
         }};
-        return this.getResponseBuilder().getCreatedResponse(body, headers);
     }
 
     private String getLocationString(Request request) {

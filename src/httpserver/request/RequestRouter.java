@@ -15,6 +15,8 @@ public class RequestRouter {
         this.rootPath = rootPath;
         addHandlers(Arrays.asList(
                 new PatchHandler(rootPath),
+                new InvalidRequestHandler(),
+                new InternalErrorHandler(),
                 new ParametersHandler(),
                 new FormHandler(rootPath),
                 new RedirectHandler(),

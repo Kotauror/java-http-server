@@ -1,5 +1,6 @@
 package serverTests;
 
+import httpserver.request.RequestBuilder;
 import httpserver.request.RequestRouter;
 import httpserver.request.RequestParser;
 import httpserver.server.*;
@@ -35,7 +36,7 @@ public class WebServerTests {
         mockSystemOut = new PrintStream(mockOutputStream);
         // Objects passed to the server on creation
         mockServerStatus = new MockServerStatus();
-        requestParser = new RequestParser();
+        requestParser = new RequestParser(new RequestBuilder());
         rootPath = "/Users/justynazygmunt/Desktop/cob_spec/public/";
         requestRouter = new RequestRouter(rootPath);
         executor = new CurrentThreadExecutor();

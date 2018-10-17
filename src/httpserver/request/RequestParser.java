@@ -10,20 +10,30 @@ import java.util.LinkedHashMap;
 
 public class RequestParser {
 
-    public RequestParser() {}
+    private final RequestBuilder requestBuilder;
 
-    public Request parse(InputStream inputStream) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-        String firstLine = reader.readLine();
+    public RequestParser(RequestBuilder requestBuilder) {
+        this.requestBuilder = requestBuilder;
+    }
 
-        Method method = getMethod(firstLine);
-        String path = getPath(firstLine);
-        String httpVersion = getHttpVersion(firstLine);
-        LinkedHashMap<String, String> headers = getHeaders(reader);
+    public Request parse(InputStream inputStream) {
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+            String firstLine = reader.readLine();
 
-        String contentLengthKey = headers.get("Content-Length");
-        String body = getBody(contentLengthKey, reader);
-        return new Request(method, path, httpVersion, headers, body);
+            Method method = getMethod(firstLine);
+            String path = getPath(firstLine);
+            String httpVersion = getHttpVersion(firstLine);
+            LinkedHashMap<String, String> headers = getHeaders(reader);
+
+            String contentLengthKey = headers.get("Content-Length");
+            String body = getBody(contentLengthKey, reader);
+            return this.requestBuilder.getRequest(method, path, httpVersion, headers, body);
+        } catch (IOException e) {
+            return this.requestBuilder.getRequestForInternalError();
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return this.requestBuilder.getBadRequest();
+        }
     }
 
     private Method getMethod(String firstLineOfRequest) {
@@ -53,10 +63,15 @@ public class RequestParser {
             if (this.hitAnEmptyLine(line)) {
                 break;
             } else {
-                String ElementsOfLine[] = line.split(" ", 2);
-                String key = this.removeLastCharacter(ElementsOfLine[0]);
-                String value = this.stripOfNewLine(ElementsOfLine[1]);
-                headers.put(key, value);
+                try {
+                    String ElementsOfLine[] = line.split(" ", 2);
+                    String key = this.removeLastCharacter(ElementsOfLine[0]);
+                    String value = this.stripOfNewLine(ElementsOfLine[1]);
+                    headers.put(key, value);
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    throw e;
+                }
+
             }
         }
         return headers;
