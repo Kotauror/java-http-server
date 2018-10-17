@@ -26,19 +26,25 @@ public class LoggerTests {
     }
 
     @Test
-    public void addLogAboutRequest() {
-        logger.addRequestLog("Funny request test");
-        assertTrue(logger.getLogs().containsKey(LoggerHeader.REQUEST));
+    public void addLogAboutConnectionException() {
+        logger.addConnectionException("There was error in connection etc");
+        assertTrue(logger.getLogs().containsKey(LoggerHeader.CONNECTION_EXCEPTION));
+    }
+
+    @Test
+    public void addLogAboutResponseException() {
+        logger.addResponseException("There was error in response etc");
+        assertTrue(logger.getLogs().containsKey(LoggerHeader.RESPONSE_EXCEPTION));
     }
 
     @Test
     public void filtersLogs() {
         logger.addNewSocketLog("1aa23 socket");
-        logger.addRequestLog("fale request");
+        logger.addConnectionException("fale request");
 
         HashMap<LoggerHeader, String> actual = logger.filterByLoggerHeader(LoggerHeader.NEW_SOCKET);
 
         assertTrue(actual.size() == 1);
-        assertFalse(actual.containsKey(LoggerHeader.REQUEST));
+        assertFalse(actual.containsKey(LoggerHeader.CONNECTION_EXCEPTION));
     }
 }

@@ -15,8 +15,12 @@ public class Logger {
         logs.put(LoggerHeader.NEW_SOCKET, socketAddress);
     }
 
-    public void addRequestLog(String request) {
-        logs.put(LoggerHeader.REQUEST, request);
+    public void addConnectionException(String request) {
+        logs.put(LoggerHeader.CONNECTION_EXCEPTION, request);
+    }
+
+    public void addResponseException(String request) {
+        logs.put(LoggerHeader.RESPONSE_EXCEPTION, request);
     }
 
     public HashMap<LoggerHeader, String> getLogs() {

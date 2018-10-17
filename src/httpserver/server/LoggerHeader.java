@@ -2,5 +2,6 @@ package httpserver.server;
 
 public enum LoggerHeader {
     NEW_SOCKET,
-    REQUEST;
+    CONNECTION_EXCEPTION,
+    RESPONSE_EXCEPTION;
 }
