@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class PostHandlerTests {
@@ -41,7 +42,7 @@ public class PostHandlerTests {
         Response response = postHandler.processRequest(request);
 
         assertTrue(Files.exists(Paths.get(rootPath + request.getPath())));
-        assertTrue(response.getStatus().equals(ResponseStatus.NOT_ALLOWED));
+        assertEquals(response.getStatus(), ResponseStatus.NOT_ALLOWED);
     }
 
     @Test
@@ -49,7 +50,7 @@ public class PostHandlerTests {
         Request request = new Request(Method.POST, pathToFileCreatedOnPost, null, headers, body);
         Response response = postHandler.processRequest(request);
 
-        assertTrue(response.getStatus().equals(ResponseStatus.CREATED));
+        assertEquals(response.getStatus(), ResponseStatus.CREATED);
     }
 
     @After

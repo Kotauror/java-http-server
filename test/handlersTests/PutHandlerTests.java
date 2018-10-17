@@ -49,8 +49,8 @@ public class PutHandlerTests {
     @Test
     public void whenFileDoesNotExist_createsANewFile_ReturnsStatus201() throws IOException {
         this.createFileToExecutePutUpon(pathToNewFile1);
-//
-        String contentOfFile = new String(Files.readAllBytes(Paths.get(rootPath + pathToNewFile1)));
+
+        String contentOfFile = putHandler.getFileContentConverter().getFileContentAsString(rootPath + pathToNewFile1);
 
         assertTrue(Files.exists(Paths.get(rootPath + pathToNewFile1)));
         assertEquals("Some content", contentOfFile);
@@ -63,7 +63,7 @@ public class PutHandlerTests {
 
         Response response = putHandler.processRequest(request2);
 
-        String contentOfFile = new String(Files.readAllBytes(Paths.get("src/httpserver/utilities/sampleTestFiles" + pathToNewFile2)));
+        String contentOfFile = putHandler.getFileContentConverter().getFileContentAsString(rootPath + pathToNewFile2);
         assertTrue(Files.exists(Paths.get(rootPath + pathToNewFile2)));
         assertEquals("Some updated content", contentOfFile);
         assertEquals(ResponseStatus.OK, response.getStatus());
