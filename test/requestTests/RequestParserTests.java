@@ -1,5 +1,6 @@
 package requestTests;
 
+import httpserver.request.RequestBuilder;
 import httpserver.utilities.Method;
 import httpserver.request.Request;
 import httpserver.request.RequestParser;
@@ -19,11 +20,11 @@ public class RequestParserTests {
 
     @Before
     public void setup() {
-        requestParser = new RequestParser();
+        requestParser = new RequestParser(new RequestBuilder());
     }
 
     @Test
-    public void parseRequestWithCompleteStartLineHeadersAndBody() throws IOException {
+    public void parseRequestWithCompleteStartLineHeadersAndBody() {
         String requestString = "GET http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1\n" +
                 "Host: 0.0.0.0:5000\n" +
                 "Content-Length: 23\n\r\n" +
@@ -45,7 +46,7 @@ public class RequestParserTests {
     }
 
     @Test
-    public void parseRequestWithOnlyMethodAndPath() throws IOException {
+    public void parseRequestWithOnlyMethodAndPath() {
         String requestString = "GET http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1\n";
         ByteArrayInputStream mockInputStream = new ByteArrayInputStream(requestString.getBytes());
         LinkedHashMap headers = new LinkedHashMap<String, String>();
@@ -60,7 +61,7 @@ public class RequestParserTests {
     }
 
     @Test
-    public void parseReturnsRequestWithMethodPathAndHeaders() throws IOException {
+    public void parseReturnsRequestWithMethodPathAndHeaders() {
         String requestString = "GET http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1\n" +
                 "Host: 0.0.0.0:5000\n";
         ByteArrayInputStream mockInputStream = new ByteArrayInputStream(requestString.getBytes());
@@ -78,7 +79,7 @@ public class RequestParserTests {
     }
 
     @Test
-    public void parseTestCaseFromFitnesse_SimpleGet() throws IOException {
+    public void parseTestCaseFromFitnesse_SimpleGet() {
         String input = "GET /file1 HTTP/1.1\n" +
         "Host: localhost:5000\n" +
         "Connection: Keep-Alive\n" +
@@ -102,22 +103,30 @@ public class RequestParserTests {
     }
 
     @Test
-    public void parseTestCaseFromFitnesse_BogusMethod() throws IOException {
+    public void parseTestCaseFromFitnesse_BogusMethod() {
         String input = "test bogus /file1 HTTP/1.1\n" +
                 "Host: localhost:5000\n" +
                 "Connection: Keep-Alive\n" +
                 "User-Agent: Apache-HttpClient/4.3.5 (java 1.5)\n" +
                 "Accept-Encoding: gzip,deflate";
         ByteArrayInputStream mockStream1 = new ByteArrayInputStream(input.getBytes());
-        LinkedHashMap headers = new LinkedHashMap<String, String>() {{
-            put("Host", "localhost:5000");
-            put("Connection", "Keep-Alive");
-            put("User-Agent", "Apache-HttpClient/4.3.5 (java 1.5)");
-            put("Accept-Encoding", "gzip,deflate");
-        }};
 
         Request request = requestParser.parse(mockStream1);
 
         assertEquals(Method.INVALID, request.getMethod());
+    }
+
+    @Test
+    public void parseInvalidHeaderRequestToReturnBadRequest() {
+        String input = "test bogus /file1 HTTP/1.1\n" +
+                "Hostlocalhost:5000\n" +
+                "ConnectionKeep-Alive\n" +
+                "User-Agent: Apache-HttpClient/4.3.5 (java 1.5)\n" +
+                "Accept-Encoding: gzip,deflate";
+        ByteArrayInputStream mockStream1 = new ByteArrayInputStream(input.getBytes());
+
+        Request request = requestParser.parse(mockStream1);
+
+        assertEquals("Error in parsing", request.getBody());
     }
 }

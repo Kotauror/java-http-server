@@ -1,5 +1,6 @@
 package httpserver;
 
+import httpserver.request.RequestBuilder;
 import httpserver.request.RequestRouter;
 import httpserver.request.RequestParser;
 import httpserver.server.ServerStatus;
@@ -16,9 +17,10 @@ public class App {
         int portNumber = Integer.parseInt(args[1]);
         String rootPath = args[3];
 
+        RequestBuilder requestBuilder = new RequestBuilder();
         ServerSocket serverSocket = new ServerSocket(portNumber);
         ServerStatus serverStatus = new ServerStatus();
-        RequestParser requestParser = new RequestParser();
+        RequestParser requestParser = new RequestParser(requestBuilder);
         RequestRouter requestRouter = new RequestRouter(rootPath);
         Executor executor = Executors.newFixedThreadPool(7);
         WebServer webServer = new WebServer(System.out, serverSocket, serverStatus, requestParser, requestRouter, executor);

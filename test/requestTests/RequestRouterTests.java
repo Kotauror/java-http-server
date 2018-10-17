@@ -1,8 +1,6 @@
 package requestTests;
 
 import httpserver.handlers.HandlerType;
-import httpserver.response.Response;
-import httpserver.response.ResponseStatus;
 import httpserver.utilities.Method;
 import httpserver.handlers.Handler;
 import httpserver.request.RequestRouter;
@@ -10,7 +8,6 @@ import httpserver.request.Request;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.LinkedHashMap;
 
 import static junit.framework.Assert.assertEquals;
@@ -169,15 +166,18 @@ public class RequestRouterTests {
     }
 
     @Test
-    public void returnsGetWith404StatusWhenThereIsNoAppropriateHandler() throws IOException {
-        String path = "http://developer.mozilla.org/en-US/docs/Web/HTTP/Messages HTTP/1.1";
-        Request request = new Request(Method.INVALID, path, null, headers, null);
+    public void whenRequestComesWithErrorInParsingInBodyReturnInvalidRequestHandler() {
+        Request request = new Request(null, null, null, null, "Error in parsing");
         Handler handler = requestRouter.findHandler(request);
 
-        Response response = handler.processRequest(request);
-        ResponseStatus responseStatus = response.getStatus();
+        assertEquals(HandlerType.INVALID_REQUEST_HANDLER, handler.getType());
+    }
 
-        assertEquals(HandlerType.NOT_ALLOWED_HANDLER, handler.getType());
-        assertEquals(ResponseStatus.NOT_ALLOWED, responseStatus);
+    @Test
+    public void whenRequestComesWithErrorInBufferingInBodyReturnInternalErrorHandler() {
+        Request request = new Request(null, null, null, null, "Error in buffering");
+        Handler handler = requestRouter.findHandler(request);
+
+        assertEquals(HandlerType.INTERNAL_ERROR_HANDLER, handler.getType());
     }
 }

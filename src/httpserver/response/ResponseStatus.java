@@ -7,6 +7,7 @@ public enum ResponseStatus {
     NO_CONTENT("204"),
     RANGE_REQUEST("206"),
     FOUND("302"),
+    BAD_REQUEST("400"),
     UNAUTHORIZED("401"),
     NOT_FOUND("404"),
     NOT_ALLOWED("405"),
