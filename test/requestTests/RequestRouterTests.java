@@ -35,7 +35,7 @@ public class RequestRouterTests {
         Request request = new Request(Method.GET, path, null, headers, null);
         Handler handler = requestRouter.findHandler(request);
 
-        assertEquals(HandlerType.GET_HANDLER, handler.getType());
+        assertEquals(HandlerType.GET_HANDLER, handler.getTypeOfHandler());
     }
 
     @Test
@@ -44,7 +44,7 @@ public class RequestRouterTests {
         Request request = new Request(Method.POST, path, null, headers, null);
         Handler handler = requestRouter.findHandler(request);
 
-        assertEquals(HandlerType.POST_HANDLER, handler.getType());
+        assertEquals(HandlerType.POST_HANDLER, handler.getTypeOfHandler());
     }
 
     @Test
@@ -52,7 +52,7 @@ public class RequestRouterTests {
         Request request = new Request(Method.GET, "/", null, headers, null);
         Handler handler = requestRouter.findHandler(request);
 
-        assertEquals(HandlerType.DIRECTORY_LISTING_HANDLER, handler.getType());
+        assertEquals(HandlerType.DIRECTORY_LISTING_HANDLER, handler.getTypeOfHandler());
     }
 
     @Test
@@ -60,7 +60,7 @@ public class RequestRouterTests {
         Request request = new Request(Method.HEAD, "/", null, headers, null);
         Handler handler = requestRouter.findHandler(request);
 
-        assertEquals(HandlerType.HEAD_HANDLER, handler.getType());
+        assertEquals(HandlerType.HEAD_HANDLER, handler.getTypeOfHandler());
     }
 
     @Test
@@ -68,7 +68,7 @@ public class RequestRouterTests {
         Request request = new Request(Method.PUT, "/", null, headers, null);
         Handler handler = requestRouter.findHandler(request);
 
-        assertEquals(HandlerType.PUT_HANDLER, handler.getType());
+        assertEquals(HandlerType.PUT_HANDLER, handler.getTypeOfHandler());
     }
 
     @Test
@@ -76,7 +76,7 @@ public class RequestRouterTests {
         Request request = new Request(Method.INVALID, "/", null, headers, null);
         Handler handler = requestRouter.findHandler(request);
 
-        assertEquals(HandlerType.NOT_ALLOWED_HANDLER, handler.getType());
+        assertEquals(HandlerType.NOT_ALLOWED_HANDLER, handler.getTypeOfHandler());
     }
 
     @Test
@@ -84,7 +84,7 @@ public class RequestRouterTests {
         Request request = new Request(Method.DELETE, "/", null, headers, null);
         Handler handler = requestRouter.findHandler(request);
 
-        assertEquals(HandlerType.DELETE_HANDLER, handler.getType());
+        assertEquals(HandlerType.DELETE_HANDLER, handler.getTypeOfHandler());
     }
 
     @Test
@@ -92,7 +92,7 @@ public class RequestRouterTests {
         Request request = new Request(Method.OPTIONS, "/", null, headers, null);
         Handler handler = requestRouter.findHandler(request);
 
-        assertEquals(HandlerType.OPTION_HANDLER, handler.getType());
+        assertEquals(HandlerType.OPTION_HANDLER, handler.getTypeOfHandler());
     }
 
     @Test
@@ -100,7 +100,7 @@ public class RequestRouterTests {
         Request request = new Request(Method.GET, "/logs", null, headers, null);
         Handler handler = requestRouter.findHandler(request);
 
-        assertEquals(HandlerType.BASIC_AUTH_HANDLER, handler.getType());
+        assertEquals(HandlerType.BASIC_AUTH_HANDLER, handler.getTypeOfHandler());
     }
 
     @Test
@@ -108,7 +108,7 @@ public class RequestRouterTests {
         Request request = new Request(Method.GET, "/cookie?type=chocolate", null, headers, null);
         Handler handler = requestRouter.findHandler(request);
 
-        assertEquals(HandlerType.COOKIE_HANDLER, handler.getType());
+        assertEquals(HandlerType.COOKIE_HANDLER, handler.getTypeOfHandler());
     }
 
     @Test
@@ -116,7 +116,7 @@ public class RequestRouterTests {
         Request request = new Request(Method.GET, "/coffee", null, headers, null);
         Handler handler = requestRouter.findHandler(request);
 
-        assertEquals(HandlerType.TEAPOT_HANDLER, handler.getType());
+        assertEquals(HandlerType.TEAPOT_HANDLER, handler.getTypeOfHandler());
     }
 
     @Test
@@ -124,7 +124,7 @@ public class RequestRouterTests {
         Request request = new Request(Method.GET, "/tea", null, headers, null);
         Handler handler = requestRouter.findHandler(request);
 
-        assertEquals(HandlerType.TEAPOT_HANDLER, handler.getType());
+        assertEquals(HandlerType.TEAPOT_HANDLER, handler.getTypeOfHandler());
     }
 
     @Test
@@ -132,7 +132,7 @@ public class RequestRouterTests {
         Request request = new Request(Method.GET, "/redirect", null, headers, null);
         Handler handler = requestRouter.findHandler(request);
 
-        assertEquals(HandlerType.REDIRECT_HANDLER, handler.getType());
+        assertEquals(HandlerType.REDIRECT_HANDLER, handler.getTypeOfHandler());
     }
 
     @Test
@@ -140,7 +140,7 @@ public class RequestRouterTests {
         Request request = new Request(Method.GET, "/cat-form/data", null, headers, null);
         Handler handler = requestRouter.findHandler(request);
 
-        assertEquals(HandlerType.FORM_HANDLER, handler.getType());
+        assertEquals(HandlerType.FORM_HANDLER, handler.getTypeOfHandler());
     }
 
     @Test
@@ -148,7 +148,7 @@ public class RequestRouterTests {
         Request request = new Request(Method.DELETE, "/cat-form/data", null, headers, null);
         Handler handler = requestRouter.findHandler(request);
 
-        assertEquals(HandlerType.FORM_HANDLER, handler.getType());
+        assertEquals(HandlerType.FORM_HANDLER, handler.getTypeOfHandler());
     }
 
     @Test
@@ -156,7 +156,7 @@ public class RequestRouterTests {
         Request request = new Request(Method.GET, "/parameters?variable_1=a%20query%20string%20parameter", null, headers, null);
         Handler handler = requestRouter.findHandler(request);
 
-        assertEquals(HandlerType.PARAMETERS_HANDLER, handler.getType());
+        assertEquals(HandlerType.PARAMETERS_HANDLER, handler.getTypeOfHandler());
     }
 
     @Test
@@ -164,7 +164,7 @@ public class RequestRouterTests {
         Request request = new Request(Method.PATCH, "/patch-content", null, headers, null);
         Handler handler = requestRouter.findHandler(request);
 
-        assertEquals(HandlerType.PATCH_HANDLER, handler.getType());
+        assertEquals(HandlerType.PATCH_HANDLER, handler.getTypeOfHandler());
     }
 
     @Test
@@ -172,7 +172,7 @@ public class RequestRouterTests {
         Request request = new Request(null, null, null, null, "Error in parsing");
         Handler handler = requestRouter.findHandler(request);
 
-        assertEquals(HandlerType.INVALID_REQUEST_HANDLER, handler.getType());
+        assertEquals(HandlerType.INVALID_REQUEST_HANDLER, handler.getTypeOfHandler());
     }
 
     @Test
@@ -180,6 +180,6 @@ public class RequestRouterTests {
         Request request = new Request(null, null, null, null, "Error in buffering");
         Handler handler = requestRouter.findHandler(request);
 
-        assertEquals(HandlerType.INTERNAL_ERROR_HANDLER, handler.getType());
+        assertEquals(HandlerType.INTERNAL_ERROR_HANDLER, handler.getTypeOfHandler());
     }
 }

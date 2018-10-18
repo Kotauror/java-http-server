@@ -23,7 +23,7 @@ public abstract class Handler {
 
     public abstract boolean coversPathFromRequest(Request request);
 
-    public HandlerType getType() {
+    public HandlerType getTypeOfHandler() {
         return typeOfHandler;
     }
 
