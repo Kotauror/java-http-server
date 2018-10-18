@@ -105,4 +105,26 @@ public class WebServerTests {
 
         assertEquals("HTTP/1.1 404", mockClientOutputStream.toString().trim());
     }
+
+    @Test
+    public void serverLogHasLogAboutConnectionException_whenThereWasAnErrorInConnectingWithClientSocket() throws IOException {
+        // Client Input
+        String requestString = "GET /fileThatDoesntExist HTTP/1.1\n" +
+                "Host: 0.0.0.0:5000\n" +
+                "Content-Length: 23\n\r\n" +
+                "nomethod body\ntestbody";
+        ByteArrayInputStream mockInputSteam = new ByteArrayInputStream(requestString.getBytes());
+        // Client Output
+        mockClientOutputStream = new ByteArrayOutputStream();
+        // Client Socket
+        MockSocket mockSocket = new MockSocket(mockClientOutputStream, mockInputSteam);
+        MockServerSocket mockServerSocket = new MockServerSocket(mockSocket);
+        mockServerSocket.setIOException();
+        // Server
+        WebServer webServer = new WebServer(mockSystemOut, mockServerSocket, mockServerStatus, requestParser, requestRouter, executor, logger);
+
+        webServer.start();
+
+        assertTrue(logger.getLogs().containsKey(LoggerHeader.CONNECTION_EXCEPTION));
+    }
 }

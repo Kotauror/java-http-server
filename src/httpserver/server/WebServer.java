@@ -42,7 +42,7 @@ public class WebServer {
             Socket clientConnection = serverSocket.accept();
             this.logger.addNewSocketLog(Integer.toString(clientConnection.getPort()));
             this.manageConnection(clientConnection);
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
             this.logger.addConnectionException(e.getMessage());
         }
     }
