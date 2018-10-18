@@ -119,6 +119,7 @@ public class WebServerTests {
         // Client Socket
         MockSocket mockSocket = new MockSocket(mockClientOutputStream, mockInputSteam);
         MockServerSocket mockServerSocket = new MockServerSocket(mockSocket);
+        // set the serverSocket to return IOException when trying to connect with client.
         mockServerSocket.setIOException();
         // Server
         WebServer webServer = new WebServer(mockSystemOut, mockServerSocket, mockServerStatus, requestParser, requestRouter, executor, logger);
@@ -126,5 +127,28 @@ public class WebServerTests {
         webServer.start();
 
         assertTrue(logger.getLogs().containsKey(LoggerHeader.CONNECTION_EXCEPTION));
+    }
+
+    @Test
+    public void serverLogHasLogAboutExceptionInSendingResponse_whenThereWasAnErrorInManagingConnection() throws IOException {
+        // Client Input
+        String requestString = "GET /fileThatDoesntExist HTTP/1.1\n" +
+                "Host: 0.0.0.0:5000\n" +
+                "Content-Length: 23\n\r\n" +
+                "nomethod body\ntestbody";
+        ByteArrayInputStream mockInputSteam = new ByteArrayInputStream(requestString.getBytes());
+        // Client Output
+        mockClientOutputStream = new ByteArrayOutputStream();
+        // Client Socket
+        MockSocket mockSocket = new MockSocket(mockClientOutputStream, mockInputSteam);
+        // Set the client socket to cause IOException when asked for output stream
+        mockSocket.setIOException();
+        MockServerSocket mockServerSocket = new MockServerSocket(mockSocket);
+        // Server
+        WebServer webServer = new WebServer(mockSystemOut, mockServerSocket, mockServerStatus, requestParser, requestRouter, executor, logger);
+
+        webServer.start();
+
+        assertTrue(logger.getLogs().containsKey(LoggerHeader.RESPONSE_EXCEPTION));
     }
 }

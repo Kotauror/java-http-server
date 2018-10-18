@@ -15,8 +15,12 @@ public class MockServerSocket extends ServerSocket {
     }
 
     @Override
-    public MockSocket accept() {
-        return (this.errorStatus == false) ? this.mockSocket : null;
+    public MockSocket accept() throws IOException {
+        if (this.errorStatus == true) {
+            throw new IOException();
+        } else {
+            return this.mockSocket;
+        }
     }
 
     public void setIOException() {
