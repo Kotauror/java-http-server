@@ -15,12 +15,12 @@ public class Logger {
         logs.put(LoggerHeader.NEW_SOCKET, portInfo);
     }
 
-    public void addConnectionException(String request) {
-        logs.put(LoggerHeader.CONNECTION_EXCEPTION, request);
+    public void addConnectionException(String exceptionInfo) {
+        logs.put(LoggerHeader.CONNECTION_EXCEPTION, exceptionInfo);
     }
 
-    public void addResponseException(String request) {
-        logs.put(LoggerHeader.RESPONSE_EXCEPTION, request);
+    public void addResponseException(String exceptionInfo) {
+        logs.put(LoggerHeader.RESPONSE_EXCEPTION, exceptionInfo);
     }
 
     public HashMap<LoggerHeader, String> getLogs() {

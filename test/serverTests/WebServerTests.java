@@ -4,9 +4,9 @@ import httpserver.request.RequestBuilder;
 import httpserver.request.RequestRouter;
 import httpserver.request.RequestParser;
 import httpserver.server.*;
-import httpserver.server.mocks.MockServerSocket;
-import httpserver.server.mocks.MockServerStatus;
-import httpserver.server.mocks.MockSocket;
+import serverTests.mocks.MockServerSocket;
+import serverTests.mocks.MockServerStatus;
+import serverTests.mocks.MockSocket;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -6,6 +6,7 @@ import httpserver.utilities.Method;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 
 public class PatchHandler extends Handler {
 
@@ -27,10 +28,14 @@ public class PatchHandler extends Handler {
         } catch (IOException e) {
             return this.getResponseBuilder().getNotFoundResponse();
         }
-        String actualShaOfRequestedFile = this.getEncoder().encode(fileContent, "SHA-1");
-        if (this.isValidPatchRequest(request, actualShaOfRequestedFile)) {
-            return this.processValidPatchRequest(request, file);
-        } else {
+        try {
+            String actualShaOfRequestedFile = this.getEncoder().encode(fileContent, "SHA-1");
+            if (this.isValidPatchRequest(request, actualShaOfRequestedFile)) {
+                return this.processValidPatchRequest(request, file);
+            } else {
+                return this.getResponseBuilder().getPreconditionFailedResponse();
+            }
+        } catch (NoSuchAlgorithmException e) {
             return this.getResponseBuilder().getPreconditionFailedResponse();
         }
     }

@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.LinkedHashMap;
 
 import static junit.framework.Assert.assertEquals;
@@ -24,7 +25,7 @@ public class PatchHandlerTests {
 
     @Before
     public void setup() {
-        rootPath = "src/httpserver/utilities/sampleTestFiles";
+        rootPath = "test/sampleTestFiles";
         patchHandler = new PatchHandler(rootPath);
         patchFileName = "/patch-content";
     }
@@ -63,7 +64,7 @@ public class PatchHandlerTests {
     }
 
     @Test
-    public void updatesFileOnPatchWhenFileExistsAndSHAMatch_andReturnStatus204() throws IOException {
+    public void updatesFileOnPatchWhenFileExistsAndSHAMatch_andReturnStatus204() throws IOException, NoSuchAlgorithmException {
         String contentToPatch = "patched content";
         Request request = this.getAValidRequest(contentToPatch);
         File requestedFile = patchHandler.getFileOperator().getRequestedFile(rootPath + patchFileName);
@@ -76,7 +77,7 @@ public class PatchHandlerTests {
         assertArrayEquals(contentToPatch.getBytes(), response.getBodyContent());
     }
 
-    private Request getAValidRequest(String contentToPath) throws IOException {
+    private Request getAValidRequest(String contentToPath) throws IOException, NoSuchAlgorithmException {
         String shaOfRequestedFile = this.getShaForFilePath(patchFileName);
         LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
             put("If-Match", shaOfRequestedFile);
@@ -84,7 +85,7 @@ public class PatchHandlerTests {
         return new Request(Method.PATCH, patchFileName, null, headers, contentToPath);
     }
 
-    private String getShaForFilePath(String path) throws IOException {
+    private String getShaForFilePath(String path) throws IOException, NoSuchAlgorithmException {
         File file = patchHandler.getFileOperator().getRequestedFile(rootPath + path);
         byte[] fileContent = patchHandler.getFileContentConverter().getFileContentFromFile(file);
         return patchHandler.getEncoder().encode(fileContent, "SHA-1");

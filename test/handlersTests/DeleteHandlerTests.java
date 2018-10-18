@@ -24,7 +24,7 @@ public class DeleteHandlerTests {
 
     @Before
     public void setupTestAndCreateFileToBeLaterDeleted() {
-        rootPath = "src/httpserver/utilities/sampleTestFiles";
+        rootPath = "test/sampleTestFiles";
         pathOfFileToBeDeleted = "/filetesting";
         PutHandler putHandler = new PutHandler(rootPath);
         Request request = new Request(Method.GET, pathOfFileToBeDeleted, null, null, "Some content");

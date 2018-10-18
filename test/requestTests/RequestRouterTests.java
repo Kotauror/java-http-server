@@ -20,7 +20,7 @@ public class RequestRouterTests {
 
     @Before
     public void setup() {
-        String rootPath = "src/httpserver/utilities/sampleTestFiles";
+        String rootPath = "test/sampleTestFiles";
         Logger logger = new Logger();
         requestRouter = new RequestRouter(rootPath, logger);
         headers = new LinkedHashMap<String, String>() {{

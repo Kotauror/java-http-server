@@ -25,7 +25,7 @@ public class GetHandlerTests {
 
     @Before
     public void setup() {
-        rootPath = "src/httpserver/utilities/sampleTestFiles";
+        rootPath = "test/sampleTestFiles";
         getHandler = new GetHandler(rootPath);
     }
 
@@ -44,9 +44,7 @@ public class GetHandlerTests {
 
     @Test
     public void pathExists_WhenPathToFileIsValid_ReturnsTrue() {
-        String pathToTestFile = "src/httpserver/utilities/sampleTestFiles/";
-
-        boolean actual = getHandler.getFileOperator().fileExists(pathToTestFile);
+        boolean actual = getHandler.getFileOperator().fileExists(rootPath);
 
         assertEquals(true, actual);
     }

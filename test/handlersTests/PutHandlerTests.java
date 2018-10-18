@@ -30,7 +30,7 @@ public class PutHandlerTests {
 
     @Before
     public void setup() {
-        rootPath = "src/httpserver/utilities/sampleTestFiles";
+        rootPath = "test/sampleTestFiles";
         putHandler = new PutHandler(rootPath);
         headers = new LinkedHashMap<>();
         body = "example body";
@@ -40,7 +40,7 @@ public class PutHandlerTests {
 
     @Test
     public void coversPath_when_PathIsValid_ReturnTrue() {
-        String path = "src/httpserver/utilities/testFile";
+        String path = "test/sampleTestFiles/testFile";
         Request request = new Request(Method.GET, path, null, headers, body);
 
         assertTrue(putHandler.coversPathFromRequest(request));

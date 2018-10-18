@@ -21,7 +21,7 @@ public class HeadHandlerTests {
 
     @Before
     public void setup() {
-        String rootPath = "src/httpserver/utilities/sampleTestFiles";
+        String rootPath = "test/sampleTestFiles";
         headHandler = new HeadHandler(rootPath);
         String path = "/";
         LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>(){};
