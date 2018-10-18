@@ -3,12 +3,14 @@ package httpserver.handlers;
 import httpserver.request.Request;
 import httpserver.response.Response;
 import httpserver.server.Logger;
+import httpserver.server.LoggerHeader;
 import httpserver.utilities.AuthenticationCredentials;
 import httpserver.utilities.Method;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.Map;
 
 public class BasicAuthHandler extends Handler {
 
@@ -62,7 +64,11 @@ public class BasicAuthHandler extends Handler {
     }
 
     private Response getResponseForSuccessfulBasicAuth() {
-        byte [] body = "GET /logs HTTP/1.1 PUT /these HTTP/1.1 HEAD /requests HTTP/1.1".getBytes();
-        return this.getResponseBuilder().getOKResponse(body, new HashMap<>());
+        StringBuilder bodyOfResponse = new StringBuilder();
+        bodyOfResponse.append("GET /logs HTTP/1.1 PUT /these HTTP/1.1 HEAD /requests HTTP/1.1\n");
+        for (Map.Entry<LoggerHeader, String> log : this.logger.getLogs().entrySet()) {
+            bodyOfResponse.append(log.getKey().toString() + ": " + log.getValue() + "\n");
+        }
+        return this.getResponseBuilder().getOKResponse(bodyOfResponse.toString().getBytes(), new HashMap<>());
     }
 }
