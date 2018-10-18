@@ -8,7 +8,13 @@ The server passes all tests from [Cob Spec](https://github.com/8thlight/cob_spec
 
 Both this server and Cob Spec require Java 8 and Maven.
 
-## Running the server
+## Readme's content:
+
+[Running the server](#running-server)
+[Running the Cob Spec tests](#running-cob-spec)
+[Things to improve, spotted irregularities](#improve)
+
+## <a name="running-server"> Running the server </a>
 
 1. Clone the Cob Spec repo. It will be needed to run the test suite and serve as a root directory with sample files: `$ git clone https://github.com/8thlight/cob_spec.git`
 
@@ -27,10 +33,11 @@ Both this server and Cob Spec require Java 8 and Maven.
 This server should now be running - you should see `I'm listening for connections` in the console.
 
 You can go to `http://localhost:port/` (replace `port` with a port number set in step 5) to see the public directory of files and make HTTP requests.
+
 If you're using Google Chrome, and you're firing this server for n-th time, there is a chance that instead of seeing the file directory, you'll see this bizzare line: `mmmm textwrapon=false; textautoformat=false; wysiwyg=textarea`.
 Stay calm. In order to fix it, open the DevTools -> go to Application -> Clear site data. It should help!
 
-## Running the Cob Spec tests
+## <a name="running-cob-spec"> Running the Cob Spec tests </a>
 
 1. Enter into Cob Spec directory (cloned in step 1 of the section above): `$ cd cob_spec`
 
@@ -65,7 +72,7 @@ On my machine, this line looks like this:
 
 ![test green](https://image.ibb.co/mEDQgL/Zrzut-ekranu-2018-10-18-o-11-21-17.png)
 
-## Things to improve, spotted irregularities
+## <a name="improve"> Things to improve, spotted irregularities </a>
 
 ### Authentication data
 TL;DR: disclosed authentication data.
@@ -77,8 +84,8 @@ publicly visible, but would be hidden as environmental variables.
 ### Logger
 TL;DR: The server has only a basic logger.
 When writing the server I was following requirements laid down by the Fitnesse testing framework.
-None of the tests needed a logger to pass, so I've decided to not add this functionality and focus on the things that were actually necessary to pass tests.
-As I had some time left before submitting the code for review, I've decided to try to add a logger.
+None of the tests needed a logger to pass, so I've decided not to work on this functionality and focus on passing all of the tests.
+Once all of them were passing and I had some time left before submitting the code for review, I've decided to try to add a logger.
 I've managed to develop a basic functionality that collects information about:
 - connections with clients;
 - IOExceptions thrown when connecting with clients;
@@ -86,7 +93,8 @@ I've managed to develop a basic functionality that collects information about:
 The logger data is then available at the `BasicAuthHadler`, after providing authentication data. The server's logger is injected to `BasicAuthHadler` via `RequestRouter`.
 
 In my opinion, the logger should have some form of logger-handler - an instance that would be injected into each client's thread - and that would
-collect more data, for example about requests that were made by the clients. The logger that I've written can't be used for this purpose as it shouldn't disclose its public API to clients.
+collect more data, for example about requests that were made by the clients, and then send it to the "main" logger.
+The logger that I've written can't be used to collect clients' data as it shouldn't disclose its public API to them (hence the need of some form of handler).
 
 ### Continuous integration
 There is no tool ensuring a successful build on my project like Travis CI. No further explanation needed, adding it would be beneficial.
