@@ -21,7 +21,7 @@ public class DirectoryLinksHandler extends Handler {
 
     @Override
     public Response processRequest(Request request) {
-        File[] files = new File(this.rootPath).listFiles();
+        File[] files = this.getFileOperator().getFilesFromDirectory(this.rootPath);
         byte[] body = this.getBodyContent(files);
         HashMap<ResponseHeader, String> headers = this.getHeaders();
         return this.getResponseBuilder().getOKResponse(body, headers);
