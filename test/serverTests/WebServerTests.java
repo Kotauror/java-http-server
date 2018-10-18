@@ -28,6 +28,7 @@ public class WebServerTests {
     private RequestRouter requestRouter;
     private CurrentThreadExecutor executor;
     private PrintStream mockSystemOut;
+    private Logger logger;
 
     @Before
     public void setup() {
@@ -38,7 +39,8 @@ public class WebServerTests {
         mockServerStatus = new MockServerStatus();
         requestParser = new RequestParser(new RequestBuilder());
         rootPath = "/Users/justynazygmunt/Desktop/cob_spec/public/";
-        requestRouter = new RequestRouter(rootPath);
+        logger = new Logger();
+        requestRouter = new RequestRouter(rootPath, logger);
         executor = new CurrentThreadExecutor();
     }
 
@@ -53,7 +55,7 @@ public class WebServerTests {
         MockSocket mockSocket = new MockSocket(mockClientOutputStream, mockInputSteam);
         // Server
         MockServerSocket mockServerSocket = new MockServerSocket(mockSocket);
-        WebServer webServer = new WebServer(mockSystemOut, mockServerSocket, mockServerStatus, requestParser, requestRouter, executor);
+        WebServer webServer = new WebServer(mockSystemOut, mockServerSocket, mockServerStatus, requestParser, requestRouter, executor, logger);
 
         webServer.start();
 
@@ -74,7 +76,7 @@ public class WebServerTests {
         MockSocket mockSocket = new MockSocket(mockClientOutputStream, mockInputSteam);
         // Server
         MockServerSocket mockServerSocket = new MockServerSocket(mockSocket);
-        WebServer webServer = new WebServer(mockSystemOut, mockServerSocket, mockServerStatus, requestParser, requestRouter, executor);
+        WebServer webServer = new WebServer(mockSystemOut, mockServerSocket, mockServerStatus, requestParser, requestRouter, executor, logger);
 
         webServer.start();
 
@@ -97,10 +99,56 @@ public class WebServerTests {
         MockSocket mockSocket = new MockSocket(mockClientOutputStream, mockInputSteam);
         MockServerSocket mockServerSocket = new MockServerSocket(mockSocket);
         // Server
-        WebServer webServer = new WebServer(mockSystemOut, mockServerSocket, mockServerStatus, requestParser, requestRouter, executor);
+        WebServer webServer = new WebServer(mockSystemOut, mockServerSocket, mockServerStatus, requestParser, requestRouter, executor, logger);
 
         webServer.start();
 
         assertEquals("HTTP/1.1 404", mockClientOutputStream.toString().trim());
+    }
+
+    @Test
+    public void serverLogHasLogAboutConnectionException_whenThereWasAnErrorInConnectingWithClientSocket() throws IOException {
+        // Client Input
+        String requestString = "GET /fileThatDoesntExist HTTP/1.1\n" +
+                "Host: 0.0.0.0:5000\n" +
+                "Content-Length: 23\n\r\n" +
+                "nomethod body\ntestbody";
+        ByteArrayInputStream mockInputSteam = new ByteArrayInputStream(requestString.getBytes());
+        // Client Output
+        mockClientOutputStream = new ByteArrayOutputStream();
+        // Client Socket
+        MockSocket mockSocket = new MockSocket(mockClientOutputStream, mockInputSteam);
+        MockServerSocket mockServerSocket = new MockServerSocket(mockSocket);
+        // set the serverSocket to return IOException when trying to connect with client.
+        mockServerSocket.setIOException();
+        // Server
+        WebServer webServer = new WebServer(mockSystemOut, mockServerSocket, mockServerStatus, requestParser, requestRouter, executor, logger);
+
+        webServer.start();
+
+        assertTrue(logger.getLogs().containsKey(LoggerHeader.CONNECTION_EXCEPTION));
+    }
+
+    @Test
+    public void serverLogHasLogAboutExceptionInSendingResponse_whenThereWasAnErrorInManagingConnection() throws IOException {
+        // Client Input
+        String requestString = "GET /fileThatDoesntExist HTTP/1.1\n" +
+                "Host: 0.0.0.0:5000\n" +
+                "Content-Length: 23\n\r\n" +
+                "nomethod body\ntestbody";
+        ByteArrayInputStream mockInputSteam = new ByteArrayInputStream(requestString.getBytes());
+        // Client Output
+        mockClientOutputStream = new ByteArrayOutputStream();
+        // Client Socket
+        MockSocket mockSocket = new MockSocket(mockClientOutputStream, mockInputSteam);
+        // Set the client socket to cause IOException when asked for output stream
+        mockSocket.setIOException();
+        MockServerSocket mockServerSocket = new MockServerSocket(mockSocket);
+        // Server
+        WebServer webServer = new WebServer(mockSystemOut, mockServerSocket, mockServerStatus, requestParser, requestRouter, executor, logger);
+
+        webServer.start();
+
+        assertTrue(logger.getLogs().containsKey(LoggerHeader.RESPONSE_EXCEPTION));
     }
 }

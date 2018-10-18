@@ -5,6 +5,7 @@ import httpserver.request.Request;
 import httpserver.response.ResponseHeader;
 import httpserver.response.Response;
 import httpserver.response.ResponseStatus;
+import httpserver.server.Logger;
 import httpserver.utilities.Method;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,17 +22,21 @@ public class BasicAuthTests {
 
     @Before
     public void setup() {
-        basicAuthHandler = new BasicAuthHandler();
+        Logger logger = new Logger();
+        basicAuthHandler = new BasicAuthHandler(logger);
+        logger.addNewSocketLog("port fake info");
         path = "/logs";
     }
 
     @Test
-    public void returnsResponseWithStatusOKWhen_RequestHasGetMethodAndIsAuthorised() {
+    public void returnsResponseWIthStatusOKKAndLogs_WhenRequestWithValidCredentials() {
         LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>() {{
             put("Authorization", "Basic YWRtaW46aHVudGVyMg==");
         }};
         Request request = new Request(Method.GET, path, null, headers, null);
-        byte [] expectedBody = "GET /logs HTTP/1.1 PUT /these HTTP/1.1 HEAD /requests HTTP/1.1".getBytes();
+        String bodyString = "GET /logs HTTP/1.1 PUT /these HTTP/1.1 HEAD /requests HTTP/1.1\n" +
+                "NEW_SOCKET: port fake info\n";
+        byte [] expectedBody = bodyString.getBytes();
 
         Response response = basicAuthHandler.processRequest(request);
 
