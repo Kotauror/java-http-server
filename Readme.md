@@ -26,7 +26,9 @@ Both this server and Cob Spec require Java 8 and Maven.
 
 This server should now be running - you should see `I'm listening for connections` in the console.
 
-You can go to `http://localhost:port/` (replace `port` with a port number set in step 5) public directory of files and make HTTP requests.
+You can go to `http://localhost:port/` (replace `port` with a port number set in step 5) to see the public directory of files and make HTTP requests.
+If you're using Google Chrome, and you're firing this server for n-th time, there is a chance that instead of seeing the file directory, you'll see this bizzare line: `mmmm textwrapon=false; textautoformat=false; wysiwyg=textarea`.
+Stay calm. In order to fix it, open the DevTools -> go to Application -> Clear site data. It should help!
 
 ## Running the Cob Spec tests
 
@@ -38,9 +40,9 @@ You can go to `http://localhost:port/` (replace `port` with a port number set in
 
 Open your browser and go to http://localhost:9090 - you should see Fitnesse website.
 
-4. Configure the test suite. Go to the HttpTestSuite and click 'Edit' at the top. You need to update the 'User-Defined Variables' that should be visible in the text box.
+4. Configure the test suite. Go to the HttpTestSuite and click 'Edit' at the top. You need to update the `User-Defined Variables` that should be visible in the text box.
 
-4a. `SERVER_START_COMMAND` is the command to start the server by executing jar, hence it should have a path to the jar file:
+4a. `SERVER_START_COMMAND` is the command to start the server by executing JAR, hence it should have a path to the JAR file we want to execute:
 
 `!define SERVER_START_COMMAND {java -jar (path-to-httpServer-root-on-your-machine)/out/artifacts/java_http_server_jar/java-http-server.jar}`
 
@@ -55,7 +57,7 @@ On my machine, this line looks like this:
 
 `!define PUBLIC_DIR {/Users/justynazygmunt/Desktop/cob_spec/public}`
 
-4c. Remember to remove `-` from the beginning of both lines in the 'User-Defined Variables' section. Only then the variables will be visible to the testing framework.
+4c. Remember to remove `-` from the beginning of both lines in the `User-Defined Variables` section! Only then the variables will be visible to the testing framework.
 
 5. Click Save.
 
@@ -95,12 +97,6 @@ When working on the project I've used IntelliJ IDE, which is super handy, especi
 Because of this, the project has no gradle file that allows for building it outside of IntelliJ environment. It was not really needed for this code review,
 as I've provided the review board with a JAR file of an already build project, but should be kept in mind for the future, to make it easier for others to work on the same project.
 There is a rumor that not everyone uses IntelliJ :P
-
-### Chrome vs the rest of browsers - what you see when firing the server locally.
-When I open the server on Chrome, I don not always see the list of files, but instead this line appears:
-`mmmm textwrapon=false; textautoformat=false; wysiwyg=textarea`.
-Cleaning cookies didn't help. This issue doesn't happen in other browsers (checked Safari and Mozilla).
-If I had more time, I would get to the bottom of this issue.
 
 ### SimultaneousTestSuite.TimeToComplete - performance issue
 Last but not least, I've spotted a bizzare performance issue that I haven't figured out.
