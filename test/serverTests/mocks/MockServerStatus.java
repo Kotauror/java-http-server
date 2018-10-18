@@ -1,4 +1,4 @@
-package httpserver.server.mocks;
+package serverTests.mocks;
 
 import httpserver.server.ServerStatus;
 
