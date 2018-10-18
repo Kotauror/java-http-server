@@ -77,7 +77,7 @@ On my machine, this line looks like this:
 ## <a name="diagram"> Class Diagram  </a>
 
 ![Class diagram](/class_diagram.jpg)
-To see a bigger version on the image, go to `/class_diagram.jpg`.
+Click on the image to allow making it bigger.
 
 ## <a name="improve"> Things to improve, spotted irregularities </a>
 
