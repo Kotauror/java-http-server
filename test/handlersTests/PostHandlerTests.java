@@ -27,7 +27,7 @@ public class PostHandlerTests {
 
     @Before
     public void setup() {
-        rootPath = "src/httpserver/utilities/sampleTestFiles";
+        rootPath = "test/sampleTestFiles";
         headers = new LinkedHashMap<>();
         body = "example body";
         postHandler = new PostHandler(rootPath);

@@ -19,7 +19,7 @@ public class DirectoryListingHandlerTests {
     @Before
     public void setup() {
         method = Method.GET;
-        String rootPath = "src/httpserver/utilities/sampleTestFiles";
+        String rootPath = "test/sampleTestFiles";
         directoryLinksHandler = new DirectoryLinksHandler(rootPath);
     }
 

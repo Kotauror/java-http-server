@@ -25,7 +25,7 @@ public class PatchHandlerTests {
 
     @Before
     public void setup() {
-        rootPath = "src/httpserver/utilities/sampleTestFiles";
+        rootPath = "test/sampleTestFiles";
         patchHandler = new PatchHandler(rootPath);
         patchFileName = "/patch-content";
     }

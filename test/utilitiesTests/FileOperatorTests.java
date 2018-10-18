@@ -21,7 +21,7 @@ public class FileOperatorTests {
 
     @Before
     public void setup() {
-        rootPath = "src/httpserver/utilities/sampleTestFiles";
+        rootPath = "test/sampleTestFiles";
         fileOperator = new FileOperator();
     }
 

@@ -33,7 +33,7 @@ public class FormHandlerTests {
 
     @Before
     public void setup() {
-        rootPath = "src/httpserver/utilities/sampleTestFiles";
+        rootPath = "test/sampleTestFiles";
         formHandler = new FormHandler(rootPath);
         pathForFileUpdatedOnPut = "/cat-form";
         pathForFileCreatedOnPost = "/samplesample";
@@ -82,7 +82,7 @@ public class FormHandlerTests {
 
         Response response = formHandler.processRequest(request);
 
-        String contentOfFile = new String(Files.readAllBytes(Paths.get("src/httpserver/utilities/sampleTestFiles" + pathForFileCreatedOnPost)));
+        String contentOfFile = new String(Files.readAllBytes(Paths.get(rootPath + pathForFileCreatedOnPost)));
         assertEquals(ResponseStatus.CREATED, response.getStatus());
         assertEquals(body, contentOfFile);
         assertEquals(pathForFileCreatedOnPost + "/data", response.getHeaders().get(ResponseHeader.LOCATION.toString()));
@@ -111,7 +111,7 @@ public class FormHandlerTests {
 
         Response response = formHandler.processRequest(request);
 
-        String contentOfFile = new String(Files.readAllBytes(Paths.get("src/httpserver/utilities/sampleTestFiles" + pathForFileUpdatedOnPut)));
+        String contentOfFile = new String(Files.readAllBytes(Paths.get(rootPath + pathForFileUpdatedOnPut)));
         assertEquals(ResponseStatus.OK, response.getStatus());
         assertEquals(body, contentOfFile);
     }

@@ -16,15 +16,17 @@ import static org.junit.Assert.assertArrayEquals;
 public class FileContentConverterTests {
 
     private FileContentConverter fileContentConverter;
+    private String rootPath;
 
     @Before
     public void setup() {
+        rootPath = "test/sampleTestFiles";
         fileContentConverter = new FileContentConverter();
     }
 
     @Test
     public void transformsFileIntoArrayOfBytes() throws IOException {
-        String filePath = "src/httpserver/utilities/sampleTestFiles/testFile.txt";
+        String filePath = rootPath + "/testFile.txt";
         byte[] fileContent = "test strjjing hehhe\n".getBytes();
         Files.write(Paths.get(filePath), fileContent);
 
@@ -35,7 +37,7 @@ public class FileContentConverterTests {
 
     @Test
     public void transformsRangeOfFileIntoArrayOfBytes() throws IOException {
-        String filePath = "src/httpserver/utilities/sampleTestFiles/partial_content.txt";
+        String filePath = rootPath + "/partial_content.txt";
         byte[] fileContent = "This".getBytes();
         Files.write(Paths.get(filePath), fileContent);
         HashMap startEndMap = new HashMap<String, Integer>(){};
@@ -49,7 +51,7 @@ public class FileContentConverterTests {
 
     @After
     public void bringBackLongerVersionOfFile() throws IOException {
-        String filePath = "src/httpserver/utilities/sampleTestFiles/partial_content.txt";
+        String filePath = rootPath + "/partial_content.txt";
         byte[] fileContent = "This is a file that contains text to read part of in order to fulfill a 206.\n".getBytes();
         Files.write(Paths.get(filePath), fileContent);
     }
