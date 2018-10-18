@@ -1,14 +1,13 @@
 package requestTests;
 
 import httpserver.request.RequestBuilder;
-import httpserver.utilities.Method;
+import httpserver.request.Method;
 import httpserver.request.Request;
 import httpserver.request.RequestParser;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.util.LinkedHashMap;
 
 import static junit.framework.Assert.assertEquals;

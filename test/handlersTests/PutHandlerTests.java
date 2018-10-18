@@ -4,12 +4,11 @@ import httpserver.handlers.PutHandler;
 import httpserver.request.Request;
 import httpserver.response.Response;
 import httpserver.response.ResponseStatus;
-import httpserver.utilities.Method;
+import httpserver.request.Method;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;

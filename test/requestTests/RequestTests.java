@@ -1,6 +1,6 @@
 package requestTests;
 
-import httpserver.utilities.Method;
+import httpserver.request.Method;
 import httpserver.request.Request;
 import org.junit.Before;
 import org.junit.Test;

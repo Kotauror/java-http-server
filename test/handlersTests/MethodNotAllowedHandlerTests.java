@@ -4,7 +4,7 @@ import httpserver.handlers.MethodNotAllowedHandler;
 import httpserver.request.Request;
 import httpserver.response.Response;
 import httpserver.response.ResponseStatus;
-import httpserver.utilities.Method;
+import httpserver.request.Method;
 import org.junit.Test;
 
 import java.util.LinkedHashMap;

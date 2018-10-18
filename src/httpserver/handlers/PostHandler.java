@@ -2,7 +2,7 @@ package httpserver.handlers;
 
 import httpserver.response.ResponseHeader;
 import httpserver.utilities.FileType;
-import httpserver.utilities.Method;
+import httpserver.request.Method;
 import httpserver.request.Request;
 import httpserver.response.Response;
 

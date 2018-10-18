@@ -2,7 +2,7 @@ package utilitiesTests;
 
 import httpserver.request.Request;
 import httpserver.utilities.FileOperator;
-import httpserver.utilities.Method;
+import httpserver.request.Method;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -3,7 +3,7 @@ package httpserver.handlers;
 import httpserver.request.Request;
 import httpserver.response.Response;
 import httpserver.response.ResponseHeader;
-import httpserver.utilities.Method;
+import httpserver.request.Method;
 
 import java.util.HashMap;
 

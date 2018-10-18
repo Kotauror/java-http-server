@@ -5,7 +5,7 @@ import httpserver.response.Response;
 import httpserver.server.Logger;
 import httpserver.server.LoggerHeader;
 import httpserver.utilities.AuthenticationCredentials;
-import httpserver.utilities.Method;
+import httpserver.request.Method;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;

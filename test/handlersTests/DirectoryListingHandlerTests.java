@@ -3,7 +3,7 @@ package handlersTests;
 import httpserver.handlers.DirectoryLinksHandler;
 import httpserver.request.Request;
 import httpserver.response.Response;
-import httpserver.utilities.Method;
+import httpserver.request.Method;
 import org.junit.Before;
 import org.junit.Test;
 

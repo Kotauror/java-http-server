@@ -2,7 +2,7 @@ package httpserver.handlers;
 
 import httpserver.request.Request;
 import httpserver.response.Response;
-import httpserver.utilities.Method;
+import httpserver.request.Method;
 
 import java.io.IOException;
 import java.util.Arrays;

@@ -6,7 +6,7 @@ import httpserver.response.ResponseHeader;
 import httpserver.response.Response;
 import httpserver.response.ResponseStatus;
 import httpserver.server.Logger;
-import httpserver.utilities.Method;
+import httpserver.request.Method;
 import org.junit.Before;
 import org.junit.Test;
 

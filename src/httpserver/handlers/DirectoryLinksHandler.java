@@ -4,7 +4,7 @@ import httpserver.request.Request;
 import httpserver.response.ResponseHeader;
 import httpserver.response.Response;
 import httpserver.utilities.FileType;
-import httpserver.utilities.Method;
+import httpserver.request.Method;
 
 import java.io.File;
 import java.util.HashMap;

@@ -2,7 +2,7 @@ package requestTests;
 
 import httpserver.handlers.HandlerType;
 import httpserver.server.Logger;
-import httpserver.utilities.Method;
+import httpserver.request.Method;
 import httpserver.handlers.Handler;
 import httpserver.request.RequestRouter;
 import httpserver.request.Request;

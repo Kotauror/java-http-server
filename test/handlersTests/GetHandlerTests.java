@@ -1,10 +1,9 @@
 package handlersTests;
 
 import httpserver.response.ResponseHeader;
-import httpserver.utilities.Method;
+import httpserver.request.Method;
 import httpserver.handlers.GetHandler;
 import httpserver.request.Request;
-import httpserver.utilities.FileContentConverter;
 import httpserver.response.Response;
 import httpserver.response.ResponseStatus;
 import org.junit.Assert;
