@@ -61,21 +61,50 @@ On my machine, this line looks like this:
 
 6. Run the tests by navigating back to the HttpTestSuite website's initial page and click Suite. All tests should turn green.
 
-## Things to improve
+![test green](https://image.ibb.co/mEDQgL/Zrzut-ekranu-2018-10-18-o-11-21-17.png)
 
-### Authorisation data
-Password and login required to authorize a client (see `BasicAuthHadler`) are available in `utilities/AuthenticationCredentials`.
+## Things to improve, spotted irregularities
+
+### Authentication data
+TL;DR: disclosed authentication data.
+Password and login required to authorize a client making request for the `/logs` path (see `BasicAuthHadler`) are available in `utilities/AuthenticationCredentials`.
 This information in publicly visible and was pushed to GitHub because this server is for training purpose and I wanted crafters
 from 8th Light to have a complete access to all information in an easy way. In real life though, credentials wouldn't be
 publicly visible, but would be hidden as environmental variables.
 
 ### Logger
-The server has no logger. When writing the server I was following requirements laid down by the Fitnesse testing framework.
-None of the tests needed a logger, so I've decided to not add this functionality and focus on the things that were actually necessary to pass tests.
-Although not explicitly required, I am aware that a form of logging is very useful and should be implemented.
-If I had more time, I would write a logger that:
-- collects and logs information about requests made;
-- collects and logs information about errors.
+TL;DR: The server has only a basic logger.
+When writing the server I was following requirements laid down by the Fitnesse testing framework.
+None of the tests needed a logger to pass, so I've decided to not add this functionality and focus on the things that were actually necessary to pass tests.
+As I had some time left before submitting the code for review, I've decided to try to add a logger.
+I've managed to develop a basic functionality that collects information about:
+- connections with clients;
+- IOExceptions thrown when connecting with clients;
+- IOExceptions thrown within the request-response cycle.
+The logger data is then available at the `BasicAuthHadler`, after providing authentication data. The server's logger is injected to `BasicAuthHadler` via `RequestRouter`.
+
+In my opinion, the logger should have some form of logger-handler - an instance that would be injected into each client's thread - and that would
+collect more data, for example about requests that were made by the clients. The logger that I've written can't be used for this purpose as it shouldn't disclose its public API to clients.
 
 ### Continuous integration
 There is no tool ensuring a successful build on my project like Travis CI. No further explanation needed, adding it would be beneficial.
+
+### IntelliJ vs pure Gradle
+TL;DR: no gradle.build file.
+When working on the project I've used IntelliJ IDE, which is super handy, especially when it comes to refactoring. I was also building the project via IntelliJ.
+Because of this, the project has no gradle file that allows for building it outside of IntelliJ environment. It was not really needed for this code review,
+as I've provided the review board with a JAR file of an already build project, but should be kept in mind for the future, to make it easier for others to work on the same project.
+There is a rumor that not everyone uses IntelliJ :P
+
+### Chrome vs the rest of browsers - what you see when firing the server locally.
+When I open the server on Chrome, I don not always see the list of files, but instead this line appears:
+`mmmm textwrapon=false; textautoformat=false; wysiwyg=textarea`.
+Cleaning cookies didn't help. This issue doesn't happen in other browsers (checked Safari and Mozilla).
+If I had more time, I would get to the bottom of this issue.
+
+### SimultaneousTestSuite.TimeToComplete - performance issue
+Last but not least, I've spotted a bizzare performance issue that I haven't figured out.
+When the SimultaneousTestSuite.TimeToComplete Fitnesse test is run together with other tests (when sunning the whole suite at once),
+it takes from 2 to 4 seconds, what seems to be normal time. However, when run separately, it takes more time. What is more, each next time it takes more time, from 5 to 20 seconds.
+Each time it's passing though. Again, if I had more time, I would try to understand the reason for it.
+
