@@ -12,6 +12,7 @@ Both this server and Cob Spec require Java 8 and Maven.
 
 [Running the server](#running-server) <br>
 [Running the Cob Spec tests](#running-cob-spec) <br>
+[Class diagram](#diagram) <br>
 [Things to improve, spotted irregularities](#improve) <br>
 [What went good](#good) <br>
 
@@ -72,6 +73,11 @@ On my machine, this line looks like this:
 6. Run the tests by navigating back to the HttpTestSuite website's initial page and click Suite. All tests should turn green.
 
 ![test green](https://image.ibb.co/mEDQgL/Zrzut-ekranu-2018-10-18-o-11-21-17.png)
+
+## <a name="diagram"> Class Diagram  </a>
+
+![Class diagram](/class_diagram.jpg)
+Click on the image to allow making it bigger.
 
 ## <a name="improve"> Things to improve, spotted irregularities </a>
 
