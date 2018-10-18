@@ -10,9 +10,9 @@ Both this server and Cob Spec require Java 8 and Maven.
 
 ## Readme's content:
 
-[Running the server](#running-server)
-[Running the Cob Spec tests](#running-cob-spec)
-[Things to improve, spotted irregularities](#improve)
+[Running the server](#running-server) <br>
+[Running the Cob Spec tests](#running-cob-spec) <br>
+[Things to improve, spotted irregularities](#improve) <br>
 
 ## <a name="running-server"> Running the server </a>
 
