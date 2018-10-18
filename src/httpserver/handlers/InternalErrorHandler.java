@@ -11,10 +11,7 @@ public class InternalErrorHandler extends Handler {
 
     @Override
     public boolean handles(Request request) {
-        if (request.getBody() != null) {
-            return (request.getBody().contains("Error in buffering"));
-        }
-        return false;
+        return (request.getBody() != null) && (request.getBody().contains("Error in buffering"));
     }
 
     @Override

@@ -83,15 +83,11 @@ public class RangeRequestResponder {
 
     private Response getSuccessfulRangeResponse(Request request, HashMap<String, String> rangeLimits, int lengthOfRequestedFile) throws IOException {
         File file = this.fileOperator.getRequestedFile(this.rootPath + request.getPath());
-        byte[] body = this.getPartOfFileContent(rangeLimits, file);
+        byte[] body = this.fileContentConverter.getPartOfFile(file, rangeLimits);
         FileType fileType = this.fileTypeDecoder.getFileType(request.getPath());
         String contentRangeHeader = this.getContentRangeHeader(lengthOfRequestedFile, rangeLimits);
         HashMap<ResponseHeader, String> headers = this.getHeaders(fileType, contentRangeHeader);
         return new Response(ResponseStatus.RANGE_REQUEST, body, headers);
-    }
-
-    private byte[] getPartOfFileContent(HashMap startAndEnd, File file) throws IOException {
-        return this.fileContentConverter.getPartOfFile(file, startAndEnd);
     }
 
     private String getContentRangeHeader(int fileLength, HashMap rangeLimits) {

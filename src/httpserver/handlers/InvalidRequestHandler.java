@@ -11,10 +11,7 @@ public class InvalidRequestHandler extends Handler{
 
     @Override
     public boolean handles(Request request) {
-        if (request.getBody() != null) {
-            return (request.getBody().contains("Error in parsing"));
-        }
-        return false;
+        return (request.getBody() != null) && request.getBody().contains("Error in parsing");
     }
 
     @Override
