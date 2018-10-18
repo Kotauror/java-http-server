@@ -6,7 +6,6 @@ import java.security.NoSuchAlgorithmException;
 
 public class Encoder {
 
-
     public String encode(byte[] byteArray, String algorithm) {
         try {
             MessageDigest messageDigest = MessageDigest.getInstance(algorithm);
