@@ -109,8 +109,8 @@ There is a rumor that not everyone uses IntelliJ :P
 
 ### SimultaneousTestSuite.TimeToComplete - performance issue
 Last but not least, I've spotted a bizzare performance issue that I haven't figured out.
-When the SimultaneousTestSuite.TimeToComplete Fitnesse test is run together with other tests (when sunning the whole suite at once),
-it takes from 2 to 4 seconds, what seems to be normal time. However, when run separately, it takes more time. What is more, each next time it takes more time, from 5 to 20 seconds.
+When the SimultaneousTestSuite.TimeToComplete Fitnesse test is run together with other tests (when running the whole suite at once),
+it takes from 2 to 4 seconds to pass it, what seems to be a normal time. However, when run separately, this test takes more time. What is more, each next time it takes more time, generally from 5 to 20 seconds.
 Each time it's passing though. Again, if I had more time, I would try to understand the reason for it.
 
 ## <a name="good"> What went good </a>
