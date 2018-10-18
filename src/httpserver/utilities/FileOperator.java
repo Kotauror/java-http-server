@@ -46,6 +46,10 @@ public class FileOperator {
         return (!this.fileExists(root + filePath)) && (this.fileExists(root + pathWithoutEventualKey));
     }
 
+    public File[] getFilesFromDirectory(String directoryPath) {
+        return new File(directoryPath).listFiles();
+    }
+
     private boolean keyDoesNotExist(String[] partsOfPath) {
         return partsOfPath.length == 2;
     }

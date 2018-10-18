@@ -2,7 +2,6 @@ package httpserver.utilities;
 
 public class FileTypeDecoder {
 
-
     public FileTypeDecoder(){}
 
     public FileType getFileType(String fileName) {
