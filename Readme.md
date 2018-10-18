@@ -13,6 +13,7 @@ Both this server and Cob Spec require Java 8 and Maven.
 [Running the server](#running-server) <br>
 [Running the Cob Spec tests](#running-cob-spec) <br>
 [Things to improve, spotted irregularities](#improve) <br>
+[What went good](#good) <br>
 
 ## <a name="running-server"> Running the server </a>
 
@@ -111,4 +112,21 @@ Last but not least, I've spotted a bizzare performance issue that I haven't figu
 When the SimultaneousTestSuite.TimeToComplete Fitnesse test is run together with other tests (when sunning the whole suite at once),
 it takes from 2 to 4 seconds, what seems to be normal time. However, when run separately, it takes more time. What is more, each next time it takes more time, from 5 to 20 seconds.
 Each time it's passing though. Again, if I had more time, I would try to understand the reason for it.
+
+## <a name="good"> What went good </a>
+
+### Testing
+I have a high test coverage (97% of methods, 94% of lines). I wrote both integration tests (see `/test/serverTests/WebServerTests`) and unit tests.
+
+### Going that extra mile
+My code not only passes the Fitnesse tests, but covers other - not requested, but really necessary things like catching errors. I've also made sure that all handlers are universal and can handle other requests, not only these made by the Fitnesse suite.
+
+### DRY and comprehensible code
+I've done lots of refactoring and redesigning to keep my code DRY and easy to ready.
+
+### Clean tests
+I've ensured that tests don't rely on each other (mistake I've made in my previous projects). When needed, tests have `@Before` and `@After` sections to prepare tests and clean the slate afterwards.
+
+### Minimizing public interfaces
+I've paid lots of attention to keeping the public interfaces of all classes as small as possible. Most of them have only one public class (eg. `RequestParser` has `parse`, `RequestRouter` has `findHandler` and `ResponseWriter` has `write`). There are no public setters.
 
