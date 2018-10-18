@@ -16,7 +16,7 @@ public class PutHandler extends Handler{
 
     public PutHandler(String rootPath) {
         this.rootPath = rootPath;
-        setType(HandlerType.PUT_HANDLER);
+        setTypeOfHandler(HandlerType.PUT_HANDLER);
         addHandledMethod(Method.PUT);
     }
 

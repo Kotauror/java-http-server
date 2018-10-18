@@ -18,7 +18,7 @@ public class BasicAuthHandler extends Handler {
 
     public BasicAuthHandler(Logger logger) {
         this.logger = logger;
-        setType(HandlerType.BASIC_AUTH_HANDLER);
+        setTypeOfHandler(HandlerType.BASIC_AUTH_HANDLER);
         addHandledMethod(Method.GET);
     }
 

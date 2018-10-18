@@ -12,7 +12,7 @@ public class HeadHandler extends Handler {
 
     public HeadHandler(String rootPath) {
         this.rootPath = rootPath;
-        setType(HandlerType.HEAD_HANDLER);
+        setTypeOfHandler(HandlerType.HEAD_HANDLER);
         addHandledMethod(Method.HEAD);
     }
 

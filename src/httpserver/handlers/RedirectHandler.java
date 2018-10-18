@@ -7,7 +7,7 @@ import httpserver.utilities.Method;
 public class RedirectHandler extends Handler {
 
     public RedirectHandler() {
-        setType(HandlerType.REDIRECT_HANDLER);
+        setTypeOfHandler(HandlerType.REDIRECT_HANDLER);
         addHandledMethod(Method.GET);
     }
 

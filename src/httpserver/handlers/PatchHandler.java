@@ -14,7 +14,7 @@ public class PatchHandler extends Handler {
 
     public PatchHandler(String rootPath) {
         this.rootPath = rootPath;
-        setType(HandlerType.PATCH_HANDLER);
+        setTypeOfHandler(HandlerType.PATCH_HANDLER);
         addHandledMethod(Method.PATCH);
     }
 

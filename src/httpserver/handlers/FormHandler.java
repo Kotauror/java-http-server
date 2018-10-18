@@ -14,7 +14,7 @@ public class FormHandler extends Handler {
 
     public FormHandler(String rootPath) {
         this.rootPath = rootPath;
-        setType(HandlerType.FORM_HANDLER);
+        setTypeOfHandler(HandlerType.FORM_HANDLER);
         addHandledMethods(Arrays.asList(Method.GET, Method.POST, Method.PUT, Method.DELETE));
     }
 

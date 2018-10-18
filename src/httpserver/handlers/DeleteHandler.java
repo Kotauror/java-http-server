@@ -12,7 +12,7 @@ public class DeleteHandler extends Handler {
 
     public DeleteHandler(String rootPath) {
         this.rootPath = rootPath;
-        setType(HandlerType.DELETE_HANDLER);
+        setTypeOfHandler(HandlerType.DELETE_HANDLER);
         addHandledMethod(Method.DELETE);
     }
 

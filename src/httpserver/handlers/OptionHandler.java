@@ -13,7 +13,7 @@ public class OptionHandler extends Handler{
 
 
     public OptionHandler() {
-        setType(HandlerType.OPTION_HANDLER);
+        setTypeOfHandler(HandlerType.OPTION_HANDLER);
         addHandledMethod(Method.OPTIONS);
     }
 

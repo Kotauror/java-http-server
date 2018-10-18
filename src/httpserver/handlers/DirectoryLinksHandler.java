@@ -15,7 +15,7 @@ public class DirectoryLinksHandler extends Handler {
 
     public DirectoryLinksHandler(String rootPath) {
         this.rootPath = rootPath;
-        setType(HandlerType.DIRECTORY_LISTING_HANDLER);
+        setTypeOfHandler(HandlerType.DIRECTORY_LISTING_HANDLER);
         addHandledMethod(Method.GET);
     }
 

@@ -8,7 +8,7 @@ import httpserver.utilities.Method;
 public class MethodNotAllowedHandler extends Handler{
 
     public MethodNotAllowedHandler() {
-        setType(HandlerType.NOT_ALLOWED_HANDLER);
+        setTypeOfHandler(HandlerType.NOT_ALLOWED_HANDLER);
         addHandledMethod(Method.INVALID);
     }
 

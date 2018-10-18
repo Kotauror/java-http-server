@@ -27,7 +27,7 @@ public abstract class Handler {
         return typeOfHandler;
     }
 
-    public void setType(HandlerType handlerType) {
+    public void setTypeOfHandler(HandlerType handlerType) {
         typeOfHandler = handlerType;
     }
 

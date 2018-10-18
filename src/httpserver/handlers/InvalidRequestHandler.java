@@ -6,7 +6,7 @@ import httpserver.response.Response;
 public class InvalidRequestHandler extends Handler{
 
     public InvalidRequestHandler(){
-        setType(HandlerType.INVALID_REQUEST_HANDLER);
+        setTypeOfHandler(HandlerType.INVALID_REQUEST_HANDLER);
     }
 
     @Override

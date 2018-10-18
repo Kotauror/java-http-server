@@ -10,7 +10,7 @@ import java.util.HashMap;
 public class CookieHandler extends Handler {
 
     public CookieHandler() {
-        setType(HandlerType.COOKIE_HANDLER);
+        setTypeOfHandler(HandlerType.COOKIE_HANDLER);
         addHandledMethod(Method.GET);
     }
 

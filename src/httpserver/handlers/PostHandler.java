@@ -18,7 +18,7 @@ public class PostHandler extends Handler {
 
     public PostHandler(String rootPath) {
         this.rootPath = rootPath;
-        setType(HandlerType.POST_HANDLER);
+        setTypeOfHandler(HandlerType.POST_HANDLER);
         addHandledMethod(Method.POST);
     }
 

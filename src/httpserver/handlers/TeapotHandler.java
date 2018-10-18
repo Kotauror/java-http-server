@@ -9,7 +9,7 @@ import java.util.HashMap;
 public class TeapotHandler extends Handler {
 
     public TeapotHandler() {
-        setType(HandlerType.TEAPOT_HANDLER);
+        setTypeOfHandler(HandlerType.TEAPOT_HANDLER);
         addHandledMethod(Method.GET);
     }
 
