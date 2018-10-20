@@ -128,11 +128,11 @@ I have a high test coverage (97% of methods, 94% of lines). I wrote both integra
 My code not only passes the Fitnesse tests, but covers other - not requested, but really necessary things like catching errors. I've also made sure that all handlers are universal and can handle other requests, not only these made by the Fitnesse suite.
 
 ### DRY and comprehensible code
-I've done lots of refactoring and redesigning to keep my code DRY and easy to ready.
+I've done lots of refactoring and redesigning to keep my code DRY and easy to read.
 
 ### Clean tests
 I've ensured that tests don't rely on each other (mistake I've made in my previous projects). When needed, tests have `@Before` and `@After` sections to prepare tests and clean the slate afterwards.
 
 ### Minimizing public interfaces
-I've paid lots of attention to keeping the public interfaces of all classes as small as possible. Most of them have only one public class (eg. `RequestParser` has `parse`, `RequestRouter` has `findHandler` and `ResponseWriter` has `write`). There are no public setters.
+I've paid lots of attention to keeping the public interfaces of all classes as small as possible. Most of them have only one public method (eg. `RequestParser` has `parse`, `RequestRouter` has `findHandler` and `ResponseWriter` has `write`). There are no public setters.
 
